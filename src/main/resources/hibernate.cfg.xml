@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC connection pool (use c3p0) -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+
+        <!-- Validate the database schema on startup -->
+        <property name="hbm2ddl.auto">validate</property>
+
+        <!-- Maping -->
+        <mapping class="ru.metal.cashflow.server.model.Category" />
+        <mapping class="ru.metal.cashflow.server.model.Currency" />
+        <mapping class="ru.metal.cashflow.server.model.Account" />
+        <mapping class="ru.metal.cashflow.server.model.CrossCurrency" />
+        <mapping class="ru.metal.cashflow.server.model.Operation" />
+
+    </session-factory>
+</hibernate-configuration>

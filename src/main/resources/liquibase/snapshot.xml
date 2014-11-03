@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+    <changeSet author="metal (generated)" id="1415010233919-1">
+
+        <preConditions onFail="MARK_RAN">
+            <!-- Check if database already exists. IF ACCOUNT table is exists when DB is not new -->
+            <not>
+                <tableExists tableName="ACCOUNT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ACCOUNT">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="ACCOUNT_PK"/>
+            </column>
+            <column name="BALANCE" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CURRENCY_ID" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="OPERATION">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="OPERATION_PK"/>
+            </column>
+            <column name="DATE" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ACCOUNT_ID" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CURRENCY_ID" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CATEGORY_ID" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE" defaultValue="OUTCOME" type="ENUM('OUTCOME','INCOME','TRANSFER')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MONEYBECOME" type="DECIMAL(19, 2)"/>
+            <column name="MONEYWAS" type="DECIMAL(19, 2)"/>
+            <column name="INFO" type="VARCHAR(255)"/>
+            <column name="CROSSCURRENCY_ID" type="INT(10)"/>
+        </createTable>
+
+        <createTable tableName="CATEGORY">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="CATEGORY_PK"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="CROSSCURRENCY">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="CURRENCY_PK"/>
+            </column>
+            <column name="EXCHANGERATE" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="AMOUNT" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="CURRENCY">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="CURRENCY_PK"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="CURRENCY_ID" baseTableName="ACCOUNT"
+                                 constraintName="ACCOUNT_CURRENCY_ID" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="ID" referencedTableName="CURRENCY"/>
+
+        <addForeignKeyConstraint baseColumnNames="CURRENCY_ID" baseTableName="OPERATION"
+                                 constraintName="OPERATION_CURRENCY_ID" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="ID" referencedTableName="CURRENCY"/>
+
+        <addForeignKeyConstraint baseColumnNames="CATEGORY_ID" baseTableName="OPERATION"
+                                 constraintName="OPERATION_CATEGORY_ID" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="ID" referencedTableName="CATEGORY"/>
+
+        <addForeignKeyConstraint baseColumnNames="ACCOUNT_ID" baseTableName="OPERATION"
+                                 constraintName="OPERATION_ACCOUNT_ID" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="ID" referencedTableName="ACCOUNT"/>
+
+        <addForeignKeyConstraint baseColumnNames="CROSSCURRENCY_ID" baseTableName="OPERATION"
+                                 constraintName="OPERATION_CROSSCURRENCY_ID" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="ID" referencedTableName="CROSSCURRENCY"/>
+    </changeSet>
+</databaseChangeLog>

@@ -35,13 +35,16 @@
           <element id="library" level="project" name="Gradle: aopalliance-1.0" />
           <element id="library" level="project" name="Gradle: log4j-1.2.17" />
           <element id="library" level="project" name="Gradle: liquibase-core-3.2.2" />
-          <element id="library" level="project" name="Gradle: junit-4.11" />
           <element id="library" level="project" name="Gradle: snakeyaml-1.13" />
           <element id="library" level="project" name="Gradle: hamcrest-core-1.3" />
           <element id="library" level="project" name="Gradle: h2-1.4.182" />
           <element id="library" level="project" name="Gradle: jackson-databind-2.4.3" />
           <element id="library" level="project" name="Gradle: jackson-annotations-2.4.0" />
           <element id="library" level="project" name="Gradle: jackson-core-2.4.3" />
+          <element id="library" level="project" name="Gradle: commons-dbcp-1.4" />
+          <element id="library" level="project" name="Gradle: commons-pool-1.5.4" />
+          <element id="library" level="project" name="Gradle: junit-4.11" />
+          <element id="library" level="project" name="Gradle: spring-orm-4.1.1.RELEASE" />
         </element>
       </element>
       <element id="directory" name="META-INF">
