@@ -37,7 +37,7 @@ public class Account {
      * @return currency of the account
      */
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     public Currency getCurrency() {
         return currency;
     }

@@ -62,7 +62,7 @@ public class Operation {
      * @see Account
      */
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     public Account getAccount() {
         return account;
     }
@@ -76,7 +76,7 @@ public class Operation {
      * @see Currency
      */
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     public Currency getCurrency() {
         return currency;
     }
@@ -90,7 +90,7 @@ public class Operation {
      * @see Category
      */
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     public Category getCategory() {
         return category;
     }
@@ -104,8 +104,8 @@ public class Operation {
      * or 'OUTCOME' if you spend money. And it can be 'TRANSFER' then you transfer money from one account to another,
      * in that case will be creating two operations with 'TRANSFER' type: one for one account and for second one
      */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "ENUM('OUTCOME','INCOME','TRANSFER')")
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     public FlowType getType() {
         return type;
     }
@@ -169,7 +169,7 @@ public class Operation {
      * @see CrossCurrency
      */
     @ManyToOne
-    @Column(nullable = true)
+    @JoinColumn(nullable = false)
     public CrossCurrency getCrossCurrency() {
         return crossCurrency;
     }

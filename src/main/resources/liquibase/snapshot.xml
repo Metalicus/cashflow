@@ -42,7 +42,7 @@
             <column name="CATEGORY_ID" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="TYPE" defaultValue="OUTCOME" type="ENUM('OUTCOME','INCOME','TRANSFER')">
+            <column name="TYPE" defaultValue="0" type="INT">
                 <constraints nullable="false"/>
             </column>
             <column name="AMOUNT" type="DECIMAL(19, 2)">
@@ -65,7 +65,7 @@
 
         <createTable tableName="CROSSCURRENCY">
             <column autoIncrement="true" name="ID" type="INT(10)">
-                <constraints primaryKey="true" primaryKeyName="CURRENCY_PK"/>
+                <constraints primaryKey="true" primaryKeyName="CROSSCURRENCY_PK"/>
             </column>
             <column name="EXCHANGERATE" type="DECIMAL(19, 2)">
                 <constraints nullable="false"/>
