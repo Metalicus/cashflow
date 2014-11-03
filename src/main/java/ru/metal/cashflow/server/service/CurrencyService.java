@@ -64,7 +64,7 @@ public class CurrencyService implements CRUDService<Currency> {
             final Session session = sessionFactory.getCurrentSession();
             session.delete(currency);
             session.flush();
-        } catch (HibernateException e) {
+        } catch (IllegalArgumentException | HibernateException e) {
             logger.error("Error while deleteing existing currency", e);
             throw new CFException("Error while deleteing existing currency", e);
         }

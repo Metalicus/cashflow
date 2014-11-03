@@ -3,6 +3,7 @@ package ru.metal.cashflow.server.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.metal.cashflow.server.SpringTestCase;
+import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Currency;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 
@@ -22,6 +23,18 @@ public class CurrencyServiceTest extends SpringTestCase {
         currencyService.insert(currency);
         assertNotNull(currency.getId());
         assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        final Currency currencyFromDB = currencyService.get(currency.getId());
+        assertEquals(currency, currencyFromDB);
+    }
+
+    @Test(expected = CFException.class)
+    public void saveErrorTest() throws Exception {
+        final Currency account = new Currency();
+        currencyService.insert(account);
     }
 
     @Test
@@ -44,7 +57,21 @@ public class CurrencyServiceTest extends SpringTestCase {
         assertEquals(id, currency.getId());
         assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
 
-        assertEquals("new currency name", ((Currency) sessionFactory.getCurrentSession().get(Currency.class, id)).getName());
+        final Currency currencyFromDB = currencyService.get(currency.getId());
+        assertEquals(currency, currencyFromDB);
+    }
+
+    @Test(expected = CFException.class)
+    public void updateErrorTest() throws Exception {
+        final Currency currency = new Currency();
+        currency.setName("currency");
+        currencyService.insert(currency);
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        currency.setName(null);
+        currencyService.update(currency);
     }
 
     @Test
@@ -61,6 +88,11 @@ public class CurrencyServiceTest extends SpringTestCase {
     }
 
     @Test
+    public void getNullTest() throws Exception {
+        assertNull(currencyService.get(Integer.MAX_VALUE));
+    }
+
+    @Test
     public void deleteTest() throws Exception {
         final Currency currency = new Currency();
         currency.setName("new currency");
@@ -72,5 +104,10 @@ public class CurrencyServiceTest extends SpringTestCase {
 
         currencyService.delete(currency.getId());
         assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
+    }
+
+    @Test(expected = CFException.class)
+    public void deleteErrorTest() throws Exception {
+        currencyService.delete(Integer.MAX_VALUE);
     }
 }

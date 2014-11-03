@@ -7,8 +7,12 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean name="accountService" class="ru.metal.cashflow.server.service.AccountService">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean name="operationsService" class="ru.metal.cashflow.server.service.OperationsService">
-    <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
 </beans>

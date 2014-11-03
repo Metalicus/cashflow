@@ -57,4 +57,28 @@ public class Account {
     public void setBalance(BigDecimal currentMoney) {
         this.balance = currentMoney;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+
+        Account account = (Account) o;
+
+        if (balance != null ? balance.compareTo(account.balance) != 0 : account.balance != null) return false;
+        if (currency != null ? !currency.equals(account.currency) : account.currency != null) return false;
+        if (id != null ? !id.equals(account.id) : account.id != null) return false;
+        if (name != null ? !name.equals(account.name) : account.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+        return result;
+    }
 }
