@@ -23,6 +23,7 @@ public class OperationsDAO implements CRUDService<Operation> {
 
     @Override
     public void insert(Operation model) throws CFException {
+
     }
 
     @Override

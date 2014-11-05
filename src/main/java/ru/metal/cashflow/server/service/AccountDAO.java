@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Account;
 
@@ -23,7 +22,6 @@ public class AccountDAO implements CRUDService<Account> {
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
     public void insert(Account model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -36,7 +34,6 @@ public class AccountDAO implements CRUDService<Account> {
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
     public void update(Account model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -50,7 +47,6 @@ public class AccountDAO implements CRUDService<Account> {
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
     public Account get(Integer id) throws CFException {
         try {
             return (Account) sessionFactory.getCurrentSession().get(Account.class, id);
@@ -61,7 +57,6 @@ public class AccountDAO implements CRUDService<Account> {
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
     public void delete(Integer id) throws CFException {
         try {
             final Account currency = get(id);
