@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html ng-app="cashFlow">
+<head>
+
+    <title>Home Bookkeeping</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <style type="text/css">
+        @import "css/bootstrap.css";
+        @import "css/ng-grid.css";
+        @import "css/cashflow.css";
+    </style>
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="js/ng-grid.js"></script>
+    <script src="js/script.js"></script>
+</head>
+
+<body ng-controller="mainController">
+
+<header>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-menu">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Home Bookkeeping</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="top-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Operations</a></li>
+                    <li><a href="#category">Category</a></li>
+                    <li><a href="#currency">Currency</a></li>
+                    <li><a href="#account">Account</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div ng-view></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
