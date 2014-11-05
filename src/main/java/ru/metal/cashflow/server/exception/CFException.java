@@ -8,6 +8,10 @@ public class CFException extends Exception {
     public CFException() {
     }
 
+    public CFException(Throwable cause) {
+        super(cause);
+    }
+
     public CFException(String message) {
         super(message);
     }

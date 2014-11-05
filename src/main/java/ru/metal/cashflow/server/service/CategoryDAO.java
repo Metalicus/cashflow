@@ -29,7 +29,7 @@ public class CategoryDAO implements CRUDService<Category> {
             session.flush();
         } catch (HibernateException e) {
             logger.error("Error while inserting new category", e);
-            throw new CFException("Error while inserting new category", e);
+            throw new CFException(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class CategoryDAO implements CRUDService<Category> {
             session.flush();
         } catch (HibernateException e) {
             logger.error("Error while updating existing category", e);
-            throw new CFException("Error while updating existing category", e);
+            throw new CFException(e);
         }
     }
 
@@ -52,20 +52,20 @@ public class CategoryDAO implements CRUDService<Category> {
             return (Category) sessionFactory.getCurrentSession().get(Category.class, id);
         } catch (HibernateException e) {
             logger.error("Error while geting existing category from database", e);
-            throw new CFException("Error while geting existing category from database", e);
+            throw new CFException(e);
         }
     }
 
     @Override
     public void delete(Integer id) throws CFException {
         try {
-            final Category currency = get(id);
+            final Category category = get(id);
             final Session session = sessionFactory.getCurrentSession();
-            session.delete(currency);
+            session.delete(category);
             session.flush();
         } catch (IllegalArgumentException | HibernateException e) {
             logger.error("Error while deleteing existing category", e);
-            throw new CFException("Error while deleteing existing category", e);
+            throw new CFException(e);
         }
     }
 }

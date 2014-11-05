@@ -29,7 +29,7 @@ public class AccountDAO implements CRUDService<Account> {
             session.flush();
         } catch (HibernateException e) {
             logger.error("Error while inserting new account", e);
-            throw new CFException("Error while inserting new account", e);
+            throw new CFException(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class AccountDAO implements CRUDService<Account> {
             session.flush();
         } catch (HibernateException e) {
             logger.error("Error while updating existing account", e);
-            throw new CFException("Error while updating existing account", e);
+            throw new CFException(e);
         }
     }
 
@@ -52,20 +52,20 @@ public class AccountDAO implements CRUDService<Account> {
             return (Account) sessionFactory.getCurrentSession().get(Account.class, id);
         } catch (HibernateException e) {
             logger.error("Error while geting existing account from database", e);
-            throw new CFException("Error while geting existing account from database", e);
+            throw new CFException(e);
         }
     }
 
     @Override
     public void delete(Integer id) throws CFException {
         try {
-            final Account currency = get(id);
+            final Account account = get(id);
             final Session session = sessionFactory.getCurrentSession();
-            session.delete(currency);
+            session.delete(account);
             session.flush();
         } catch (IllegalArgumentException | HibernateException e) {
             logger.error("Error while deleteing existing account", e);
-            throw new CFException("Error while deleteing existing account", e);
+            throw new CFException(e);
         }
     }
 }

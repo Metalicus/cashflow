@@ -29,7 +29,7 @@ public class CurrencyDAO implements CRUDService<Currency> {
             session.flush();
         } catch (HibernateException e) {
             logger.error("Error while inserting new currency", e);
-            throw new CFException("Error while inserting new currency", e);
+            throw new CFException(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class CurrencyDAO implements CRUDService<Currency> {
             session.flush();
         } catch (HibernateException e) {
             logger.error("Error while updating existing currency", e);
-            throw new CFException("Error while updating existing currency", e);
+            throw new CFException(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class CurrencyDAO implements CRUDService<Currency> {
             return (Currency) sessionFactory.getCurrentSession().get(Currency.class, id);
         } catch (HibernateException e) {
             logger.error("Error while geting existing currency from database", e);
-            throw new CFException("Error while geting existing currency from database", e);
+            throw new CFException(e);
         }
     }
 
@@ -65,7 +65,7 @@ public class CurrencyDAO implements CRUDService<Currency> {
             session.flush();
         } catch (IllegalArgumentException | HibernateException e) {
             logger.error("Error while deleteing existing currency", e);
-            throw new CFException("Error while deleteing existing currency", e);
+            throw new CFException(e);
         }
     }
 }
