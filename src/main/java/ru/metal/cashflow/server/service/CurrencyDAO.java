@@ -15,9 +15,9 @@ import ru.metal.cashflow.server.model.Currency;
  * DAO service to work with currency
  */
 @Repository
-public class CurrencyService implements CRUDService<Currency> {
+public class CurrencyDAO implements CRUDService<Currency> {
 
-    private static final Log logger = LogFactory.getLog(CurrencyService.class);
+    private static final Log logger = LogFactory.getLog(CurrencyDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;

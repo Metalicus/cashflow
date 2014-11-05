@@ -14,9 +14,9 @@ import ru.metal.cashflow.server.model.Category;
  * DAO service to work with category
  */
 @Repository
-public class CategoryService implements CRUDService<Category> {
+public class CategoryDAO implements CRUDService<Category> {
 
-    private static final Log logger = LogFactory.getLog(CategoryService.class);
+    private static final Log logger = LogFactory.getLog(CategoryDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;

@@ -12,14 +12,14 @@ import ru.metal.cashflow.server.model.Operation;
  * Cash flow control dao service
  */
 @Repository
-public class OperationsService implements CRUDService<Operation> {
+public class OperationsDAO implements CRUDService<Operation> {
 
-    private static final Log logger = LogFactory.getLog(OperationsService.class);
+    private static final Log logger = LogFactory.getLog(OperationsDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;
     @Autowired
-    private AccountService accountService;
+    private AccountDAO accountDAO;
 
     @Override
     public void insert(Operation model) throws CFException {

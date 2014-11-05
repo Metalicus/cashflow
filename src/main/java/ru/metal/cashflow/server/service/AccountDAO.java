@@ -15,9 +15,9 @@ import ru.metal.cashflow.server.model.Account;
  * DAO service to work with accounts
  */
 @Repository
-public class AccountService implements CRUDService<Account> {
+public class AccountDAO implements CRUDService<Account> {
 
-    private static final Log logger = LogFactory.getLog(AccountService.class);
+    private static final Log logger = LogFactory.getLog(AccountDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;
