@@ -1,22 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean name="currencyService" class="ru.metal.cashflow.server.service.CurrencyService">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean name="categoryService" class="ru.metal.cashflow.server.service.CategoryService">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean name="accountService" class="ru.metal.cashflow.server.service.AccountService">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean name="operationsService" class="ru.metal.cashflow.server.service.OperationsService">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+    <beans:component-scan base-package="ru.metal.cashflow.server.service"/>
 
 </beans>

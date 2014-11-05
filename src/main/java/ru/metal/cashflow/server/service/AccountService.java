@@ -5,17 +5,21 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Account;
 
 /**
- * Service to work with accounts
+ * DAO service to work with accounts
  */
+@Repository
 public class AccountService implements CRUDService<Account> {
 
     private static final Log logger = LogFactory.getLog(AccountService.class);
 
+    @Autowired
     private SessionFactory sessionFactory;
 
     @Override
@@ -68,9 +72,5 @@ public class AccountService implements CRUDService<Account> {
             logger.error("Error while deleteing existing account", e);
             throw new CFException("Error while deleteing existing account", e);
         }
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

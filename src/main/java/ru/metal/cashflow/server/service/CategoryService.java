@@ -5,16 +5,20 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Category;
 
 /**
- * Service to work with category
+ * DAO service to work with category
  */
+@Repository
 public class CategoryService implements CRUDService<Category> {
 
     private static final Log logger = LogFactory.getLog(CategoryService.class);
 
+    @Autowired
     private SessionFactory sessionFactory;
 
     @Override
@@ -63,9 +67,5 @@ public class CategoryService implements CRUDService<Category> {
             logger.error("Error while deleteing existing category", e);
             throw new CFException("Error while deleteing existing category", e);
         }
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

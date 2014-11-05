@@ -5,17 +5,21 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Currency;
 
 /**
- * Service to work with currency
+ * DAO service to work with currency
  */
+@Repository
 public class CurrencyService implements CRUDService<Currency> {
 
     private static final Log logger = LogFactory.getLog(CurrencyService.class);
 
+    @Autowired
     private SessionFactory sessionFactory;
 
     @Override
@@ -68,9 +72,5 @@ public class CurrencyService implements CRUDService<Currency> {
             logger.error("Error while deleteing existing currency", e);
             throw new CFException("Error while deleteing existing currency", e);
         }
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }
