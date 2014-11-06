@@ -14,14 +14,13 @@ import ru.metal.cashflow.server.model.Currency;
  * DAO service to work with currency
  */
 @Repository
-public class CurrencyDAO implements CRUDService<Currency> {
+public class CurrencyDAO {
 
     private static final Log logger = LogFactory.getLog(CurrencyDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     public void insert(Currency model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -33,7 +32,6 @@ public class CurrencyDAO implements CRUDService<Currency> {
         }
     }
 
-    @Override
     public void update(Currency model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -46,7 +44,6 @@ public class CurrencyDAO implements CRUDService<Currency> {
         }
     }
 
-    @Override
     public Currency get(Integer id) throws CFException {
         try {
             return (Currency) sessionFactory.getCurrentSession().get(Currency.class, id);
@@ -56,7 +53,6 @@ public class CurrencyDAO implements CRUDService<Currency> {
         }
     }
 
-    @Override
     public void delete(Integer id) throws CFException {
         try {
             final Currency currency = get(id);

@@ -17,7 +17,7 @@ import java.util.List;
  * DAO service to work with category
  */
 @Repository
-public class CategoryDAO implements CRUDService<Category> {
+public class CategoryDAO {
 
     private static final Log logger = LogFactory.getLog(CategoryDAO.class);
 
@@ -55,7 +55,6 @@ public class CategoryDAO implements CRUDService<Category> {
         }
     }
 
-    @Override
     public void insert(Category model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -67,7 +66,6 @@ public class CategoryDAO implements CRUDService<Category> {
         }
     }
 
-    @Override
     public void update(Category model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -80,7 +78,6 @@ public class CategoryDAO implements CRUDService<Category> {
         }
     }
 
-    @Override
     public Category get(Integer id) throws CFException {
         try {
             return (Category) sessionFactory.getCurrentSession().get(Category.class, id);
@@ -90,7 +87,6 @@ public class CategoryDAO implements CRUDService<Category> {
         }
     }
 
-    @Override
     public void delete(Integer id) throws CFException {
         try {
             final Category category = get(id);

@@ -14,14 +14,13 @@ import ru.metal.cashflow.server.model.Operation;
  * Cash flow control dao service
  */
 @Repository
-public class OperationsDAO implements CRUDService<Operation> {
+public class OperationsDAO {
 
     private static final Log logger = LogFactory.getLog(OperationsDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     public void insert(Operation model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -38,7 +37,6 @@ public class OperationsDAO implements CRUDService<Operation> {
         }
     }
 
-    @Override
     public void update(Operation model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -51,7 +49,6 @@ public class OperationsDAO implements CRUDService<Operation> {
         }
     }
 
-    @Override
     public Operation get(Integer id) throws CFException {
         try {
             return (Operation) sessionFactory.getCurrentSession().get(Operation.class, id);
@@ -61,7 +58,6 @@ public class OperationsDAO implements CRUDService<Operation> {
         }
     }
 
-    @Override
     public void delete(Integer id) throws CFException {
         try {
             final Operation operation = get(id);

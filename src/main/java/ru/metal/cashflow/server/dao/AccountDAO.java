@@ -14,14 +14,13 @@ import ru.metal.cashflow.server.model.Account;
  * DAO service to work with accounts
  */
 @Repository
-public class AccountDAO implements CRUDService<Account> {
+public class AccountDAO {
 
     private static final Log logger = LogFactory.getLog(AccountDAO.class);
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
     public void insert(Account model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -33,7 +32,6 @@ public class AccountDAO implements CRUDService<Account> {
         }
     }
 
-    @Override
     public void update(Account model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
@@ -46,7 +44,6 @@ public class AccountDAO implements CRUDService<Account> {
         }
     }
 
-    @Override
     public Account get(Integer id) throws CFException {
         try {
             return (Account) sessionFactory.getCurrentSession().get(Account.class, id);
@@ -56,7 +53,6 @@ public class AccountDAO implements CRUDService<Account> {
         }
     }
 
-    @Override
     public void delete(Integer id) throws CFException {
         try {
             final Account account = get(id);

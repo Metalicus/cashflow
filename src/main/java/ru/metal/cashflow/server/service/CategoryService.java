@@ -13,7 +13,7 @@ import java.util.List;
  * Business layer for categories
  */
 @Service
-public class CategoryService {
+public class CategoryService implements CRUDService<Category> {
 
     @Autowired
     private CategoryDAO categoryDAO;
@@ -23,4 +23,23 @@ public class CategoryService {
         return categoryDAO.getPagedCategory(limit, page);
     }
 
+    @Override
+    public void insert(Category model) throws CFException {
+        categoryDAO.insert(model);
+    }
+
+    @Override
+    public void update(Category model) throws CFException {
+        categoryDAO.update(model);
+    }
+
+    @Override
+    public Category get(Integer id) throws CFException {
+        return categoryDAO.get(id);
+    }
+
+    @Override
+    public void delete(Integer id) throws CFException {
+        categoryDAO.delete(id);
+    }
 }

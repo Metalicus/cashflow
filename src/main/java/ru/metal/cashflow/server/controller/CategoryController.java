@@ -1,7 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +12,7 @@ import ru.metal.cashflow.server.service.CategoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "category", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
+@RequestMapping(value = "category", produces = MainController.MEDIA_TYPE)
 public class CategoryController {
 
     @Autowired
