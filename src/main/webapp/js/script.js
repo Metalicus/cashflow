@@ -1,5 +1,3 @@
-// create the module and name it scotchApp
-// also include ngRoute for all our routing needs
 var cashFlow = angular.module('cashFlow', ['ngRoute', 'ngGrid']);
 
 // configure our routes
