@@ -2,6 +2,7 @@ package ru.metal.cashflow.server.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Category;
+
+import java.util.List;
 
 /**
  * DAO service to work with category
@@ -20,6 +23,37 @@ public class CategoryDAO implements CRUDService<Category> {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    /**
+     * Get collection of the categories
+     *
+     * @param limit of the elements
+     * @param page  page
+     * @return collection of categories
+     */
+    public List<Category> getPagedCategory(int limit, int page) throws CFException {
+        try {
+            int start;
+            if (page == 1) {
+                // first page
+                start = 0;
+            } else {
+                // next pages
+                page = page - 1;
+                start = page * limit;
+            }
+
+            final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Category.class);
+            criteria.setFirstResult(start);
+            criteria.setMaxResults(limit);
+
+            //noinspection unchecked
+            return criteria.list();
+        } catch (HibernateException e) {
+            logger.error("Error while collection categories", e);
+            throw new CFException(e);
+        }
+    }
 
     @Override
     public void insert(Category model) throws CFException {

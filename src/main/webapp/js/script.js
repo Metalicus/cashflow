@@ -60,24 +60,30 @@ cashFlow.controller('categoryController', function($scope, $http) {
         }
     };
     $scope.getPagedDataAsync = function (pageSize, page, searchText) {
-        setTimeout(function () {
-            var data;
-            if (searchText) {
-                var ft = searchText.toLowerCase();
-                $http({method: 'GET', url: 'action/category/table', params: {'limit': $scope.pagingOptions.pageSize, 'page': $scope.pagingOptions.currentPage}})
-                    .success(function (largeLoad) {
-                        data = largeLoad.filter(function(item) {
-                            return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
-                        });
-                        $scope.setPagingData(data,page,pageSize);
+        var data;
+        if (searchText) {
+            var ft = searchText.toLowerCase();
+            $http({
+                method: 'GET',
+                url: 'action/category/table',
+                params: {'limit': $scope.pagingOptions.pageSize, 'page': $scope.pagingOptions.currentPage}
+            })
+                .success(function (largeLoad) {
+                    data = largeLoad.filter(function (item) {
+                        return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                     });
-            } else {
-                $http({method: 'GET', url: 'action/category/table', params: {'limit': $scope.pagingOptions.pageSize, 'page': $scope.pagingOptions.currentPage}})
-                    .success(function (largeLoad) {
-                        $scope.setPagingData(largeLoad,page,pageSize);
-                    });
-            }
-        }, 100);
+                    $scope.setPagingData(data, page, pageSize);
+                });
+        } else {
+            $http({
+                method: 'GET',
+                url: 'action/category/table',
+                params: {'limit': $scope.pagingOptions.pageSize, 'page': $scope.pagingOptions.currentPage}
+            })
+                .success(function (largeLoad) {
+                    $scope.setPagingData(largeLoad, page, pageSize);
+                });
+        }
     };
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
     $scope.$watch('pagingOptions', function (newVal, oldVal) {
