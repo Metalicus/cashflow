@@ -1,4 +1,4 @@
-package ru.metal.cashflow.server.service;
+package ru.metal.cashflow.server.dao;
 
 import ru.metal.cashflow.server.exception.CFException;
 

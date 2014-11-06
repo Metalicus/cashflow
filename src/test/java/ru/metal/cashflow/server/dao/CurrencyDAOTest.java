@@ -1,4 +1,4 @@
-package ru.metal.cashflow.server.service;
+package ru.metal.cashflow.server.dao;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

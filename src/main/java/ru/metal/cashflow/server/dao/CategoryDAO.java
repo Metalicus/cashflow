@@ -1,4 +1,4 @@
-package ru.metal.cashflow.server.service;
+package ru.metal.cashflow.server.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

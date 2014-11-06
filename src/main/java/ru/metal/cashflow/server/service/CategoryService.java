@@ -3,6 +3,7 @@ package ru.metal.cashflow.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.metal.cashflow.server.dao.CategoryDAO;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Category;
 
