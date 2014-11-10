@@ -2,13 +2,17 @@ package ru.metal.cashflow.server.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Operation;
+
+import java.util.List;
 
 /**
  * Cash flow control dao service
@@ -20,6 +24,19 @@ public class OperationsDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    public List<Operation> getOperations() throws CFException {
+        try {
+            final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Operation.class);
+            criteria.addOrder(Order.desc("id"));
+            //noinspection unchecked
+            return criteria.list();
+        } catch (HibernateException e) {
+            logger.error("Error while collection operations", e);
+            throw new CFException(e);
+        }
+    }
+
 
     public void insert(Operation model) throws CFException {
         try {

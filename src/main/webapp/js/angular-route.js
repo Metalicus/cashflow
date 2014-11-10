@@ -304,7 +304,7 @@ function $RouteProvider(){
      *     Chapter Id: {{params.chapterId}}
      *   </file>
      *
-     *   <file name="script.js">
+     *   <file name="app.js">
      *     angular.module('ngRouteExample', ['ngRoute'])
      *
      *      .controller('MainController', function($scope, $route, $routeParams, $location) {
@@ -752,7 +752,7 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
         }
       </file>
 
-      <file name="script.js">
+      <file name="app.js">
         angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
           .config(['$routeProvider', '$locationProvider',
             function($routeProvider, $locationProvider) {

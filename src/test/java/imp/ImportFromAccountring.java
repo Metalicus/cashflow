@@ -84,7 +84,7 @@ public class ImportFromAccountring {
             while (resultSet.next()) {
                 final Operation operation = new Operation();
                 operation.setId(resultSet.getInt("id"));
-                operation.setDate(resultSet.getTimestamp("date").toLocalDateTime());
+                operation.setDate(resultSet.getTimestamp("date"));
                 operation.setAccount(accounts.get(resultSet.getInt("account_id")));
                 operation.setCurrency(currencies.get(resultSet.getInt("currency_id")));
                 operation.setCategory(categories.get(resultSet.getInt("category_id")));
@@ -176,7 +176,7 @@ public class ImportFromAccountring {
                         "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
             for (Operation operation : operations) {
                 statement.setInt(1, operation.getId());
-                statement.setTimestamp(2, Timestamp.valueOf(operation.getDate()));
+                statement.setTimestamp(2, new Timestamp(operation.getDate().getTime()));
                 statement.setInt(3, operation.getAccount().getId());
                 statement.setInt(4, operation.getCurrency().getId());
                 statement.setInt(5, operation.getCategory().getId());

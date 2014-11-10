@@ -8,7 +8,7 @@ import ru.metal.cashflow.server.model.*;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -44,7 +44,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setInfo("information");
         operation.setMoneyWas(BigDecimal.ZERO);
         operation.setMoneyBecome(BigDecimal.TEN);
@@ -86,7 +86,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setInfo("information");
         operation.setMoneyWas(BigDecimal.ZERO);
         operation.setMoneyBecome(BigDecimal.TEN);
@@ -133,7 +133,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setCategory(category);
         operation.setCrossCurrency(crossCurrency);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setInfo("information");
         operation.setMoneyWas(BigDecimal.ZERO);
         operation.setMoneyBecome(BigDecimal.TEN);
@@ -186,7 +186,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setCategory(category);
         operation.setCrossCurrency(crossCurrency);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setInfo("information");
         operation.setMoneyWas(BigDecimal.ZERO);
         operation.setMoneyBecome(BigDecimal.TEN);
@@ -230,7 +230,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setType(Operation.FlowType.TRANSFER);
         operationsDAO.insert(operation);
 
@@ -262,7 +262,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setType(Operation.FlowType.TRANSFER);
         operationsDAO.insert(operation);
 
@@ -299,7 +299,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setAmount(BigDecimal.TEN);
-        operation.setDate(LocalDateTime.now());
+        operation.setDate(new Date());
         operation.setType(Operation.FlowType.TRANSFER);
         operationsDAO.insert(operation);
         assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Account.class));

@@ -16,6 +16,15 @@ public class MainController implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
+    @RequestMapping(value = "{beanName}/list", method = RequestMethod.GET)
+    public Object get(@PathVariable("beanName") String beanName) throws CFException {
+        final Object bean = applicationContext.getBean(getManagerName(beanName));
+        if (bean instanceof CRUDService) {
+            return ((CRUDService) bean).list();
+        } else
+            throw new CFException("Service is not has a CRUD support");
+    }
+
     @RequestMapping(value = "{beanName}/get", method = RequestMethod.GET)
     public Object get(@PathVariable("beanName") String beanName, @RequestParam("id") Integer id) throws CFException {
         final Object bean = applicationContext.getBean(getManagerName(beanName));

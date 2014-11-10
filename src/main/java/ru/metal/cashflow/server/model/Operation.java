@@ -1,20 +1,13 @@
 package ru.metal.cashflow.server.model;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import ru.metal.cashflow.server.hibernate.LocalDateTimeUserType;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Operation with money and accounts
  */
 @Entity
-@TypeDef(name = "localDateTimeType",
-        defaultForType = LocalDateTime.class,
-        typeClass = LocalDateTimeUserType.class)
 public class Operation {
 
     public enum FlowType {
@@ -22,7 +15,7 @@ public class Operation {
     }
 
     private Integer id;
-    private LocalDateTime date;
+    private Date date;
     private Account account;
     private Currency currency;
     private Category category;
@@ -48,12 +41,11 @@ public class Operation {
      * @return date and time of the operation
      */
     @Column(nullable = false)
-    @Type(type = "localDateTimeType")
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

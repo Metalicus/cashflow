@@ -24,29 +24,9 @@ public class CategoryDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
-    /**
-     * Get collection of the categories
-     *
-     * @param limit of the elements
-     * @param page  page
-     * @return collection of categories
-     */
-    public List<Category> getPagedCategory(int limit, int page) throws CFException {
+    public List<Category> getCategories() throws CFException {
         try {
-            int start;
-            if (page == 1) {
-                // first page
-                start = 0;
-            } else {
-                // next pages
-                page = page - 1;
-                start = page * limit;
-            }
-
             final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Category.class);
-            criteria.setFirstResult(start);
-            criteria.setMaxResults(limit);
-
             //noinspection unchecked
             return criteria.list();
         } catch (HibernateException e) {
