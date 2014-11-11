@@ -1,4 +1,4 @@
-<ui-select ng-model="category.selected">
+<ui-select ng-model="category.selected" required>
     <ui-select-match placeholder="Select category...">{{$select.selected.name}}</ui-select-match>
     <ui-select-choices repeat="category in categories | filter: $select.search">
         {{category.name}}

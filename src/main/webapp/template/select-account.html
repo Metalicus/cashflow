@@ -1,4 +1,4 @@
-<ui-select ng-model="account.selected" on-select="accountSelect($model)">
+<ui-select ng-model="account.selected" on-select="accountSelect($model)" required>
     <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
     <ui-select-choices repeat="account in accounts | filter: $select.search">
         {{account.name}}
