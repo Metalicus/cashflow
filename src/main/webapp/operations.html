@@ -2,4 +2,8 @@
     <h1>Cash flow</h1>
 </div>
 
-<div ui-grid="gridOptions" class="grid" ui-grid-selection></div>
+<button type="button" class="btn btn-primary">Add</button>
+<button type="button" class="btn btn-default" ng-click="openEditDialog()" ng-disabled="disabled">Edit</button>
+<button type="button" class="btn btn-danger" ng-disabled="disabled">Delete</button>
+
+<div ui-grid="gridOptions" class="grid" ui-grid-selection ui-grid-cellnav></div>

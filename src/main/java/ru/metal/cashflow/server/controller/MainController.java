@@ -4,7 +4,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.service.CRUDService;
 
@@ -25,8 +28,8 @@ public class MainController implements ApplicationContextAware {
             throw new CFException("Service is not has a CRUD support");
     }
 
-    @RequestMapping(value = "{beanName}/get", method = RequestMethod.GET)
-    public Object get(@PathVariable("beanName") String beanName, @RequestParam("id") Integer id) throws CFException {
+    @RequestMapping(value = "{beanName}/get/{id}", method = RequestMethod.GET)
+    public Object get(@PathVariable("beanName") String beanName, @PathVariable("id") Integer id) throws CFException {
         final Object bean = applicationContext.getBean(getManagerName(beanName));
         if (bean instanceof CRUDService) {
             if (id == null)
