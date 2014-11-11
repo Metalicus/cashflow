@@ -54,8 +54,23 @@
 
     operations.controller('OperationModelCtrl', ['$scope', '$modalInstance', '$http', 'id', function ($scope, $modalInstance, $http, id) {
         $scope.id = id;
-        $scope.date = {};
+        $scope.date = new Date();
         $scope.amount = {};
+
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.datePickerOpen = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
 
         $scope.ok = function () {
             $modalInstance.dismiss('ok');
