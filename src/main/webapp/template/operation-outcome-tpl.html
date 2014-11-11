@@ -12,6 +12,15 @@
         </p>
     </div>
     <div class="form-group">
+        <label>Account</label>
+        <ui-select ng-model="account.selected">
+            <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="account in accounts | filter: $select.search">
+                {{account.name}}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="form-group">
         <label for="amount">Money amount in operation</label>
         <input type="text" class="form-control" id="amount" placeholder="" ng-model="amount">
     </div>

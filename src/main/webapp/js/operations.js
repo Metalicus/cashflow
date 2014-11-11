@@ -69,6 +69,7 @@
         $scope.type = 'OUTCOME';
         $scope.date = new Date();
         $scope.amount = "";
+        $scope.account = {};
 
         $scope.tabs = [
             {type: 'OUTCOME', disabled: false, active: true},
@@ -119,12 +120,18 @@
         };
 
         if (id !== null) {
-            //edit operation
+
+            $http.get('action/account/list')
+                .then(function (response) {
+                    $scope.accounts = response.data;
+                });
+
             $http.get('action/operation/get/' + id)
                 .success(function (data) {
                     $scope.type = data.type;
                     $scope.date = new Date(data.date);
                     $scope.amount = data.amount;
+                    $scope.account.selected = data.account;
 
                     for (var i = 0; i < $scope.tabs.length; i++) {
                         if ($scope.tabs[i].type === data.type) {
