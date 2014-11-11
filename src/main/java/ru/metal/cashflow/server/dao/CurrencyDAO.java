@@ -2,6 +2,7 @@ package ru.metal.cashflow.server.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Currency;
+
+import java.util.List;
 
 /**
  * DAO service to work with currency
@@ -20,6 +23,17 @@ public class CurrencyDAO {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    public List<Currency> getCurrencies() throws CFException {
+        try {
+            final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Currency.class);
+            //noinspection unchecked
+            return criteria.list();
+        } catch (HibernateException e) {
+            logger.error("Error while collection currencies", e);
+            throw new CFException(e);
+        }
+    }
 
     public void insert(Currency model) throws CFException {
         try {
