@@ -29,6 +29,18 @@
             });
         };
 
+        $scope.openNewDialog = function () {
+            $modal.open({
+                templateUrl: 'template/operation-modal.html',
+                controller: 'OperationModelCtrl',
+                resolve: {
+                    id: function () {
+                        return null;
+                    }
+                }
+            });
+        };
+
         $scope.openEditDialog = function () {
             if ($scope.gridApi.selection.getSelectedRows().length > 0) {
                 $modal.open({
@@ -54,8 +66,15 @@
 
     operations.controller('OperationModelCtrl', ['$scope', '$modalInstance', '$http', 'id', function ($scope, $modalInstance, $http, id) {
         $scope.id = id;
+        $scope.type = 'OUTCOME';
         $scope.date = new Date();
-        $scope.amount = {};
+        $scope.amount = "";
+
+        $scope.tabs = [
+            {type: 'OUTCOME', disabled: false, active: true},
+            {type: 'TRANSFER', disabled: false, active: false},
+            {type: 'INCOME', disabled: false, active: false}
+        ];
 
         $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
         $scope.format = $scope.formats[0];
@@ -63,6 +82,25 @@
         $scope.dateOptions = {
             formatYear: 'yy',
             startingDay: 1
+        };
+
+        $scope.setType = function (index) {
+            if ($scope.id === null) {
+                $scope.type = $scope.tabs[index].type;
+
+                for (var i = 0; i < $scope.tabs.length; i++)
+                    $scope.tabs[i].active = false;
+
+                $scope.tabs[index].active = true;
+            }
+        };
+
+        $scope.isActived = function (index) {
+            return $scope.tabs[index].active;
+        };
+
+        $scope.isTabDisabled = function (index) {
+            return $scope.tabs[index].disabled;
         };
 
         $scope.datePickerOpen = function ($event) {
@@ -80,11 +118,25 @@
             $modalInstance.dismiss('cancel');
         };
 
-        $http.get('action/operation/get/' + id)
-            .success(function (data) {
-                $scope.date = new Date(data.date);
-                $scope.amount = data.amount;
-            });
+        if (id !== null) {
+            //edit operation
+            $http.get('action/operation/get/' + id)
+                .success(function (data) {
+                    $scope.type = data.type;
+                    $scope.date = new Date(data.date);
+                    $scope.amount = data.amount;
+
+                    for (var i = 0; i < $scope.tabs.length; i++) {
+                        if ($scope.tabs[i].type === data.type) {
+                            $scope.tabs[i].disabled = false;
+                            $scope.tabs[i].active = true;
+                        } else {
+                            $scope.tabs[i].disabled = true;
+                            $scope.tabs[i].active = false;
+                        }
+                    }
+                });
+        }
     }]);
 
 })();

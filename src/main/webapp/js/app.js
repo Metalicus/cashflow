@@ -1,6 +1,10 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
-        'cashflow-category', 'ngRoute', 'ui.grid', 'ui.grid.selection', 'ui.grid.cellNav', 'ui.bootstrap']);
+        'cashflow-category', 'ngRoute', 'ui.grid', 'ui.grid.selection', 'ui.grid.cellNav', 'ui.bootstrap', 'ui.select']);
+
+    cashFlow.config(function (uiSelectConfig) {
+        uiSelectConfig.theme = 'bootstrap';
+    });
 
     cashFlow.config(function ($routeProvider) {
         $routeProvider
