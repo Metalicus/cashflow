@@ -117,6 +117,10 @@
             startingDay: 1
         };
 
+        $scope.updateMoney = function () {
+
+        };
+
         $scope.accountSelect = function (model) {
             if (id === null) {
                 $scope.moneyWas = model["balance"];
