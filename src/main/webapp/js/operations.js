@@ -1,10 +1,10 @@
 (function () {
     var operations = angular.module('cashflow-operations', []);
 
-    operations.directive('datepickerPanel', function () {
+    operations.directive('dpicker', function () {
         return {
             restrict: 'E',
-            templateUrl: 'template/datepicker.html'
+            templateUrl: 'template/dpicker.html'
         }
     });
 
@@ -93,12 +93,20 @@
     }]);
 
     operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', '$http', 'id', function ($scope, $modalInstance, $http, id) {
-        $scope.id = id;
-        $scope.type = 'OUTCOME';
-        $scope.date = new Date();
-        $scope.amount = "";
-        $scope.moneyWas = "";
-        $scope.moneyBecome = "";
+        // operation model
+        $scope.model = {
+            id: id,
+            type: 'OUTCOME',
+            date: new Date(),
+            amount: null,
+            moneyWas: null,
+            moneyBecome: null,
+            account: {},
+            currency: {},
+            category: {}
+        };
+
+        // ui-select models
         $scope.account = {};
         $scope.currency = {};
         $scope.category = {};
@@ -109,27 +117,26 @@
             {type: 'INCOME', disabled: false, active: false}
         ];
 
-        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        $scope.format = $scope.formats[0];
-
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
         $scope.updateMoney = function () {
 
         };
 
         $scope.accountSelect = function (model) {
-            if (id === null) {
-                $scope.moneyWas = model["balance"];
-            }
+            $scope.model.account = model;
+            $scope.model.moneyWas = model["balance"];
+        };
+
+        $scope.categorySelect = function (model) {
+            $scope.model.category = model;
+        };
+
+        $scope.currencySelect = function (model) {
+            $scope.model.currency = model;
         };
 
         $scope.setType = function (index) {
             if ($scope.id === null) {
-                $scope.type = $scope.tabs[index].type;
+                $scope.model.type = $scope.tabs[index].type;
 
                 for (var i = 0; i < $scope.tabs.length; i++)
                     $scope.tabs[i].active = false;
@@ -146,14 +153,7 @@
             return $scope.tabs[index].disabled;
         };
 
-        $scope.datePickerOpen = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.opened = true;
-        };
-
-        $scope.ok = function () {
+        $scope.submit = function () {
             $modalInstance.dismiss('ok');
         };
 
@@ -179,15 +179,22 @@
         if (id !== null) {
             $http.get('action/operation/get/' + id)
                 .success(function (data) {
-                    $scope.type = data.type;
-                    $scope.date = new Date(data.date);
-                    $scope.amount = data.amount;
-                    $scope.moneyWas = data.moneyWas;
-                    $scope.moneyBecome = data.moneyBecome;
+                    //model
+                    $scope.model.type = data.type;
+                    $scope.model.date = new Date(data.date);
+                    $scope.model.amount = data.amount;
+                    $scope.model.moneyWas = data.moneyWas;
+                    $scope.model.moneyBecome = data.moneyBecome;
+                    $scope.model.account = data.account;
+                    $scope.model.currency = data.currency;
+                    $scope.model.category = data.category;
+
+                    //ui-select
                     $scope.account.selected = data.account;
                     $scope.currency.selected = data.currency;
                     $scope.category.selected = data.category;
 
+                    //tabs settings
                     for (var i = 0; i < $scope.tabs.length; i++) {
                         if ($scope.tabs[i].type === data.type) {
                             $scope.tabs[i].disabled = false;

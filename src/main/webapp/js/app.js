@@ -33,4 +33,20 @@
     cashFlow.controller('NavBarCtrl', ['$scope', function ($scope) {
         $scope.isCollapsed = true;
     }]);
+
+    cashFlow.controller('DPickerCtrl', ['$scope', function ($scope) {
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.datePickerOpen = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+    }]);
 })();
