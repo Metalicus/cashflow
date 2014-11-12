@@ -135,7 +135,7 @@
         };
 
         $scope.setType = function (index) {
-            if ($scope.id === null) {
+            if ($scope.model.id === null) {
                 $scope.model.type = $scope.tabs[index].type;
 
                 for (var i = 0; i < $scope.tabs.length; i++)
