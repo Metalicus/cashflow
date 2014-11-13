@@ -92,119 +92,120 @@
             });
     }]);
 
-    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', '$http', 'id', function ($scope, $modalInstance, $http, id) {
-        // operation model
-        $scope.model = {
-            id: id,
-            type: 'OUTCOME',
-            date: new Date(),
-            amount: null,
-            moneyWas: null,
-            moneyBecome: null,
-            account: {},
-            currency: {},
-            category: {}
-        };
+    operations.service('tabService', function () {
+        this.type = null;
+        this.setType = function (newType) {
+            this.type = newType;
+        }
+    });
 
-        // ui-select models
-        $scope.account = {};
-        $scope.currency = {};
-        $scope.category = {};
-
+    operations.controller('TabController', ['$scope', 'tabService', function ($scope, tabService) {
         $scope.tabs = [
             {type: 'OUTCOME', disabled: false, active: true},
             {type: 'TRANSFER', disabled: false, active: false},
             {type: 'INCOME', disabled: false, active: false}
         ];
 
-        $scope.updateMoney = function () {
-
-        };
-
-        $scope.accountSelect = function (model) {
-            $scope.model.account = model;
-            $scope.model.moneyWas = model["balance"];
-        };
-
-        $scope.categorySelect = function (model) {
-            $scope.model.category = model;
-        };
-
-        $scope.currencySelect = function (model) {
-            $scope.model.currency = model;
-        };
-
-        $scope.setType = function (index) {
-            if ($scope.model.id === null) {
-                $scope.model.type = $scope.tabs[index].type;
-
-                for (var i = 0; i < $scope.tabs.length; i++)
-                    $scope.tabs[i].active = false;
-
-                $scope.tabs[index].active = true;
-            }
-        };
-
-        $scope.isActived = function (index) {
-            return $scope.tabs[index].active;
-        };
-
-        $scope.isTabDisabled = function (index) {
-            return $scope.tabs[index].disabled;
-        };
-
-        $scope.submit = function () {
-            $modalInstance.dismiss('ok');
-        };
-
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
-
-        $http.get('action/account/list')
-            .then(function (response) {
-                $scope.accounts = response.data;
-            });
-
-        $http.get('action/currency/list')
-            .then(function (response) {
-                $scope.currencies = response.data;
-            });
-
-        $http.get('action/category/list')
-            .then(function (response) {
-                $scope.categories = response.data;
-            });
-
-        if (id !== null) {
-            $http.get('action/operation/get/' + id)
-                .success(function (data) {
-                    //model
-                    $scope.model.type = data.type;
-                    $scope.model.date = new Date(data.date);
-                    $scope.model.amount = data.amount;
-                    $scope.model.moneyWas = data.moneyWas;
-                    $scope.model.moneyBecome = data.moneyBecome;
-                    $scope.model.account = data.account;
-                    $scope.model.currency = data.currency;
-                    $scope.model.category = data.category;
-
-                    //ui-select
-                    $scope.account.selected = data.account;
-                    $scope.currency.selected = data.currency;
-                    $scope.category.selected = data.category;
-
-                    //tabs settings
+        $scope.$watch(function () {
+                return tabService.type;
+            },
+            function (newVal) {
+                if (newVal) {
                     for (var i = 0; i < $scope.tabs.length; i++) {
-                        if ($scope.tabs[i].type === data.type) {
-                            $scope.tabs[i].disabled = false;
-                            $scope.tabs[i].active = true;
-                        } else {
-                            $scope.tabs[i].disabled = true;
-                            $scope.tabs[i].active = false;
-                        }
+                        $scope.tabs[i].active = $scope.tabs[i].type === newVal;
                     }
-                });
-        }
+                }
+            }, true);
     }]);
+
+    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', '$http', 'tabService', 'id',
+        function ($scope, $modalInstance, $http, tabService, id) {
+            // operation model
+            $scope.model = {
+                id: id,
+                type: 'OUTCOME',
+                date: new Date(),
+                amount: null,
+                moneyWas: null,
+                moneyBecome: null,
+                account: {},
+                currency: {},
+                category: {}
+            };
+
+            tabService.setType($scope.model.type);
+
+            // ui-select models
+            $scope.account = {};
+            $scope.currency = {};
+            $scope.category = {};
+
+            $scope.changeType = function (newType) {
+                $scope.model.type = newType;
+                tabService.setType(newType);
+            };
+
+            $scope.updateMoney = function () {
+
+            };
+
+            $scope.accountSelect = function (model) {
+                $scope.model.account = model;
+                $scope.model.moneyWas = model["balance"];
+            };
+
+            $scope.categorySelect = function (model) {
+                $scope.model.category = model;
+            };
+
+            $scope.currencySelect = function (model) {
+                $scope.model.currency = model;
+            };
+
+            $scope.submit = function () {
+                $modalInstance.dismiss('ok');
+            };
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+
+            $http.get('action/account/list')
+                .then(function (response) {
+                    $scope.accounts = response.data;
+                });
+
+            $http.get('action/currency/list')
+                .then(function (response) {
+                    $scope.currencies = response.data;
+                });
+
+            $http.get('action/category/list')
+                .then(function (response) {
+                    $scope.categories = response.data;
+                });
+
+            if (id !== null) {
+                $http.get('action/operation/get/' + id)
+                    .success(function (data) {
+                        //model
+                        $scope.model.type = data.type;
+                        $scope.model.date = new Date(data.date);
+                        $scope.model.amount = data.amount;
+                        $scope.model.moneyWas = data.moneyWas;
+                        $scope.model.moneyBecome = data.moneyBecome;
+                        $scope.model.account = data.account;
+                        $scope.model.currency = data.currency;
+                        $scope.model.category = data.category;
+
+                        //ui-select
+                        $scope.account.selected = data.account;
+                        $scope.currency.selected = data.currency;
+                        $scope.category.selected = data.category;
+
+                        //tabs settings
+                        $scope.changeType($scope.model.type);
+                    });
+            }
+        }]);
 })();

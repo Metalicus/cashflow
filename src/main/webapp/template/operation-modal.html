@@ -2,17 +2,22 @@
     <h3 class="modal-title">Operation</h3>
 </div>
 <div class="modal-body">
-    <tabset type="pills">
-        <tab heading="Outcome" ng-click="setType(0)" disabled="isTabDisabled(0)" active="isActived(0)">
-            <div ng-include="'template/operation-outcome-tpl.html'"></div>
-        </tab>
-        <tab heading="Transfer" ng-click="setType(1)" disabled="isTabDisabled(1)" active="isActived(1)">
-            <div ng-include="'template/operation-transfer-tpl.html'"></div>
-        </tab>
-        <tab heading="Income" ng-click="setType(2)" disabled="isTabDisabled(2)" active="isActived(2)">
-            <div ng-include="'template/operation-income-tpl.html'"></div>
-        </tab>
-    </tabset>
+    <div ng-controller="TabController">
+        <tabset type="pills">
+            <tab heading="Outcome" disabled="tabs[0].disabled" active="tabs[0].active"
+                 ng-click="changeType(tabs[0].type)">
+                <div ng-include="'template/operation-outcome-tpl.html'"></div>
+            </tab>
+            <tab heading="Transfer" disabled="tabs[1].disabled" active="tabs[1].active"
+                 ng-click="changeType(tabs[1].type)">
+                <div ng-include="'template/operation-transfer-tpl.html'"></div>
+            </tab>
+            <tab heading="Income" disabled="tabs[2].disabled" active="tabs[2].active"
+                 ng-click="changeType(tabs[2].type)">
+                <div ng-include="'template/operation-income-tpl.html'"></div>
+            </tab>
+        </tabset>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="submit()">Save</button>
