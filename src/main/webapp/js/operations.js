@@ -50,14 +50,14 @@
             multiSelect: false,
             enableSorting: true,
             columnDefs: [
-                {name: 'Date', field: 'date', type: 'date', cellFilter: 'date:"yyyy-MM-dd"'},
-                {name: 'Type', field: 'type'},
-                {name: 'Account', field: 'account.name'},
-                {name: 'Currency', field: 'currency.name'},
-                {name: 'Amount', field: 'amount'},
-                {name: 'Cross currency amount', field: 'crossCurrency.amount'},
-                {name: 'Exchange rate', field: 'crossCurrency.exchangeRate'},
-                {name: 'Info', field: 'info'}
+                {name: 'Date', field: 'date', type: 'date', cellFilter: 'date:"yyyy-MM-dd"', width: 150},
+                {name: 'Type', field: 'type', width: 200},
+                {name: 'Account', field: 'account.name', width: 200},
+                {name: 'Currency', field: 'currency.name', width: 200},
+                {name: 'Amount', field: 'amount', width: 200},
+                {name: 'Cross currency amount', field: 'crossCurrency.amount', width: 200},
+                {name: 'Exchange rate', field: 'crossCurrency.exchangeRate', width: 200},
+                {name: 'Info', field: 'info', width: 200}
             ]
         };
 
