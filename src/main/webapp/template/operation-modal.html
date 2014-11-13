@@ -3,17 +3,14 @@
 </div>
 <div class="modal-body">
     <div ng-controller="TabController">
-        <tabset type="pills">
-            <tab heading="Outcome" disabled="tabs[0].disabled" active="tabs[0].active"
-                 ng-click="tabs[0].disabled || changeType(tabs[0].type)">
+        <tabset type-tabs ng-model="model.type" type="pills">
+            <tab heading="Outcome" active="tabs[0].active">
                 <div ng-include="'template/operation-outcome-tpl.html'"></div>
             </tab>
-            <tab heading="Transfer" disabled="tabs[1].disabled" active="tabs[1].active"
-                 ng-click="tabs[1].disabled || changeType(tabs[1].type)">
+            <tab heading="Transfer" active="tabs[1].active">
                 <div ng-include="'template/operation-transfer-tpl.html'"></div>
             </tab>
-            <tab heading="Income" disabled="tabs[2].disabled" active="tabs[2].active"
-                 ng-click="tabs[2].disabled || changeType(tabs[2].type)">
+            <tab heading="Income" active="tabs[2].active">
                 <div ng-include="'template/operation-income-tpl.html'"></div>
             </tab>
         </tabset>
