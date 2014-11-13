@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 
-public class ImportFromAccountring {
+public class ImportFromAccounting {
 
     public static void main(String[] args) throws Exception {
         final Properties connectionProperties = new Properties();
@@ -89,7 +89,7 @@ public class ImportFromAccountring {
                 operation.setCurrency(currencies.get(resultSet.getInt("currency_id")));
                 operation.setCategory(categories.get(resultSet.getInt("category_id")));
                 operation.setInfo(resultSet.getString("info"));
-                operation.setAmount(resultSet.getBigDecimal("totalCurrency"));
+                operation.setAmount(resultSet.getBigDecimal("total"));
                 operation.setMoneyWas(resultSet.getBigDecimal("moneyWas"));
                 operation.setMoneyBecome(resultSet.getBigDecimal("moneyBecome"));
 
@@ -102,13 +102,10 @@ public class ImportFromAccountring {
                 final BigDecimal exchangeRate = resultSet.getBigDecimal("exchangeRate");
                 if (exchangeRate != null) {
                     final CrossCurrency crossCurrency = new CrossCurrency();
-                    crossCurrency.setAmount(resultSet.getBigDecimal("total"));
+                    crossCurrency.setAmount(resultSet.getBigDecimal("totalCurrency"));
                     crossCurrency.setExchangeRate(exchangeRate);
                     operation.setCrossCurrency(crossCurrency);
                 }
-
-                if (operation.getAmount() == null) // bug from old app
-                    operation.setAmount(resultSet.getBigDecimal("total"));
 
                 if (operation.getAmount().signum() < 0)
                     operation.setAmount(operation.getAmount().negate());

@@ -93,8 +93,7 @@ public class Operation {
 
     /**
      * @return type of the operation. It can be 'INCOME' if you put money into the account,
-     * or 'OUTCOME' if you spend money. And it can be 'TRANSFER' then you transfer money from one account to another,
-     * in that case will be creating two operations with 'TRANSFER' type: one for one account and for second one
+     * or 'OUTCOME' if you spend money. And it can be 'TRANSFER' then you transfer money from one account to another.
      */
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)

@@ -39,7 +39,7 @@ public class CrossCurrency {
     }
 
     /**
-     * @return amount of the money spent in different currency
+     * @return amount of the money spent in currency of the account
      */
     @Column(nullable = false)
     public BigDecimal getAmount() {
