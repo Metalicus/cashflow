@@ -2,70 +2,110 @@
     <h3 class="modal-title">Operation</h3>
 </div>
 <div class="modal-body">
-    <div ng-controller="TypeTabController">
-        <!-- Tabs to show operation type -->
-        <tabset type-tabs ng-model="model.type" type="pills">
-            <tab heading="Outcome" active="tabs[0].active"></tab>
-            <tab heading="Transfer" active="tabs[1].active"></tab>
-            <tab heading="Income" active="tabs[2].active"></tab>
-        </tabset>
-    </div>
+    <form role="form" ng-submit="submit()" novalidate>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div ng-controller="TypeTabController">
+                        <tabset type-tabs ng-model="model.type" type="pills">
+                            <tab heading="Outcome" active="tabs[0].active"></tab>
+                            <tab heading="Transfer" active="tabs[1].active"></tab>
+                            <tab heading="Income" active="tabs[2].active"></tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Date of operation</label>
 
-    <form role="form" style="margin-top: 10px" ng-submit="submit()" novalidate>
-        <div class="form-group">
-            <label>Date of operation</label>
-
-            <div ng-controller="DPickerCtrl">
-                <p class="input-group">
-                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="model.date"
-                           is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                        <p class="input-group">
+                            <input type="text" class="form-control input-sm" datepicker-popup="{{format}}"
+                                   ng-model="model.date"
+                                   is-open="opened" datepicker-options="dateOptions" ng-required="true"
+                                   close-text="Close"/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="open($event)">
+                        <button type="button" class="btn btn-default btn-sm" ng-click="open($event)">
                             <i class="glyphicon glyphicon-calendar"></i>
                         </button>
                     </span>
-                </p>
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label>Account</label>
-            <ui-select ng-model="account.selected" on-select="accountSelect($model)" required>
-                <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="account in accounts | filter: $select.search">
-                    {{account.name}}
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group">
-            <label>Currency</label>
-            <ui-select ng-model="currency.selected" on-select="currencySelect($model)" required>
-                <ui-select-match placeholder="Select currency...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="currency in currencies | filter: $select.search">
-                    {{currency.name}}
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group">
-            <label>Category</label>
-            <ui-select ng-model="category.selected" on-select="categorySelect($model)" required>
-                <ui-select-match placeholder="Select category...">{{$select.selected.name}}</ui-select-match>
-                <ui-select-choices repeat="category in categories | filter: $select.search">
-                    {{category.name}}
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="form-group">
-            <label for="amount">Money amount in operation</label>
-            <input type="text" class="form-control" id="amount" placeholder="" ng-model="amount"
-                   ng-change="updateMoney()">
-        </div>
-        <div class="form-group">
-            <label for="moneyWas">Money was on account before operation</label>
-            <input type="text" class="form-control" id="moneyWas" placeholder="" ng-model="moneyWas">
-        </div>
-        <div class="form-group">
-            <label for="moneyBecome">Money become on account after operation</label>
-            <input type="text" class="form-control" id="moneyBecome" placeholder="" ng-model="moneyBecome">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Account</label>
+                        <ui-select ng-model="account.selected" on-select="accountSelect($model)" required>
+                            <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices repeat="account in accounts | filter: $select.search">
+                                {{account.name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <ui-select ng-model="currency.selected" on-select="currencySelect($model)" required>
+                            <ui-select-match placeholder="Select currency...">{{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="currency in currencies | filter: $select.search">
+                                {{currency.name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <ui-select ng-model="category.selected" on-select="categorySelect($model)" required>
+                            <ui-select-match placeholder="Select category...">{{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="category in categories | filter: $select.search">
+                                {{category.name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="amount">Money <a href="#"
+                                                         tooltip="The amount of money of this operation in operation currency"><span
+                                    class="glyphicon glyphicon-question-sign"></span></a></label>
+                            <input type="text" class="form-control input-sm" id="amount" placeholder=""
+                                   ng-model="model.amount"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="moneyWas">Money before <a href="#" tooltip="Money was on account before the
+                        operation"><span
+                                class="glyphicon glyphicon-question-sign"></span></a></label>
+                        <input type="text" class="form-control input-sm" id="moneyWas" placeholder=""
+                               ng-model="model.moneyWas">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="moneyBecome">Money after <a href="#"
+                                                                tooltip="Money become on account after operation"><span
+                                class="glyphicon glyphicon-question-sign"></span></a></label>
+                        <input type="text" class="form-control input-sm" id="moneyBecome" placeholder=""
+                               ng-model="model.moneyBecome">
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 
