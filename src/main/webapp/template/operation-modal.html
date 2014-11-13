@@ -2,19 +2,58 @@
     <h3 class="modal-title">Operation</h3>
 </div>
 <div class="modal-body">
-    <div ng-controller="TabController">
+    <div ng-controller="TypeTabController">
+        <!-- Tabs to show operation type -->
         <tabset type-tabs ng-model="model.type" type="pills">
-            <tab heading="Outcome" active="tabs[0].active">
-                <div ng-include="'template/operation-outcome-tpl.html'"></div>
-            </tab>
-            <tab heading="Transfer" active="tabs[1].active">
-                <div ng-include="'template/operation-transfer-tpl.html'"></div>
-            </tab>
-            <tab heading="Income" active="tabs[2].active">
-                <div ng-include="'template/operation-income-tpl.html'"></div>
-            </tab>
+            <tab heading="Outcome" active="tabs[0].active"></tab>
+            <tab heading="Transfer" active="tabs[1].active"></tab>
+            <tab heading="Income" active="tabs[2].active"></tab>
         </tabset>
     </div>
+
+    <form role="form" style="margin-top: 10px" ng-submit="submit()" novalidate>
+        <div class="form-group">
+            <label>Date of operation</label>
+
+            <div ng-controller="DPickerCtrl">
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="model.date"
+                           is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Account</label>
+            <select-account></select-account>
+        </div>
+        <div class="form-group">
+            <label>Currency</label>
+            <select-currency></select-currency>
+        </div>
+        <div class="form-group">
+            <label>Category</label>
+            <select-category></select-category>
+        </div>
+        <div class="form-group">
+            <label for="amount">Money amount in operation</label>
+            <input type="text" class="form-control" id="amount" placeholder="" ng-model="amount"
+                   ng-change="updateMoney()">
+        </div>
+        <div class="form-group">
+            <label for="moneyWas">Money was on account before operation</label>
+            <input type="text" class="form-control" id="moneyWas" placeholder="" ng-model="moneyWas">
+        </div>
+        <div class="form-group">
+            <label for="moneyBecome">Money become on account after operation</label>
+            <input type="text" class="form-control" id="moneyBecome" placeholder="" ng-model="moneyBecome">
+        </div>
+    </form>
+
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="submit()">Save</button>

@@ -1,13 +1,6 @@
 (function () {
     var operations = angular.module('cashflow-operations', []);
 
-    operations.directive('dpicker', function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'template/dpicker.html'
-        }
-    });
-
     operations.directive('selectAccount', function () {
         return {
             restrict: 'E',
@@ -53,6 +46,25 @@
         }
     });
 
+    // controller for datepicker, to hold options and open event
+    operations.controller('DPickerCtrl', ['$scope', function ($scope) {
+        $scope.open = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        $scope.format = $scope.formats[0];
+    }]);
+
+    // controller for operation table and modal dialogs calls
     operations.controller('OperationsCtrl', ['$scope', '$http', '$modal', function ($scope, $http, $modal) {
         $scope.gridOptions = {
             enableRowHeaderSelection: false,
@@ -116,7 +128,8 @@
             });
     }]);
 
-    operations.controller('TabController', ['$scope', function ($scope) {
+    // controller for model type tabs. Hold all tab operations, like select current, etc.
+    operations.controller('TypeTabController', ['$scope', function ($scope) {
         $scope.tabs = [
             {type: 'OUTCOME', disabled: false, active: true},
             {type: 'TRANSFER', disabled: false, active: false},
@@ -142,6 +155,7 @@
         };
     }]);
 
+    // controller for operation edit or add. Hold operation model
     operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', '$http', 'id', function ($scope, $modalInstance, $http, id) {
         // operation model
         $scope.model = {
