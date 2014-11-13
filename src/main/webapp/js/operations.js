@@ -44,7 +44,7 @@
     }]);
 
     // controller for operation table and modal dialogs calls
-    operations.controller('OperationsCtrl', ['$scope', '$http', '$modal', function ($scope, $http, $modal) {
+    operations.controller('OperationsCtrl', ['$scope', 'operationFactory', '$modal', function ($scope, operationFactory, $modal) {
         $scope.gridOptions = {
             enableRowHeaderSelection: false,
             multiSelect: false,
@@ -57,7 +57,7 @@
                 {name: 'Amount', field: 'amount'},
                 {name: 'Cross currency amount', field: 'crossCurrency.amount'},
                 {name: 'Exchange rate', field: 'crossCurrency.exchangeRate'},
-                {name: 'Info', filed: 'info'}
+                {name: 'Info', field: 'info'}
             ]
         };
 
@@ -98,13 +98,12 @@
             }
         };
 
-        $http.get('action/operation/list')
-            .success(function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    data[i].date = new Date(data[i].date);
-                }
-                $scope.gridOptions.data = data;
-            });
+        operationFactory.list(function (data) {
+            for (var i = 0; i < data.length; i++) {
+                data[i].date = new Date(data[i].date);
+            }
+            $scope.gridOptions.data = data;
+        });
     }]);
 
     // controller for model type tabs. Hold all tab operations, like select current, etc.
@@ -135,62 +134,56 @@
     }]);
 
     // controller for operation edit or add. Hold operation model
-    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', '$http', 'id', function ($scope, $modalInstance, $http, id) {
-        // operation model
-        $scope.model = {
-            id: id,
-            type: 'OUTCOME',
-            date: new Date(),
-            amount: 0,
-            moneyWas: 0,
-            moneyBecome: 0,
-            account: null,
-            currency: null,
-            category: null
-        };
+    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', 'operationFactory', 'accountFactory', 'currencyFactory', 'categoryFactory', 'id',
+        function ($scope, $modalInstance, operationFactory, accountFactory, currencyFactory, categoryFactory, id) {
+            // operation model
+            $scope.model = {
+                id: id,
+                type: 'OUTCOME',
+                date: new Date(),
+                amount: 0,
+                moneyWas: 0,
+                moneyBecome: 0,
+                account: null,
+                currency: null,
+                category: null
+            };
 
-        $scope.moneyUpdate = function () {
-            if (!$scope.model.currency) return; // do nothing if currency not set
-            if (!$scope.model.account) return; // do nothing if account not set
-            if (!$scope.model.moneyWas) return; // do nothing if moneyWas id empty
+            $scope.moneyUpdate = function () {
+                if (!$scope.model.currency) return; // do nothing if currency not set
+                if (!$scope.model.account) return; // do nothing if account not set
+                if (!$scope.model.moneyWas) return; // do nothing if moneyWas id empty
 
-            if ($scope.model.currency.id == $scope.model.account.currency.id) {
-                // if operation currency is equal to account currency we can calculate
-                if ($scope.model.type === 'OUTCOME') {
-                    $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) - parseFloat($scope.model.amount)).toFixed(2);
-                } else if ($scope.model === 'INCOME') {
-                    $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) + parseFloat($scope.model.amount)).toFixed(2);
+                if ($scope.model.currency.id == $scope.model.account.currency.id) {
+                    // if operation currency is equal to account currency we can calculate
+                    if ($scope.model.type === 'OUTCOME') {
+                        $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) - parseFloat($scope.model.amount)).toFixed(2);
+                    } else if ($scope.model === 'INCOME') {
+                        $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) + parseFloat($scope.model.amount)).toFixed(2);
+                    }
                 }
-            }
-        };
+            };
 
-        $scope.submit = function () {
-            $modalInstance.dismiss('ok');
-        };
+            $scope.submit = function () {
+                $modalInstance.dismiss('ok');
+            };
 
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
 
-        $http.get('action/account/list')
-            .then(function (response) {
-                $scope.accounts = response.data;
+            accountFactory.list(function (data) {
+                $scope.accounts = data;
+            });
+            currencyFactory.list(function (date) {
+                $scope.currencies = date;
+            });
+            categoryFactory.list(function (date) {
+                $scope.categories = date;
             });
 
-        $http.get('action/currency/list')
-            .then(function (response) {
-                $scope.currencies = response.data;
-            });
-
-        $http.get('action/category/list')
-            .then(function (response) {
-                $scope.categories = response.data;
-            });
-
-        if (id !== null) {
-            $http.get('action/operation/get/' + id)
-                .success(function (data) {
-                    //model
+            if (id !== null) {
+                operationFactory.get(id, function (data) {
                     $scope.model.type = data.type;
                     $scope.model.date = new Date(data.date);
                     $scope.model.amount = data.amount;
@@ -200,14 +193,14 @@
                     $scope.model.currency = data.currency;
                     $scope.model.category = data.category;
                 });
-        }
-
-        // let's watch for account change and update money fields, but after we set default value
-        $scope.$watch('model.account', function (newVal) {
-            if (newVal !== null) {
-                $scope.model.moneyWas = $scope.model.account.balance;
-                $scope.moneyUpdate();
             }
-        });
-    }]);
+
+            // let's watch for account change and update money fields, but after we set default value
+            $scope.$watch('model.account', function (newVal) {
+                if (newVal !== null) {
+                    $scope.model.moneyWas = $scope.model.account.balance;
+                    $scope.moneyUpdate();
+                }
+            });
+        }]);
 })();
