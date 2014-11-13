@@ -146,13 +146,14 @@
                 moneyBecome: 0,
                 account: null,
                 currency: null,
-                category: null
+                category: null,
+                info: ''
             };
 
             $scope.moneyUpdate = function () {
-                if (!$scope.model.currency) return; // do nothing if currency not set
-                if (!$scope.model.account) return; // do nothing if account not set
-                if (!$scope.model.moneyWas) return; // do nothing if moneyWas id empty
+                if (!$scope.model.currency) return; // do nothing if currency is not set
+                if (!$scope.model.account) return; // do nothing if account is not set
+                if (!$scope.model.moneyWas) return; // do nothing if moneyWas is empty
 
                 if ($scope.model.currency.id == $scope.model.account.currency.id) {
                     // if operation currency is equal to account currency we can calculate
@@ -192,6 +193,7 @@
                     $scope.model.account = data.account;
                     $scope.model.currency = data.currency;
                     $scope.model.category = data.category;
+                    $scope.model.info = data.info;
                 });
             }
 
