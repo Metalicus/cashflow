@@ -29,15 +29,30 @@
         </div>
         <div class="form-group">
             <label>Account</label>
-            <select-account></select-account>
+            <ui-select ng-model="account.selected" on-select="accountSelect($model)" required>
+                <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="account in accounts | filter: $select.search">
+                    {{account.name}}
+                </ui-select-choices>
+            </ui-select>
         </div>
         <div class="form-group">
             <label>Currency</label>
-            <select-currency></select-currency>
+            <ui-select ng-model="currency.selected" on-select="currencySelect($model)" required>
+                <ui-select-match placeholder="Select currency...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="currency in currencies | filter: $select.search">
+                    {{currency.name}}
+                </ui-select-choices>
+            </ui-select>
         </div>
         <div class="form-group">
             <label>Category</label>
-            <select-category></select-category>
+            <ui-select ng-model="category.selected" on-select="categorySelect($model)" required>
+                <ui-select-match placeholder="Select category...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="category in categories | filter: $select.search">
+                    {{category.name}}
+                </ui-select-choices>
+            </ui-select>
         </div>
         <div class="form-group">
             <label for="amount">Money amount in operation</label>

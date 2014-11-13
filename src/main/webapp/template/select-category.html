@@ -1,6 +1,0 @@
-<ui-select ng-model="category.selected" on-select="categorySelect($model)" required>
-    <ui-select-match placeholder="Select category...">{{$select.selected.name}}</ui-select-match>
-    <ui-select-choices repeat="category in categories | filter: $select.search">
-        {{category.name}}
-    </ui-select-choices>
-</ui-select>

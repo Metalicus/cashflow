@@ -1,27 +1,6 @@
 (function () {
     var operations = angular.module('cashflow-operations', []);
 
-    operations.directive('selectAccount', function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'template/select-account.html'
-        }
-    });
-
-    operations.directive('selectCurrency', function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'template/select-currency.html'
-        }
-    });
-
-    operations.directive('selectCategory', function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'template/select-category.html'
-        }
-    });
-
     operations.directive('typeTabs', function () {
         return {
             restrict: 'A',

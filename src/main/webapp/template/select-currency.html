@@ -1,6 +1,0 @@
-<ui-select ng-model="currency.selected" on-select="currencySelect($model)" required>
-    <ui-select-match placeholder="Select currency...">{{$select.selected.name}}</ui-select-match>
-    <ui-select-choices repeat="currency in currencies | filter: $select.search">
-        {{currency.name}}
-    </ui-select-choices>
-</ui-select>
