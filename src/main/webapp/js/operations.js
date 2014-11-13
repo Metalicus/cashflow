@@ -134,8 +134,8 @@
     }]);
 
     // controller for operation edit or add. Hold operation model
-    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', 'operationFactory', 'accountFactory', 'currencyFactory', 'categoryFactory', 'id',
-        function ($scope, $modalInstance, operationFactory, accountFactory, currencyFactory, categoryFactory, id) {
+    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', 'operationFactory', 'accountFactory', 'currencyFactory', 'categoryFactory', '$timeout', 'id',
+        function ($scope, $modalInstance, operationFactory, accountFactory, currencyFactory, categoryFactory, $timeout, id) {
             // operation model
             $scope.model = {
                 id: id,
@@ -148,6 +148,14 @@
                 currency: null,
                 category: null,
                 info: ''
+            };
+
+            $scope.changeAccount = function (model) {
+                $scope.model.moneyWas = model.balance;
+                $timeout(function () {
+                    // because of on-select fires before set the selected value to model we need to little timeout before performig update
+                    $scope.moneyUpdate();
+                }, 100);
             };
 
             $scope.moneyUpdate = function () {
@@ -196,13 +204,5 @@
                     $scope.model.info = data.info;
                 });
             }
-
-            // let's watch for account change and update money fields, but after we set default value
-            $scope.$watch('model.account', function (newVal) {
-                if (newVal !== null) {
-                    $scope.model.moneyWas = $scope.model.account.balance;
-                    $scope.moneyUpdate();
-                }
-            });
         }]);
 })();
