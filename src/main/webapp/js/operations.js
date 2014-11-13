@@ -141,34 +141,27 @@
             id: id,
             type: 'OUTCOME',
             date: new Date(),
-            amount: null,
-            moneyWas: null,
-            moneyBecome: null,
-            account: {},
-            currency: {},
-            category: {}
+            amount: 0,
+            moneyWas: 0,
+            moneyBecome: 0,
+            account: null,
+            currency: null,
+            category: null
         };
 
-        // ui-select models
-        $scope.account = {};
-        $scope.currency = {};
-        $scope.category = {};
+        $scope.moneyUpdate = function () {
+            if (!$scope.model.currency) return; // do nothing if currency not set
+            if (!$scope.model.account) return; // do nothing if account not set
+            if (!$scope.model.moneyWas) return; // do nothing if moneyWas id empty
 
-        $scope.updateMoney = function () {
-
-        };
-
-        $scope.accountSelect = function (model) {
-            $scope.model.account = model;
-            $scope.model.moneyWas = model["balance"];
-        };
-
-        $scope.categorySelect = function (model) {
-            $scope.model.category = model;
-        };
-
-        $scope.currencySelect = function (model) {
-            $scope.model.currency = model;
+            if ($scope.model.currency.id == $scope.model.account.currency.id) {
+                // if operation currency is equal to account currency we can calculate
+                if ($scope.model.type === 'OUTCOME') {
+                    $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) - parseFloat($scope.model.amount)).toFixed(2);
+                } else if ($scope.model === 'INCOME') {
+                    $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) + parseFloat($scope.model.amount)).toFixed(2);
+                }
+            }
         };
 
         $scope.submit = function () {
@@ -206,12 +199,15 @@
                     $scope.model.account = data.account;
                     $scope.model.currency = data.currency;
                     $scope.model.category = data.category;
-
-                    //ui-select
-                    $scope.account.selected = data.account;
-                    $scope.currency.selected = data.currency;
-                    $scope.category.selected = data.category;
                 });
         }
+
+        // let's watch for account change and update money fields, but after we set default value
+        $scope.$watch('model.account', function (newVal) {
+            if (newVal !== null) {
+                $scope.model.moneyWas = $scope.model.account.balance;
+                $scope.moneyUpdate();
+            }
+        });
     }]);
 })();
