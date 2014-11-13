@@ -94,8 +94,15 @@
 
     operations.service('tabService', function () {
         this.type = null;
+        this.editMode = false;
         this.setType = function (newType) {
             this.type = newType;
+        };
+        this.enableEditMode = function () {
+            this.editMode = true;
+        };
+        this.disableEditMode = function () {
+            this.editMode = false;
         }
     });
 
@@ -116,6 +123,15 @@
                     }
                 }
             }, true);
+
+        $scope.$watch(function () {
+                return tabService.editMode;
+            },
+            function (newVal) {
+                for (var i = 0; i < $scope.tabs.length; i++) {
+                    $scope.tabs[i].disabled = newVal;
+                }
+            }, true);
     }]);
 
     operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', '$http', 'tabService', 'id',
@@ -134,6 +150,7 @@
             };
 
             tabService.setType($scope.model.type);
+            tabService.disableEditMode();
 
             // ui-select models
             $scope.account = {};
@@ -205,6 +222,7 @@
 
                         //tabs settings
                         $scope.changeType($scope.model.type);
+                        tabService.enableEditMode();
                     });
             }
         }]);
