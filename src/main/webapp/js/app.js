@@ -39,6 +39,9 @@
                 $http.get('action/operation/get/' + id).then(function (response) {
                     callback(response.data);
                 });
+            },
+            save: function (model, callback) {
+                callback();
             }
         }
     }]);

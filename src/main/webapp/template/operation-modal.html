@@ -2,7 +2,7 @@
     <h3 class="modal-title">Operation</h3>
 </div>
 <div class="modal-body">
-    <form role="form" ng-submit="submit()" novalidate>
+    <form name="operationForm" role="form" ng-submit="submit()" novalidate>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -17,12 +17,13 @@
             </div>
             <div class="row" style="margin-top: 10px">
                 <div class="col-md-12">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': operationForm.date.$invalid}"
+                         ng-controller="DPickerCtrl">
                         <label>Date of operation</label>
 
                         <p class="input-group">
-                            <input type="text" class="form-control input-sm" datepicker-popup="{{format}}"
-                                   ng-model="model.date"
+                            <input type="text" name="date" class="form-control input-sm" datepicker-popup="{{format}}"
+                                   ng-model="model.date" ng-required="true"
                                    is-open="opened" datepicker-options="dateOptions"
                                    close-text="Close"/>
                     <span class="input-group-btn">
@@ -36,9 +37,10 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': operationForm.account.$invalid}">
                         <label>Account</label>
-                        <ui-select ng-model="$parent.model.account" on-select="changeAccount($model)">
+                        <ui-select name="account" ng-model="$parent.model.account" on-select="changeAccount($model)"
+                                   ng-required="true">
                             <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
                             <ui-select-choices repeat="account in accounts | filter: $select.search">
                                 {{account.name}}
@@ -47,9 +49,9 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': operationForm.currency.$invalid}">
                         <label>Currency</label>
-                        <ui-select ng-model="$parent.model.currency">
+                        <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true">
                             <ui-select-match placeholder="Select currency...">{{$select.selected.name}}
                             </ui-select-match>
                             <ui-select-choices repeat="currency in currencies | filter: $select.search">
@@ -61,9 +63,9 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': operationForm.category.$invalid}">
                         <label>Category</label>
-                        <ui-select ng-model="$parent.model.category">
+                        <ui-select name="category" ng-model="$parent.model.category" ng-required="true">
                             <ui-select-match placeholder="Select category...">{{$select.selected.name}}
                             </ui-select-match>
                             <ui-select-choices repeat="category in categories | filter: $select.search">
@@ -76,12 +78,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
                             <label for="amount">Money <a href="#"
                                                          tooltip="The amount of money of this operation in the operation currency"><span
                                     class="glyphicon glyphicon-question-sign"></span></a></label>
-                            <input type="text" class="form-control input-sm" id="amount" ng-model="model.amount"
-                                   ng-change="moneyUpdate()" numbers-only/>
+                            <input type="text" name="amount" class="form-control input-sm" id="amount"
+                                   ng-model="model.amount"
+                                   ng-required="true" ng-change="moneyUpdate()" numbers-only/>
                         </div>
                     </div>
                 </div>
@@ -123,6 +126,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="submit()">Save</button>
+    <button class="btn btn-primary" ng-click="submit()" ng-disabled="operationForm.$invalid">Save</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

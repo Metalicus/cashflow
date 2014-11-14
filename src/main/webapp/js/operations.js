@@ -141,9 +141,9 @@
                 id: id,
                 type: 'OUTCOME',
                 date: new Date(),
-                amount: 0,
-                moneyWas: 0,
-                moneyBecome: 0,
+                amount: null,
+                moneyWas: null,
+                moneyBecome: null,
                 account: null,
                 currency: null,
                 category: null,
@@ -174,7 +174,9 @@
             };
 
             $scope.submit = function () {
-                $modalInstance.dismiss('ok');
+                operationFactory.save($scope.model, function () {
+                    $modalInstance.dismiss('ok');
+                });
             };
 
             $scope.cancel = function () {
