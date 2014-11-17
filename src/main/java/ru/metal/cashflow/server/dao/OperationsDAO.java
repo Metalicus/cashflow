@@ -41,11 +41,6 @@ public class OperationsDAO {
     public void insert(Operation model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
-
-            // insert CrossCurrency before inserting operation
-            if (model.getCrossCurrency() != null)
-                session.save(model.getCrossCurrency());
-
             session.save(model);
             session.flush();
         } catch (HibernateException e) {

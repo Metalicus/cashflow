@@ -159,7 +159,7 @@ public class Operation {
      * for example, exchange rate for currency. Can be {@code null}
      * @see CrossCurrency
      */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(nullable = true)
     public CrossCurrency getCrossCurrency() {
         return crossCurrency;
