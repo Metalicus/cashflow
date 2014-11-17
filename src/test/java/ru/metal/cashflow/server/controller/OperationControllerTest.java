@@ -35,14 +35,19 @@ public class OperationControllerTest extends SpringControllerTestCase {
 
     @Test
     public void insertTest() throws Exception {
-        final Currency currency = new Currency();
-        currency.setName("EUR");
-        currencyService.insert(currency);
+        final Currency currency1 = new Currency();
+        currency1.setName("EUR");
+        currencyService.insert(currency1);
+
+        final Currency currency2 = new Currency();
+        currency2.setName("EUR");
+        currencyService.insert(currency2);
+
 
         final Account account = new Account();
         account.setBalance(BigDecimal.TEN);
         account.setName("test account");
-        account.setCurrency(currency);
+        account.setCurrency(currency1);
         accountService.insert(account);
 
         final Category category = new Category();
@@ -59,19 +64,16 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 "  \"account\": {" +
                 "    \"id\": " + account.getId() + "," +
                 "    \"currency\": {" +
-                "       \"id\": " + currency.getId() +
+                "       \"id\": " + currency1.getId() +
                 "    }" +
                 "  }," +
                 "  \"currency\": {" +
-                "    \"id\": " + currency.getId() +
+                "    \"id\": " + currency2.getId() +
                 "  }," +
                 "  \"category\": {" +
                 "    \"id\": " + category.getId() +
                 "  }," +
-                "  \"info\": \"test info\"," +
-                "  \"crossCurrency\": {" +
-                "    \"id\": 340" +
-                "  }" +
+                "  \"info\": \"test info\"" +
                 "}";
 
         assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));

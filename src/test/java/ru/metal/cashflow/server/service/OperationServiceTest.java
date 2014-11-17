@@ -222,4 +222,66 @@ public class OperationServiceTest extends SpringTestCase {
         assertEquals(operationUSD, operationFromDB);
         assertNull(operationFromDB.getCrossCurrency());
     }
+
+    @Test
+    public void updateTest3() throws Exception {
+        // old operation was same currency operation, but operation became cross-currency
+        final Currency currencyEUR = new Currency();
+        currencyEUR.setName("EUR");
+        currencyService.insert(currencyEUR);
+
+        final Currency currencyUSD = new Currency();
+        currencyUSD.setName("USD");
+        currencyService.insert(currencyUSD);
+
+        final Account accountEUR = new Account();
+        accountEUR.setName("Test Account");
+        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setCurrency(currencyEUR);
+        accountService.insert(accountEUR);
+
+        final Category category = new Category();
+        category.setName("Test Category");
+        categoryService.insert(category);
+
+        final Operation operationEUR = new Operation();
+        operationEUR.setAccount(accountEUR);
+        operationEUR.setCurrency(currencyEUR);
+        operationEUR.setCategory(category);
+        operationEUR.setDate(new Date());
+        operationEUR.setType(Operation.FlowType.OUTCOME);
+        operationEUR.setInfo("test info");
+        operationEUR.setMoneyWas(new BigDecimal("120.35"));
+        operationEUR.setMoneyBecome(new BigDecimal("109.00"));
+        operationEUR.setAmount(new BigDecimal("11.35"));
+        operationService.insert(operationEUR);
+        assertNull(operationEUR.getCrossCurrency());
+
+        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        operationEUR.setCurrency(currencyUSD);
+        operationService.update(operationEUR);
+
+        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        final Operation operationFromDB = operationService.get(operationEUR.getId());
+
+        assertNotNull(operationEUR.getCrossCurrency());
+        // to performe equals between object let's set id from created cross-currency
+        operationEUR.getCrossCurrency().setId(operationFromDB.getCrossCurrency().getId());
+
+        assertEquals(operationEUR, operationFromDB);
+        final CrossCurrency crossCurrency = operationFromDB.getCrossCurrency();
+        assertNotNull(crossCurrency);
+        assertEquals(new BigDecimal("11.35"), crossCurrency.getAmount());
+        assertEquals(new BigDecimal("1.00"), crossCurrency.getExchangeRate());
+    }
 }
