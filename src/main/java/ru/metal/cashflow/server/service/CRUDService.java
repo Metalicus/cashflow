@@ -39,7 +39,7 @@ public interface CRUDService<T> {
      * @return model or {@code null}
      * @throws CFException error while executing DB access
      */
-    T get(Integer id) throws CFException;
+    T get(int id) throws CFException;
 
     /**
      * Delete existing model by id

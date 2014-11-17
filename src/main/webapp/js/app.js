@@ -31,25 +31,31 @@
     cashFlow.factory('operationFactory', ['$http', function ($http) {
         return {
             list: function (callback) {
-                $http.get('action/operation/list').then(function (response) {
-                    callback(response.data);
+                $http.get('action/operation/list').success(function (data) {
+                    callback(data);
+                }).error(function (data, status, header, config) {
                 });
             },
             get: function (id, callback) {
-                $http.get('action/operation/get/' + id).then(function (response) {
-                    callback(response.data);
+                $http.get('action/operation/get/' + id).success(function (data) {
+                    callback(data);
+                }).error(function (data, status, header, config) {
                 });
             },
             save: function (model, callback) {
-                callback();
+                $http.post('action/operation/save', model).success(function () {
+                    callback();
+                }).error(function (data, status, header, config) {
+                });
             }
         }
     }]);
     cashFlow.factory('accountFactory', ['$http', function ($http) {
         return {
             list: function (callback) {
-                $http.get('action/account/list').then(function (response) {
-                    callback(response.data);
+                $http.get('action/account/list').success(function (data) {
+                    callback(data);
+                }).error(function (data, status, header, config) {
                 });
             }
         }
@@ -57,8 +63,9 @@
     cashFlow.factory('currencyFactory', ['$http', function ($http) {
         return {
             list: function (callback) {
-                $http.get('action/currency/list').then(function (response) {
-                    callback(response.data);
+                $http.get('action/currency/list').success(function (data) {
+                    callback(data);
+                }).error(function (data, status, header, config) {
                 });
             }
         }
@@ -66,8 +73,9 @@
     cashFlow.factory('categoryFactory', ['$http', function ($http) {
         return {
             list: function (callback) {
-                $http.get('action/category/list').then(function (response) {
-                    callback(response.data);
+                $http.get('action/category/list').success(function (data) {
+                    callback(data);
+                }).error(function (data, status, header, config) {
                 });
             }
         }

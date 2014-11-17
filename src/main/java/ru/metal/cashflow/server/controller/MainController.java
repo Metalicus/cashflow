@@ -20,7 +20,7 @@ public class MainController implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @RequestMapping(value = "{beanName}/list", method = RequestMethod.GET)
-    public Object get(@PathVariable("beanName") String beanName) throws CFException {
+    public Object list(@PathVariable("beanName") String beanName) throws CFException {
         final Object bean = applicationContext.getBean(getManagerName(beanName));
         if (bean instanceof CRUDService) {
             return ((CRUDService) bean).list();
@@ -29,12 +29,9 @@ public class MainController implements ApplicationContextAware {
     }
 
     @RequestMapping(value = "{beanName}/get/{id}", method = RequestMethod.GET)
-    public Object get(@PathVariable("beanName") String beanName, @PathVariable("id") Integer id) throws CFException {
+    public Object get(@PathVariable("beanName") String beanName, @PathVariable("id") int id) throws CFException {
         final Object bean = applicationContext.getBean(getManagerName(beanName));
         if (bean instanceof CRUDService) {
-            if (id == null)
-                throw new CFException("ID can not be null");
-
             return ((CRUDService) bean).get(id);
         } else
             throw new CFException("Service is not has a CRUD support");

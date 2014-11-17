@@ -169,6 +169,16 @@ public class Operation {
         this.crossCurrency = crossCurrency;
     }
 
+    /**
+     * Check if this operation is same currency with account
+     *
+     * @return {@code true} if operation's currency and account's currency is the same
+     */
+    public boolean sameCurrency() {
+        return crossCurrency == null && (account == null || currency == null || account.getCurrency() == null || account.getCurrency().getId().equals(currency.getId()));
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

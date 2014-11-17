@@ -142,18 +142,28 @@
                 type: 'OUTCOME',
                 date: new Date(),
                 amount: null,
-                moneyWas: null,
-                moneyBecome: null,
+                moneyWas: 0,
+                moneyBecome: 0,
                 account: null,
                 currency: null,
                 category: null,
-                info: ''
+                info: '',
+                calcMoneyBecome: function () { // function to calculate money become
+                    var moneyWas = parseFloat($scope.model.moneyWas);
+                    var money = parseFloat($scope.model.amount);
+
+                    if (this.type === 'OUTCOME') {
+                        this.moneyBecome = (moneyWas - money).toFixed(2);
+                    } else {
+                        this.moneyBecome = (moneyWas + money).toFixed(2);
+                    }
+                }
             };
 
             $scope.changeAccount = function (model) {
                 $scope.model.moneyWas = model.balance;
                 $timeout(function () {
-                    // because of on-select fires before set the selected value to model we need to little timeout before performig update
+                    // due to the fact that the event is triggered before the model is selected, delay the money update
                     $scope.moneyUpdate();
                 }, 100);
             };
@@ -165,11 +175,7 @@
 
                 if ($scope.model.currency.id == $scope.model.account.currency.id) {
                     // if operation currency is equal to account currency we can calculate
-                    if ($scope.model.type === 'OUTCOME') {
-                        $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) - parseFloat($scope.model.amount)).toFixed(2);
-                    } else if ($scope.model === 'INCOME') {
-                        $scope.model.moneyBecome = (parseFloat($scope.model.moneyWas) + parseFloat($scope.model.amount)).toFixed(2);
-                    }
+                    $scope.model.calcMoneyBecome();
                 }
             };
 
@@ -204,6 +210,7 @@
                     $scope.model.currency = data.currency;
                     $scope.model.category = data.category;
                     $scope.model.info = data.info;
+                    $scope.model.crossCurrency = data.crossCurrency;
                 });
             }
         }]);

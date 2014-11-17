@@ -35,7 +35,7 @@ public class AccountService implements CRUDService<Account> {
 
     @Override
     @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Account get(Integer id) throws CFException {
+    public Account get(int id) throws CFException {
         return accountDAO.get(id);
     }
 

@@ -38,7 +38,7 @@ public class CategoryService implements CRUDService<Category> {
 
     @Override
     @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Category get(Integer id) throws CFException {
+    public Category get(int id) throws CFException {
         return categoryDAO.get(id);
     }
 

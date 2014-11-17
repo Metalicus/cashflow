@@ -35,7 +35,7 @@ public class CurrencyService implements CRUDService<Currency> {
 
     @Override
     @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Currency get(Integer id) throws CFException {
+    public Currency get(int id) throws CFException {
         return currencyDAO.get(id);
     }
 

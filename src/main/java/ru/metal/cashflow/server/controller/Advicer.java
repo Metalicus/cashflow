@@ -14,7 +14,7 @@ import java.io.StringWriter;
 public class Advicer {
 
     /**
-     * Catch all of the errors and sand back to user in JSON
+     * Catch all of the errors and send back to user in JSON
      *
      * @param exception ошибка
      * @return JSON представление ошибки
