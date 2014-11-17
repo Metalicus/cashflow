@@ -108,4 +108,59 @@ public class OperationServiceTest extends SpringTestCase {
         assertEquals(new BigDecimal("11.35"), crossCurrency.getAmount());
         assertEquals(new BigDecimal("0.80"), crossCurrency.getExchangeRate());
     }
+
+    @Test
+    public void updateTest1() throws Exception {
+        // simple update
+        final Currency currencyEUR = new Currency();
+        currencyEUR.setName("EUR");
+        currencyService.insert(currencyEUR);
+
+        final Currency currencyUSD = new Currency();
+        currencyUSD.setName("USD");
+        currencyService.insert(currencyUSD);
+
+        final Account accountEUR = new Account();
+        accountEUR.setName("Test Account");
+        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setCurrency(currencyEUR);
+        accountService.insert(accountEUR);
+
+        final Category category = new Category();
+        category.setName("Test Category");
+        categoryService.insert(category);
+
+        final Operation operationUSD = new Operation();
+        operationUSD.setAccount(accountEUR);
+        operationUSD.setCurrency(currencyUSD);
+        operationUSD.setCategory(category);
+        operationUSD.setDate(new Date());
+        operationUSD.setType(Operation.FlowType.OUTCOME);
+        operationUSD.setInfo("test info");
+        operationUSD.setMoneyWas(new BigDecimal("120.35"));
+        operationUSD.setMoneyBecome(new BigDecimal("109.00"));
+        operationUSD.setAmount(new BigDecimal("14.19"));
+        operationService.insert(operationUSD);
+
+        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        operationUSD.setMoneyBecome(new BigDecimal("107.14"));
+        operationUSD.setAmount(new BigDecimal("14.00"));
+        operationService.update(operationUSD);
+
+        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        final Operation operationFromDB = operationService.get(operationUSD.getId());
+        assertEquals(operationUSD, operationFromDB);
+        final CrossCurrency crossCurrency = operationFromDB.getCrossCurrency();
+        assertNotNull(crossCurrency);
+        assertEquals(new BigDecimal("13.21"), crossCurrency.getAmount());
+        assertEquals(new BigDecimal("0.94"), crossCurrency.getExchangeRate());
+    }
 }

@@ -36,9 +36,19 @@ public class OperationService implements CRUDService<Operation> {
     @Override
     @Transactional(rollbackFor = CFException.class)
     public void update(Operation model) throws CFException {
-        //final Operation old = operationsDAO.get(model.getId()); todo
-        //if our operation was a crosscurrency operation and now it's not, we should find old one and delete it
-        // but if our operation become crosscurrency we should create it
+        final Operation oldOperation = operationsDAO.get(model.getId());
+
+        if (!oldOperation.sameCurrency()) { // operation was cross-currency
+            if (!model.sameCurrency()) { // updated operation still cross-currency, just update it
+                calculateCrossCurrency(model.getCrossCurrency(), model);
+            } else { // updated operation became same currency operation, delete old cross-currency object
+                model.setCrossCurrency(null);
+            }
+        } else { // old operation was same currency operation
+            if (!model.sameCurrency()) { // updated operation became cross-currency, create cross currency to it
+                model.setCrossCurrency(createCrossCurrency(model));
+            }
+        }
 
         operationsDAO.update(model);
     }
@@ -62,7 +72,11 @@ public class OperationService implements CRUDService<Operation> {
      */
     private CrossCurrency createCrossCurrency(Operation operation) {
         final CrossCurrency crossCurrency = new CrossCurrency();
+        calculateCrossCurrency(crossCurrency, operation);
+        return crossCurrency;
+    }
 
+    private void calculateCrossCurrency(CrossCurrency crossCurrency, Operation operation) {
         // we can calculate exchange rate only if we have information about money
         if (operation.getMoneyWas() != null && operation.getMoneyBecome() != null) {
             BigDecimal crossCurrencyAmount = operation.getMoneyWas().subtract(operation.getMoneyBecome()).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -75,7 +89,5 @@ public class OperationService implements CRUDService<Operation> {
             crossCurrency.setAmount(BigDecimal.ZERO);
             crossCurrency.setExchangeRate(BigDecimal.ZERO);
         }
-
-        return crossCurrency;
     }
 }

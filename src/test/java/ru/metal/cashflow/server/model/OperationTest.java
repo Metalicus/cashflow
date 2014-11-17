@@ -22,7 +22,7 @@ public class OperationTest {
 
         final Operation operation = new Operation();
         operation.setCrossCurrency(crossCurrency);
-        assertFalse(operation.sameCurrency());
+        assertTrue(operation.sameCurrency());
 
         operation.setCrossCurrency(null);
         assertTrue(operation.sameCurrency());

@@ -159,7 +159,7 @@ public class Operation {
      * for example, exchange rate for currency. Can be {@code null}
      * @see CrossCurrency
      */
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = true)
     public CrossCurrency getCrossCurrency() {
         return crossCurrency;
@@ -175,7 +175,7 @@ public class Operation {
      * @return {@code true} if operation's currency and account's currency is the same
      */
     public boolean sameCurrency() {
-        return crossCurrency == null && (account == null || currency == null || account.getCurrency() == null || account.getCurrency().getId().equals(currency.getId()));
+        return account == null || currency == null || account.getCurrency() == null || account.getCurrency().getId().equals(currency.getId());
 
     }
 
