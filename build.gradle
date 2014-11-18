@@ -30,3 +30,7 @@ dependencies {
     testCompile 'org.springframework:spring-test:4.1.1.RELEASE'
     testCompile 'p6spy:p6spy:2.1.2'
 }
+
+test {
+    include 'ru/metal/cashflow/server/AllTests.class'
+}
