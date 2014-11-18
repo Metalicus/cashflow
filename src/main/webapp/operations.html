@@ -3,7 +3,11 @@
 </div>
 
 <button type="button" class="btn btn-primary" ng-click="openNewDialog()">Add</button>
-<button type="button" class="btn btn-default" ng-click="openEditDialog()" ng-disabled="disabled">Edit</button>
-<button type="button" class="btn btn-danger" ng-disabled="disabled">Delete</button>
+<button type="button" class="btn btn-default" ng-click="openEditDialog()"
+        ng-disabled="gridApi.selection.getSelectedRows().length === 0">Edit
+</button>
+<button type="button" class="btn btn-danger" ng-click="openDeleteDialog()"
+        ng-disabled="gridApi.selection.getSelectedRows().length === 0">Delete
+</button>
 
-<div ui-grid="gridOptions" class="grid" ui-grid-selection ui-grid-cellnav></div>
+<div ui-grid="gridOptions" class="grid" ui-grid-selection></div>

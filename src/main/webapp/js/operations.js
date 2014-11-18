@@ -46,9 +46,12 @@
     // controller for operation table and modal dialogs calls
     operations.controller('OperationsCtrl', ['$scope', 'operationFactory', '$modal', function ($scope, operationFactory, $modal) {
         $scope.gridOptions = {
+            enableRowSelection: true,
             enableRowHeaderSelection: false,
             multiSelect: false,
             enableSorting: true,
+            modifierKeysToMultiSelect: false,
+            noUnselect: true,
             columnDefs: [
                 {name: 'Date', field: 'date', type: 'date', cellFilter: 'date:"yyyy-MM-dd"', width: 150},
                 {name: 'Type', field: 'type', width: 200},
@@ -61,15 +64,8 @@
             ]
         };
 
-        $scope.disabled = true;
-
         $scope.gridOptions.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
-
-            gridApi.cellNav.on.navigate($scope, function (newRowCol) {
-                $scope.gridApi.selection.selectRow(newRowCol.row.entity);
-                $scope.disabled = $scope.gridApi.selection.getSelectedRows().length === 0;
-            });
         };
 
         $scope.openNewDialog = function () {
@@ -96,6 +92,10 @@
                     }
                 });
             }
+        };
+
+        $scope.openDeleteDialog = function () {
+
         };
 
         operationFactory.list(function (data) {
