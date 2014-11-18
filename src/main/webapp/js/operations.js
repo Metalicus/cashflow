@@ -86,18 +86,21 @@
         };
 
         $scope.openEditDialog = function () {
+            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
             var modalInstance = $modal.open({
                 templateUrl: 'template/operation-modal.html',
                 controller: 'OperationEditCtrl',
                 resolve: {
                     id: function () {
-                        return $scope.gridApi.selection.getSelectedRows()[0]["id"];
+                        return selectedRow["id"];
                     }
                 }
             });
 
             modalInstance.result.then(function (model) {
                 // update model in data array
+                var rowIndex = $scope.gridApi.grid.rowHashMap.get(selectedRow).i;
+                $scope.gridOptions.data[rowIndex] = model;
             });
         };
 
