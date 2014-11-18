@@ -96,7 +96,7 @@ public class ImportFromAccounting {
                 if (resultSet.getInt("category_id") == transferId) {
                     operation.setType(Operation.FlowType.TRANSFER);
                 } else {
-                    operation.setType(resultSet.getBoolean("income") ? Operation.FlowType.INCOME : Operation.FlowType.OUTCOME);
+                    operation.setType(resultSet.getBoolean("income") ? Operation.FlowType.INCOME : Operation.FlowType.EXPENSE);
                 }
 
                 final BigDecimal exchangeRate = resultSet.getBigDecimal("exchangeRate");

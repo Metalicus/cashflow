@@ -90,7 +90,7 @@ public class OperationsDAOTest extends SpringTestCase {
         operation.setInfo("information");
         operation.setMoneyWas(BigDecimal.ZERO);
         operation.setMoneyBecome(BigDecimal.TEN);
-        operation.setType(Operation.FlowType.OUTCOME);
+        operation.setType(Operation.FlowType.EXPENSE);
 
         assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
 

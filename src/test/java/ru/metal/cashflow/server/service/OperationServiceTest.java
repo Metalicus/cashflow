@@ -90,7 +90,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationUSD.setCurrency(currencyUSD);
         operationUSD.setCategory(category);
         operationUSD.setDate(new Date());
-        operationUSD.setType(Operation.FlowType.OUTCOME);
+        operationUSD.setType(Operation.FlowType.EXPENSE);
         operationUSD.setInfo("test info");
         operationUSD.setMoneyWas(new BigDecimal("120.35"));
         operationUSD.setMoneyBecome(new BigDecimal("109.00"));
@@ -139,7 +139,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationUSD.setCurrency(currencyUSD);
         operationUSD.setCategory(category);
         operationUSD.setDate(new Date());
-        operationUSD.setType(Operation.FlowType.OUTCOME);
+        operationUSD.setType(Operation.FlowType.EXPENSE);
         operationUSD.setInfo("test info");
         operationUSD.setMoneyWas(new BigDecimal("120.35"));
         operationUSD.setMoneyBecome(new BigDecimal("109.00"));
@@ -196,7 +196,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationUSD.setCurrency(currencyUSD);
         operationUSD.setCategory(category);
         operationUSD.setDate(new Date());
-        operationUSD.setType(Operation.FlowType.OUTCOME);
+        operationUSD.setType(Operation.FlowType.EXPENSE);
         operationUSD.setInfo("test info");
         operationUSD.setMoneyWas(new BigDecimal("120.35"));
         operationUSD.setMoneyBecome(new BigDecimal("109.00"));
@@ -249,7 +249,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationEUR.setCurrency(currencyEUR);
         operationEUR.setCategory(category);
         operationEUR.setDate(new Date());
-        operationEUR.setType(Operation.FlowType.OUTCOME);
+        operationEUR.setType(Operation.FlowType.EXPENSE);
         operationEUR.setInfo("test info");
         operationEUR.setMoneyWas(new BigDecimal("120.35"));
         operationEUR.setMoneyBecome(new BigDecimal("109.00"));
@@ -307,7 +307,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setCurrency(currency);
         operation.setCategory(category);
         operation.setDate(new Date());
-        operation.setType(Operation.FlowType.OUTCOME);
+        operation.setType(Operation.FlowType.EXPENSE);
         operation.setInfo("test info");
         operation.setMoneyWas(new BigDecimal("120.35"));
         operation.setMoneyBecome(new BigDecimal("109.00"));

@@ -11,7 +11,7 @@ import java.util.Date;
 public class Operation {
 
     public enum FlowType {
-        OUTCOME, INCOME, TRANSFER
+        EXPENSE, INCOME, TRANSFER
     }
 
     private Integer id;
@@ -93,7 +93,7 @@ public class Operation {
 
     /**
      * @return type of the operation. It can be 'INCOME' if you put money into the account,
-     * or 'OUTCOME' if you spend money. And it can be 'TRANSFER' then you transfer money from one account to another.
+     * or 'EXPENSE' if you spend money. And it can be 'TRANSFER' then you transfer money from one account to another.
      */
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)

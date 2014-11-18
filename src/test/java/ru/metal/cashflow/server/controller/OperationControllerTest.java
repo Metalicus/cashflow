@@ -56,7 +56,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
 
         final String json = "{" +
                 "  \"id\": null," +
-                "  \"type\": \"OUTCOME\"," +
+                "  \"type\": \"EXPENSE\"," +
                 "  \"date\": \"2014-11-10T21:00:00.000Z\"," +
                 "  \"amount\": 27.38," +
                 "  \"moneyWas\": 15858.71," +
@@ -91,7 +91,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
         assertEquals(new BigDecimal("27.38"), operation.getAmount());
         assertEquals(new BigDecimal("15858.71"), operation.getMoneyWas());
         assertEquals(new BigDecimal("14351.56"), operation.getMoneyBecome());
-        assertEquals(Operation.FlowType.OUTCOME, operation.getType());
+        assertEquals(Operation.FlowType.EXPENSE, operation.getType());
         assertEquals("test info", operation.getInfo());
         assertNotNull(operation.getCrossCurrency());
     }
@@ -117,7 +117,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setAmount(BigDecimal.TEN);
-        operation.setType(Operation.FlowType.OUTCOME);
+        operation.setType(Operation.FlowType.EXPENSE);
         operation.setDate(new Date());
         operationService.insert(operation);
 
@@ -127,13 +127,13 @@ public class OperationControllerTest extends SpringControllerTestCase {
         assertEquals(BigDecimal.TEN, operationFromDB.getAmount());
         assertNull(operationFromDB.getMoneyWas());
         assertNull(operationFromDB.getMoneyBecome());
-        assertEquals(Operation.FlowType.OUTCOME, operationFromDB.getType());
+        assertEquals(Operation.FlowType.EXPENSE, operationFromDB.getType());
         assertNull(operationFromDB.getInfo());
         assertNull(operation.getCrossCurrency());
 
         final String json = "{" +
                 "  \"id\": " + operation.getId() + "," +
-                "  \"type\": \"OUTCOME\"," +
+                "  \"type\": \"EXPENSE\"," +
                 "  \"date\": \"2014-11-10T21:00:00.000Z\"," +
                 "  \"amount\": 27.38," +
                 "  \"moneyWas\": 15858.71," +
@@ -166,7 +166,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
         assertEquals(new BigDecimal("27.38"), operationFromDB.getAmount());
         assertEquals(new BigDecimal("15858.71"), operationFromDB.getMoneyWas());
         assertEquals(new BigDecimal("14351.56"), operationFromDB.getMoneyBecome());
-        assertEquals(Operation.FlowType.OUTCOME, operationFromDB.getType());
+        assertEquals(Operation.FlowType.EXPENSE, operationFromDB.getType());
         assertEquals("test info", operationFromDB.getInfo());
         assertNull(operation.getCrossCurrency());
     }

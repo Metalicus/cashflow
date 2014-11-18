@@ -109,7 +109,7 @@
     // controller for model type tabs. Hold all tab operations, like select current, etc.
     operations.controller('TypeTabController', ['$scope', function ($scope) {
         $scope.tabs = [
-            {type: 'OUTCOME', disabled: false, active: true},
+            {type: 'EXPENSE', disabled: false, active: true},
             {type: 'TRANSFER', disabled: false, active: false},
             {type: 'INCOME', disabled: false, active: false}
         ];
@@ -139,7 +139,7 @@
             // operation model
             $scope.model = {
                 id: id,
-                type: 'OUTCOME',
+                type: 'EXPENSE',
                 date: new Date(),
                 amount: null,
                 moneyWas: 0,
@@ -152,7 +152,7 @@
                     var moneyWas = parseFloat($scope.model.moneyWas);
                     var money = parseFloat($scope.model.amount);
 
-                    if (this.type === 'OUTCOME') {
+                    if (this.type === 'EXPENSE') {
                         this.moneyBecome = (moneyWas - money).toFixed(2);
                     } else {
                         this.moneyBecome = (moneyWas + money).toFixed(2);
