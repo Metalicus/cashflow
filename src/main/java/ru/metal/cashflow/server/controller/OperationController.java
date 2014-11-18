@@ -22,4 +22,10 @@ public class OperationController {
         else
             return operationService.update(operation);
     }
+
+    @RequestMapping(value = "operation/delete/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public Operation delete(@PathVariable int id) throws CFException {
+        throw new CFException("I need to create delete method!");
+    }
 }

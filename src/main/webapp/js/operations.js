@@ -105,7 +105,21 @@
         };
 
         $scope.openDeleteDialog = function () {
+            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
+            var modalInstance = $modal.open({
+                templateUrl: 'template/delete-modal.html',
+                controller: 'OperationDeleteCtrl',
+                resolve: {
+                    id: function () {
+                        return selectedRow["id"];
+                    }
+                }
+            });
 
+            modalInstance.result.then(function () {
+                var rowIndex = $scope.gridApi.grid.rowHashMap.get(selectedRow).i;
+                $scope.gridOptions.data.splice(rowIndex, 1);
+            });
         };
 
         operationFactory.list(function (data) {
@@ -221,4 +235,19 @@
                 });
             }
         }]);
+
+    // controller for deleting operations
+    operations.controller('OperationDeleteCtrl', ['$scope', '$modalInstance', 'operationFactory', 'id', function ($scope, $modalInstance, operationFactory, id) {
+        $scope.entityName = 'operation';
+
+        $scope.ok = function () {
+            operationFactory.del(id, function () {
+                $modalInstance.close();
+            });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }]);
 })();
