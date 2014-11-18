@@ -35,23 +35,29 @@ public class CategoryDAO {
         }
     }
 
-    public void insert(Category model) throws CFException {
+    public Category insert(Category model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
             session.save(model);
             session.flush();
+
+            return model;
+
         } catch (HibernateException e) {
             logger.error("Error while inserting new category", e);
             throw new CFException(e);
         }
     }
 
-    public void update(Category model) throws CFException {
+    public Category update(Category model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
             model = (Category) session.merge(model);
             session.update(model);
             session.flush();
+
+            return model;
+
         } catch (HibernateException e) {
             logger.error("Error while updating existing category", e);
             throw new CFException(e);

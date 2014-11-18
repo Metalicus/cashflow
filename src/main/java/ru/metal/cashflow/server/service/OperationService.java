@@ -25,17 +25,17 @@ public class OperationService implements CRUDService<Operation> {
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void insert(Operation model) throws CFException {
+    public Operation insert(Operation model) throws CFException {
         if (!model.sameCurrency()) {
             model.setCrossCurrency(createCrossCurrency(model));
         }
 
-        operationsDAO.insert(model);
+        return operationsDAO.insert(model);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void update(Operation model) throws CFException {
+    public Operation update(Operation model) throws CFException {
         final Operation oldOperation = operationsDAO.get(model.getId());
 
         if (!oldOperation.sameCurrency()) { // operation was cross-currency
@@ -50,7 +50,7 @@ public class OperationService implements CRUDService<Operation> {
             }
         }
 
-        operationsDAO.update(model);
+        return operationsDAO.update(model);
     }
 
     @Override

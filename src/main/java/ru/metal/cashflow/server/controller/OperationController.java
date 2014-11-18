@@ -16,10 +16,10 @@ public class OperationController {
 
     @RequestMapping(value = "operation/save", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void save(@RequestBody Operation operation) throws CFException {
+    public Operation save(@RequestBody Operation operation) throws CFException {
         if (operation.getId() == null)
-            operationService.insert(operation);
+            return operationService.insert(operation);
         else
-            operationService.update(operation);
+            return operationService.update(operation);
     }
 }

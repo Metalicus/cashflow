@@ -32,8 +32,11 @@
         return {
             list: function (callback) {
                 $http.get('action/operation/list').success(function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].date = new Date(data[i].date);
+                    }
                     callback(data);
-                }).error(function (data, status, header, config) {
+                }).error(function () {
                     notify({
                         message: 'Error while loading operations',
                         classes: 'alert alert-danger'
@@ -43,7 +46,7 @@
             get: function (id, callback) {
                 $http.get('action/operation/get/' + id).success(function (data) {
                     callback(data);
-                }).error(function (data, status, header, config) {
+                }).error(function () {
                     notify({
                         message: 'Error while loading operation',
                         classes: 'alert alert-danger'
@@ -51,10 +54,10 @@
                 });
             },
             save: function (model, callback) {
-                $http.post('action/operation/save', model).success(function () {
-                    callback();
+                $http.post('action/operation/save', model).success(function (model) {
+                    callback(model);
                     notify('Successfully saved');
-                }).error(function (data, status, header, config) {
+                }).error(function () {
                     notify({
                         message: 'Error while saving operation',
                         classes: 'alert alert-danger'
@@ -68,7 +71,7 @@
             list: function (callback) {
                 $http.get('action/account/list').success(function (data) {
                     callback(data);
-                }).error(function (data, status, header, config) {
+                }).error(function () {
                     notify({
                         message: 'Error while loading accounts',
                         classes: 'alert alert-danger'
@@ -82,7 +85,7 @@
             list: function (callback) {
                 $http.get('action/currency/list').success(function (data) {
                     callback(data);
-                }).error(function (data, status, header, config) {
+                }).error(function () {
                     notify({
                         message: 'Error while loading cuurencies',
                         classes: 'alert alert-danger'
@@ -96,7 +99,7 @@
             list: function (callback) {
                 $http.get('action/category/list').success(function (data) {
                     callback(data);
-                }).error(function (data, status, header, config) {
+                }).error(function () {
                     notify({
                         message: 'Error while loading categories',
                         classes: 'alert alert-danger'

@@ -23,14 +23,14 @@ public class CurrencyService implements CRUDService<Currency> {
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void insert(Currency model) throws CFException {
-        currencyDAO.insert(model);
+    public Currency insert(Currency model) throws CFException {
+        return currencyDAO.insert(model);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void update(Currency model) throws CFException {
-        currencyDAO.update(model);
+    public Currency update(Currency model) throws CFException {
+        return currencyDAO.update(model);
     }
 
     @Override

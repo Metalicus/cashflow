@@ -35,23 +35,29 @@ public class CurrencyDAO {
         }
     }
 
-    public void insert(Currency model) throws CFException {
+    public Currency insert(Currency model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
             session.save(model);
             session.flush();
+
+            return model;
+
         } catch (HibernateException e) {
             logger.error("Error while inserting new currency", e);
             throw new CFException(e);
         }
     }
 
-    public void update(Currency model) throws CFException {
+    public Currency update(Currency model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
             model = (Currency) session.merge(model);
             session.update(model);
             session.flush();
+
+            return model;
+
         } catch (HibernateException e) {
             logger.error("Error while updating existing currency", e);
             throw new CFException(e);

@@ -38,23 +38,29 @@ public class OperationsDAO {
     }
 
 
-    public void insert(Operation model) throws CFException {
+    public Operation insert(Operation model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
             session.save(model);
             session.flush();
+
+            return model;
+
         } catch (HibernateException e) {
             logger.error("Error while inserting new operation", e);
             throw new CFException(e);
         }
     }
 
-    public void update(Operation model) throws CFException {
+    public Operation update(Operation model) throws CFException {
         try {
             final Session session = sessionFactory.getCurrentSession();
             model = (Operation) session.merge(model);
             session.update(model);
             session.flush();
+
+            return model;
+
         } catch (HibernateException e) {
             logger.error("Error while updating existing operation", e);
             throw new CFException(e);

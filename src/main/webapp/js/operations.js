@@ -69,7 +69,7 @@
         };
 
         $scope.openNewDialog = function () {
-            $modal.open({
+            var modalInstance = $modal.open({
                 templateUrl: 'template/operation-modal.html',
                 controller: 'OperationEditCtrl',
                 resolve: {
@@ -78,10 +78,15 @@
                     }
                 }
             });
+
+            modalInstance.result.then(function (model) {
+                // add new model to top of the data array
+                $scope.gridOptions.data.unshift(model);
+            });
         };
 
         $scope.openEditDialog = function () {
-            $modal.open({
+            var modalInstance = $modal.open({
                 templateUrl: 'template/operation-modal.html',
                 controller: 'OperationEditCtrl',
                 resolve: {
@@ -90,6 +95,10 @@
                     }
                 }
             });
+
+            modalInstance.result.then(function (model) {
+                // update model in data array
+            });
         };
 
         $scope.openDeleteDialog = function () {
@@ -97,9 +106,6 @@
         };
 
         operationFactory.list(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                data[i].date = new Date(data[i].date);
-            }
             $scope.gridOptions.data = data;
         });
     }]);
@@ -158,7 +164,7 @@
                 }
             };
 
-            $scope.changeAccount = function (account) {
+            $scope.changeAccount = function (model) {
                 $scope.model.moneyWas = model["balance"];
                 $timeout(function () {
                     // due to the fact that the event is triggered before the model is selected, delay the money update
@@ -178,8 +184,8 @@
             };
 
             $scope.submit = function () {
-                operationFactory.save($scope.model, function () {
-                    $modalInstance.dismiss('ok');
+                operationFactory.save($scope.model, function (model) {
+                    $modalInstance.close(model);
                 });
             };
 

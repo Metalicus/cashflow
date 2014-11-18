@@ -26,14 +26,14 @@ public class CategoryService implements CRUDService<Category> {
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void insert(Category model) throws CFException {
-        categoryDAO.insert(model);
+    public Category insert(Category model) throws CFException {
+        return categoryDAO.insert(model);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void update(Category model) throws CFException {
-        categoryDAO.update(model);
+    public Category update(Category model) throws CFException {
+        return categoryDAO.update(model);
     }
 
     @Override

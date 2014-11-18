@@ -3,6 +3,7 @@ package ru.metal.cashflow.server.controller;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import ru.metal.cashflow.server.SpringControllerTestCase;
 import ru.metal.cashflow.server.model.Account;
 import ru.metal.cashflow.server.model.Category;
@@ -13,6 +14,7 @@ import ru.metal.cashflow.server.service.CategoryService;
 import ru.metal.cashflow.server.service.CurrencyService;
 import ru.metal.cashflow.server.service.OperationService;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
+import ru.metal.cashflow.utils.JSONUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -78,12 +80,15 @@ public class OperationControllerTest extends SpringControllerTestCase {
 
         assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
 
-        mockMvc.perform(post("/operation/save")
+        final MvcResult mvcResult = mockMvc.perform(post("/operation/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
+
+        final Operation responseOperation = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation.class);
+        assertNotNull(responseOperation);
 
         final List list = sessionFactory.getCurrentSession().createCriteria(Operation.class).list();
         assertEquals(1, list.size());

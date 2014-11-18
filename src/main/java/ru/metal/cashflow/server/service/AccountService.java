@@ -23,14 +23,14 @@ public class AccountService implements CRUDService<Account> {
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void insert(Account model) throws CFException {
-        accountDAO.insert(model);
+    public Account insert(Account model) throws CFException {
+        return accountDAO.insert(model);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
-    public void update(Account model) throws CFException {
-        accountDAO.update(model);
+    public Account update(Account model) throws CFException {
+        return accountDAO.update(model);
     }
 
     @Override

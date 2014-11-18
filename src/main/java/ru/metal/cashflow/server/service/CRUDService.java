@@ -20,17 +20,19 @@ public interface CRUDService<T> {
      * Insert new model to database
      *
      * @param model new model
+     * @return newly created model
      * @throws CFException error while executing DB access
      */
-    void insert(T model) throws CFException;
+    T insert(T model) throws CFException;
 
     /**
      * Update exisiting model
      *
      * @param model existing model
+     * @return updated model
      * @throws CFException error while executing DB access
      */
-    void update(T model) throws CFException;
+    T update(T model) throws CFException;
 
     /**
      * Get model by ID
