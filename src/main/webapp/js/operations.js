@@ -81,17 +81,15 @@
         };
 
         $scope.openEditDialog = function () {
-            if ($scope.gridApi.selection.getSelectedRows().length > 0) {
-                $modal.open({
-                    templateUrl: 'template/operation-modal.html',
-                    controller: 'OperationEditCtrl',
-                    resolve: {
-                        id: function () {
-                            return $scope.gridApi.selection.getSelectedRows()[0]["id"];
-                        }
+            $modal.open({
+                templateUrl: 'template/operation-modal.html',
+                controller: 'OperationEditCtrl',
+                resolve: {
+                    id: function () {
+                        return $scope.gridApi.selection.getSelectedRows()[0]["id"];
                     }
-                });
-            }
+                }
+            });
         };
 
         $scope.openDeleteDialog = function () {
@@ -160,8 +158,8 @@
                 }
             };
 
-            $scope.changeAccount = function (model) {
-                $scope.model.moneyWas = model.balance;
+            $scope.changeAccount = function (account) {
+                $scope.model.moneyWas = model["balance"];
                 $timeout(function () {
                     // due to the fact that the event is triggered before the model is selected, delay the money update
                     $scope.moneyUpdate();
