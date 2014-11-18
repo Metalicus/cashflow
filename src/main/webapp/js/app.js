@@ -1,6 +1,6 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
-        'cashflow-category', 'ngRoute', 'ui.grid', 'ui.grid.selection', 'ui.bootstrap', 'ui.select']);
+        'cashflow-category', 'ngRoute', 'ui.grid', 'ui.grid.selection', 'ui.bootstrap', 'ui.select', 'growlNotifications']);
 
     // route config
     cashFlow.config(function ($routeProvider) {
