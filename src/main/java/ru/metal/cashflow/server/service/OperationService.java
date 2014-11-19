@@ -80,8 +80,7 @@ public class OperationService implements CRUDService<Operation> {
         // we can calculate exchange rate only if we have information about money
         if (operation.getMoneyWas() != null && operation.getMoneyBecome() != null) {
             BigDecimal crossCurrencyAmount = operation.getMoneyWas().subtract(operation.getMoneyBecome()).setScale(2, BigDecimal.ROUND_HALF_UP);
-            if (crossCurrencyAmount.signum() == -1)
-                crossCurrencyAmount = crossCurrencyAmount.negate();
+            crossCurrencyAmount = crossCurrencyAmount.abs();
 
             crossCurrency.setAmount(crossCurrencyAmount);
             crossCurrency.setExchangeRate(crossCurrencyAmount.divide(operation.getAmount(), 2, BigDecimal.ROUND_HALF_UP));
