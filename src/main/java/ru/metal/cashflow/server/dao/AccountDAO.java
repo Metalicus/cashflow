@@ -76,6 +76,11 @@ public class AccountDAO {
     public void delete(Integer id) throws CFException {
         try {
             final Account account = get(id);
+            if (account == null) {
+                logger.error("Account is not found");
+                throw new CFException("Account is not found");
+            }
+
             final Session session = sessionFactory.getCurrentSession();
             session.delete(account);
             session.flush();

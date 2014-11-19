@@ -76,6 +76,11 @@ public class CategoryDAO {
     public void delete(Integer id) throws CFException {
         try {
             final Category category = get(id);
+            if (category == null) {
+                logger.error("Category is not found");
+                throw new CFException("Category is not found");
+            }
+
             final Session session = sessionFactory.getCurrentSession();
             session.delete(category);
             session.flush();

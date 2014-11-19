@@ -79,6 +79,11 @@ public class OperationsDAO {
     public void delete(Integer id) throws CFException {
         try {
             final Operation operation = get(id);
+            if (operation == null) {
+                logger.error("Operation is not found");
+                throw new CFException("Operation is not found");
+            }
+
             final Session session = sessionFactory.getCurrentSession();
             session.delete(operation);
             session.flush();

@@ -3,11 +3,9 @@ package ru.metal.cashflow.server.controller;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.service.CRUDService;
 
@@ -33,6 +31,16 @@ public class MainController implements ApplicationContextAware {
         final Object bean = applicationContext.getBean(getManagerName(beanName));
         if (bean instanceof CRUDService) {
             return ((CRUDService) bean).get(id);
+        } else
+            throw new CFException("Service is not has a CRUD support");
+    }
+
+    @RequestMapping(value = "{beanName}/delete/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("beanName") String beanName, @PathVariable int id) throws CFException {
+        final Object bean = applicationContext.getBean(getManagerName(beanName));
+        if (bean instanceof CRUDService) {
+            ((CRUDService) bean).delete(id);
         } else
             throw new CFException("Service is not has a CRUD support");
     }

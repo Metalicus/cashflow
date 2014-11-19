@@ -76,6 +76,11 @@ public class CurrencyDAO {
     public void delete(Integer id) throws CFException {
         try {
             final Currency currency = get(id);
+            if (currency == null) {
+                logger.error("Currency is not found");
+                throw new CFException("Currency is not found");
+            }
+
             final Session session = sessionFactory.getCurrentSession();
             session.delete(currency);
             session.flush();
