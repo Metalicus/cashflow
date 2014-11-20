@@ -45,9 +45,12 @@ public class OperationService implements CRUDService<Operation> {
         accountDAO.update(account);
 
         if (model.getTransfer() != null) {
+            if (model.getTransfer().getAmount() == null)
+                model.getTransfer().setAmount(model.getAmount());
+
             // if this is "TRANSFER" we update the account where the money went
             final Account transferAccount = accountDAO.get(model.getTransfer().getTo().getId());
-            transferAccount.setBalance(transferAccount.getBalance().add(model.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
+            transferAccount.setBalance(transferAccount.getBalance().add(model.getTransfer().getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
             accountDAO.update(transferAccount);
         }
 
@@ -105,14 +108,14 @@ public class OperationService implements CRUDService<Operation> {
 
                 // revert old expense and income
                 oldAccount.setBalance(oldAccount.getBalance().add(oldOperation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                oldTransfer.getTo().setBalance(oldTransfer.getTo().getBalance().subtract(oldOperation.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                oldTransfer.getTo().setBalance(oldTransfer.getTo().getBalance().subtract(oldTransfer.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
                 accountDAO.update(oldAccount);
                 accountDAO.update(oldTransfer.getTo());
 
                 // update with new "TRANSFER"
                 final Account accountTransfer = accountDAO.get(model.getTransfer().getTo().getId());
                 newAccount.setBalance(newAccount.getBalance().subtract(model.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountTransfer.setBalance(accountTransfer.getBalance().add(model.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                accountTransfer.setBalance(accountTransfer.getBalance().add(model.getTransfer().getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
                 accountDAO.update(newAccount);
                 accountDAO.update(accountTransfer);
 

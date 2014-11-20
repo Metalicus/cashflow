@@ -1220,6 +1220,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation2.setMoneyWas(new BigDecimal("90"));
         operation2.setMoneyBecome(new BigDecimal("57.00"));
         operation2.setAmount(new BigDecimal("33.00"));
+        operation2.getTransfer().setAmount(new BigDecimal("33.00"));
         operationService.update(operation2);
 
         // clear session to perform re-read from database
@@ -1315,6 +1316,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation2.setMoneyWas(new BigDecimal("90.00"));
         operation2.setMoneyBecome(new BigDecimal("70.00"));
         operation2.setAmount(new BigDecimal("25.09"));
+        operation2.getTransfer().setAmount(new BigDecimal("25.09"));
         operationService.update(operation2);
 
         // clear session to perform re-read from database
@@ -1326,5 +1328,63 @@ public class OperationServiceTest extends SpringTestCase {
         //this equals for future operations rsecalculation. it will fails
         assertEquals(new BigDecimal("80.00"), operationService.get(operation3.getId()).getMoneyWas());
         assertEquals(new BigDecimal("24.00"), operationService.get(operation3.getId()).getMoneyBecome());
+    }
+
+    @Test
+    public void transferInsertTest2() throws Exception {
+        final Currency currencyEUR = new Currency();
+        currencyEUR.setName("EUR");
+        currencyService.insert(currencyEUR);
+
+        final Account accountEUR1 = new Account();
+        accountEUR1.setName("Account EUR#1");
+        accountEUR1.setBalance(new BigDecimal("100.00"));
+        accountEUR1.setCurrency(currencyEUR);
+        accountService.insert(accountEUR1);
+
+        final Account accountEUR2 = new Account();
+        accountEUR2.setName("Account EUR#2");
+        accountEUR2.setBalance(new BigDecimal("100.00"));
+        accountEUR2.setCurrency(currencyEUR);
+        accountService.insert(accountEUR2);
+
+        final Category category = new Category();
+        category.setName("Test Category");
+        categoryService.insert(category);
+
+        // i sent 50 euro but comission take 3 euro to this transaction
+        final Transfer transfer = new Transfer();
+        transfer.setTo(accountEUR2);
+        transfer.setAmount(new BigDecimal("50.00"));
+
+        final Operation operation = new Operation();
+        operation.setAccount(accountEUR1);
+        operation.setCurrency(currencyEUR);
+        operation.setCategory(category);
+        operation.setDate(new Date());
+        operation.setType(Operation.FlowType.TRANSFER);
+        operation.setInfo("operation");
+        operation.setMoneyWas(new BigDecimal("100.00"));
+        operation.setMoneyBecome(new BigDecimal("47.00"));
+        operation.setAmount(new BigDecimal("53.00"));
+        operation.setTransfer(transfer);
+        operationService.insert(operation);
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        assertEquals(new BigDecimal("47.00"), accountService.get(accountEUR1.getId()).getBalance());
+        assertEquals(new BigDecimal("150.00"), accountService.get(accountEUR2.getId()).getBalance());
+
+        operation.setAmount(new BigDecimal("63.00"));
+        operation.getTransfer().setAmount(new BigDecimal("60.00"));
+        operationService.update(operation);
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        assertEquals(new BigDecimal("37.00"), accountService.get(accountEUR1.getId()).getBalance());
+        assertEquals(new BigDecimal("160.00"), accountService.get(accountEUR2.getId()).getBalance());
+
     }
 }

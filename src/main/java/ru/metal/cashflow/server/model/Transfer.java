@@ -1,6 +1,7 @@
 package ru.metal.cashflow.server.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Transfer information
@@ -10,6 +11,7 @@ public class Transfer {
 
     private Integer id;
     private Account to;
+    private BigDecimal amount;
 
     @Id
     @GeneratedValue
@@ -32,6 +34,15 @@ public class Transfer {
 
     public void setTo(Account to) {
         this.to = to;
+    }
+
+    @Column(nullable = false)
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     @Override

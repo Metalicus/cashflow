@@ -201,6 +201,7 @@ public class OperationsDAOTest extends SpringTestCase {
 
         final Transfer transfer = new Transfer();
         transfer.setTo(account2);
+        transfer.setAmount(BigDecimal.TEN);
 
         final Operation operation = new Operation();
         operation.setCurrency(currency);
