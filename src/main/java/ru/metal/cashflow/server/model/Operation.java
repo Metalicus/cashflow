@@ -109,7 +109,7 @@ public class Operation {
     }
 
     /**
-     * @return total amount of money for this operation. How much you spend or how much you get
+     * @return amount of the money spent in the operations's currency
      */
     @Column(nullable = false)
     public BigDecimal getAmount() {

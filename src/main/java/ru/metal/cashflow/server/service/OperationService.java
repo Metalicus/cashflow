@@ -134,6 +134,27 @@ public class OperationService implements CRUDService<Operation> {
     @Override
     @Transactional(rollbackFor = CFException.class)
     public void delete(Integer id) throws CFException {
+        final Operation operation = operationsDAO.get(id);
+        final Account account = operation.getAccount();
+        switch (operation.getType()) {
+            case INCOME:
+                account.setBalance(account.getBalance().subtract(operation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                break;
+            case EXPENSE:
+                account.setBalance(account.getBalance().add(operation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                break;
+            case TRANSFER:
+                account.setBalance(account.getBalance().add(operation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
+
+                final Transfer transfer = operation.getTransfer();
+                final Account accountTo = transfer.getTo();
+                accountTo.setBalance(accountTo.getBalance().subtract(transfer.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                accountDAO.update(accountTo);
+
+                break;
+        }
+        accountDAO.update(account);
+
         operationsDAO.delete(id);
     }
 
