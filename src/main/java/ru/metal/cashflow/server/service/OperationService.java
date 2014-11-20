@@ -138,7 +138,7 @@ public class OperationService implements CRUDService<Operation> {
     }
 
     /**
-     * We need to create CrossCurrency if this is operation where account currency not equal to operation's currency
+     * We need to create CrossCurrency if this operation's account's currency not equal to operation's currency
      *
      * @param operation operation
      */
@@ -148,6 +148,12 @@ public class OperationService implements CRUDService<Operation> {
         return crossCurrency;
     }
 
+    /**
+     * Recalculate CrossCurrency values
+     *
+     * @param crossCurrency cross-currency object
+     * @param operation     operation
+     */
     private void calculateCrossCurrency(CrossCurrency crossCurrency, Operation operation) {
         final BigDecimal crossCurrencyAmount = operation.getMoneyWas().subtract(operation.getMoneyBecome()).setScale(2, BigDecimal.ROUND_HALF_UP).abs();
         crossCurrency.setAmount(crossCurrencyAmount);
