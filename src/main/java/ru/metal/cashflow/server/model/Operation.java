@@ -1,5 +1,7 @@
 package ru.metal.cashflow.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,12 +21,13 @@ public class Operation {
     private Account account;
     private Currency currency;
     private Category category;
-    private FlowType type;
-    private BigDecimal amount;
-    private BigDecimal moneyWas;
-    private BigDecimal moneyBecome;
+    private FlowType type = FlowType.EXPENSE;
+    private BigDecimal amount = BigDecimal.ZERO;
+    private BigDecimal moneyWas = BigDecimal.ZERO;
+    private BigDecimal moneyBecome = BigDecimal.ZERO;
     private String info;
 
+    private Transfer transfer;
     private CrossCurrency crossCurrency;
 
     @Id
@@ -118,9 +121,9 @@ public class Operation {
     }
 
     /**
-     * @return the total amount of the money on the account before this operation. Can be {@code null}
+     * @return the total amount of the money on the account before this operation
      */
-    @Column(nullable = true)
+    @Column(nullable = false)
     public BigDecimal getMoneyWas() {
         return moneyWas;
     }
@@ -130,9 +133,9 @@ public class Operation {
     }
 
     /**
-     * @return the total amount of the money on the account after this operation. Can be {@code null}
+     * @return the total amount of the money on the account after this operation
      */
-    @Column(nullable = true)
+    @Column(nullable = false)
     public BigDecimal getMoneyBecome() {
         return moneyBecome;
     }
@@ -170,13 +173,37 @@ public class Operation {
     }
 
     /**
+     * @return if this is a "TRANSFER" operation this object will be contain information about transfer
+     */
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(nullable = true)
+    public Transfer getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(Transfer transfer) {
+        this.transfer = transfer;
+    }
+
+    /**
      * Check if this operation is same currency with account
      *
      * @return {@code true} if operation's currency and account's currency is the same
      */
     public boolean sameCurrency() {
         return account == null || currency == null || account.getCurrency() == null || account.getCurrency().getId().equals(currency.getId());
+    }
 
+    /**
+     * @return get operation's money in account currency
+     */
+    @Transient
+    @JsonIgnore
+    public BigDecimal getMoneyInAccountCurrency() {
+        if (crossCurrency == null)
+            return amount;
+
+        return crossCurrency.getAmount();
     }
 
     @Override

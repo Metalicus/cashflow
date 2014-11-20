@@ -9,6 +9,7 @@ import ru.metal.cashflow.utils.HibernateUtilsTest;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -22,6 +23,71 @@ public class OperationsDAOTest extends SpringTestCase {
     private AccountDAO accountDAO;
     @Autowired
     private CategoryDAO categoryDAO;
+
+    @Test
+    public void getOperationsTest() throws Exception {
+        final Currency currency = new Currency();
+        currency.setName("new currency");
+        currencyDAO.insert(currency);
+
+        final Account account = new Account();
+        account.setName("new account");
+        account.setBalance(BigDecimal.valueOf(12));
+        account.setCurrency(currency);
+        accountDAO.insert(account);
+
+        final Category category = new Category();
+        category.setName("new category");
+        categoryDAO.insert(category);
+
+        final Operation operation1 = new Operation();
+        operation1.setCurrency(currency);
+        operation1.setAccount(account);
+        operation1.setCategory(category);
+        operation1.setAmount(BigDecimal.TEN);
+        operation1.setDate(new Date());
+        operation1.setInfo("information");
+        operation1.setMoneyWas(BigDecimal.ZERO);
+        operation1.setMoneyBecome(BigDecimal.TEN);
+        operation1.setType(Operation.FlowType.EXPENSE);
+        operationsDAO.insert(operation1);
+
+        final Operation operation2 = new Operation();
+        operation2.setCurrency(currency);
+        operation2.setAccount(account);
+        operation2.setCategory(category);
+        operation2.setAmount(BigDecimal.TEN);
+        operation2.setDate(new Date());
+        operation2.setInfo("information");
+        operation2.setMoneyWas(BigDecimal.ZERO);
+        operation2.setMoneyBecome(BigDecimal.TEN);
+        operation2.setType(Operation.FlowType.EXPENSE);
+        operationsDAO.insert(operation2);
+
+        final Operation operation3 = new Operation();
+        operation3.setCurrency(currency);
+        operation3.setAccount(account);
+        operation3.setCategory(category);
+        operation3.setAmount(BigDecimal.TEN);
+        operation3.setDate(new Date());
+        operation3.setInfo("information");
+        operation3.setMoneyWas(BigDecimal.ZERO);
+        operation3.setMoneyBecome(BigDecimal.TEN);
+        operation3.setType(Operation.FlowType.EXPENSE);
+        operationsDAO.insert(operation3);
+
+        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+
+        // clear session to perform re-read from database
+        sessionFactory.getCurrentSession().clear();
+
+        final List<Operation> operations = operationsDAO.getOperations();
+        assertNotNull(operations);
+        assertEquals(3, operations.size());
+        assertEquals(operation3, operations.get(0));
+        assertEquals(operation2, operations.get(1));
+        assertEquals(operation1, operations.get(2));
+    }
 
     @Test
     public void saveIncomeTest() throws Exception {
@@ -119,6 +185,12 @@ public class OperationsDAOTest extends SpringTestCase {
         account.setCurrency(currency);
         accountDAO.insert(account);
 
+        final Account account2 = new Account();
+        account2.setName("new account");
+        account2.setBalance(BigDecimal.valueOf(12));
+        account2.setCurrency(currency);
+        accountDAO.insert(account2);
+
         final Category category = new Category();
         category.setName("new category");
         categoryDAO.insert(category);
@@ -127,11 +199,15 @@ public class OperationsDAOTest extends SpringTestCase {
         crossCurrency.setAmount(BigDecimal.ONE);
         crossCurrency.setExchangeRate(BigDecimal.TEN);
 
+        final Transfer transfer = new Transfer();
+        transfer.setTo(account2);
+
         final Operation operation = new Operation();
         operation.setCurrency(currency);
         operation.setAccount(account);
         operation.setCategory(category);
         operation.setCrossCurrency(crossCurrency);
+        operation.setTransfer(transfer);
         operation.setAmount(BigDecimal.TEN);
         operation.setDate(new Date());
         operation.setInfo("information");

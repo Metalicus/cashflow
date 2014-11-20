@@ -2,8 +2,9 @@ package ru.metal.cashflow.server.model;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import java.math.BigDecimal;
+
+import static org.junit.Assert.*;
 
 public class OperationTest {
 
@@ -38,5 +39,17 @@ public class OperationTest {
 
         account.setCurrency(currency1);
         assertTrue(operation.sameCurrency());
+    }
+
+    @Test
+    public void getMoneyInAccountCurrencyTest() throws Exception {
+        final Operation operation = new Operation();
+        operation.setAmount(BigDecimal.TEN);
+        assertEquals(BigDecimal.TEN, operation.getMoneyInAccountCurrency());
+
+        final CrossCurrency crossCurrency = new CrossCurrency();
+        crossCurrency.setAmount(BigDecimal.ONE);
+        operation.setCrossCurrency(crossCurrency);
+        assertEquals(BigDecimal.ONE, operation.getMoneyInAccountCurrency());
     }
 }

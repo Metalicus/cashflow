@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 public class CrossCurrency {
 
     private Integer id;
-    private BigDecimal exchangeRate;
-    private BigDecimal amount;
+    private BigDecimal exchangeRate = BigDecimal.ZERO;
+    private BigDecimal amount = BigDecimal.ZERO;
 
     @Id
     @GeneratedValue

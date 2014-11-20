@@ -48,10 +48,15 @@
             <column name="AMOUNT" type="DECIMAL(19, 2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="MONEYBECOME" type="DECIMAL(19, 2)"/>
-            <column name="MONEYWAS" type="DECIMAL(19, 2)"/>
+            <column name="MONEYBECOME" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MONEYWAS" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
             <column name="INFO" type="VARCHAR(255)"/>
             <column name="CROSSCURRENCY_ID" type="INT(10)"/>
+            <column name="TRANSFER_ID" type="INT(10)"/>
         </createTable>
 
         <createTable tableName="CATEGORY">
@@ -71,6 +76,15 @@
                 <constraints nullable="false"/>
             </column>
             <column name="AMOUNT" type="DECIMAL(19, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="TRANSFER">
+            <column autoIncrement="true" name="ID" type="INT(10)">
+                <constraints primaryKey="true" primaryKeyName="TRANSFER_PK"/>
+            </column>
+            <column name="TO_ID" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

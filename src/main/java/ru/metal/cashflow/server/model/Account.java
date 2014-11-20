@@ -9,7 +9,7 @@ public class Account {
     private Integer id;
     private String name;
     private Currency currency;
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Id
     @GeneratedValue

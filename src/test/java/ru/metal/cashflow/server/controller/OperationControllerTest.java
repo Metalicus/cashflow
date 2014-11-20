@@ -130,8 +130,8 @@ public class OperationControllerTest extends SpringControllerTestCase {
         assertEquals(1, list.size());
         Operation operationFromDB = (Operation) list.get(0);
         assertEquals(BigDecimal.TEN, operationFromDB.getAmount());
-        assertNull(operationFromDB.getMoneyWas());
-        assertNull(operationFromDB.getMoneyBecome());
+        assertEquals(BigDecimal.ZERO, operationFromDB.getMoneyWas());
+        assertEquals(BigDecimal.ZERO, operationFromDB.getMoneyBecome());
         assertEquals(Operation.FlowType.EXPENSE, operationFromDB.getType());
         assertNull(operationFromDB.getInfo());
         assertNull(operation.getCrossCurrency());

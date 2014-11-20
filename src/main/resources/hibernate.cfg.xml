@@ -25,6 +25,7 @@
         <mapping class="ru.metal.cashflow.server.model.Currency" />
         <mapping class="ru.metal.cashflow.server.model.Account" />
         <mapping class="ru.metal.cashflow.server.model.CrossCurrency" />
+        <mapping class="ru.metal.cashflow.server.model.Transfer" />
         <mapping class="ru.metal.cashflow.server.model.Operation" />
 
     </session-factory>
