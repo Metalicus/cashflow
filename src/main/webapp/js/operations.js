@@ -1,6 +1,13 @@
 (function () {
     var operations = angular.module('cashflow-operations', []);
 
+    // operations type enum
+    var OperationType = {
+        EXPENSE: 'EXPENSE',
+        INCOME: 'INCOME',
+        TRANSFER: 'TRANSFER'
+    };
+
     operations.directive('typeTabs', function () {
         return {
             restrict: 'A',
@@ -130,9 +137,9 @@
     // controller for model type tabs. Hold all tab operations, like select current, etc.
     operations.controller('TypeTabController', ['$scope', function ($scope) {
         $scope.tabs = [
-            {type: 'EXPENSE', active: true},
-            {type: 'TRANSFER', active: false},
-            {type: 'INCOME', active: false}
+            {type: OperationType.EXPENSE, active: true},
+            {type: OperationType.TRANSFER, active: false},
+            {type: OperationType.INCOME, active: false}
         ];
 
         $scope.getCurrentType = function () {
@@ -160,7 +167,7 @@
             // operation model
             $scope.model = {
                 id: id,
-                type: 'EXPENSE',
+                type: OperationType.EXPENSE,
                 date: new Date(),
                 amount: null,
                 moneyWas: 0,
@@ -173,7 +180,7 @@
                     var moneyWas = parseFloat($scope.model.moneyWas);
                     var money = parseFloat($scope.model.amount);
 
-                    if (this.type === 'EXPENSE') {
+                    if (this.type === OperationType.EXPENSE) {
                         this.moneyBecome = (moneyWas - money).toFixed(2);
                     } else {
                         this.moneyBecome = (moneyWas + money).toFixed(2);
@@ -200,8 +207,12 @@
                 }
             };
 
+            $scope.isTransfer = function () {
+                return $scope.model.type === OperationType.TRANSFER;
+            };
+
             $scope.submit = function () {
-                if ($scope.model.type !== 'TRANSFER' && $scope.model.transfer) {
+                if ($scope.model.type !== OperationType.TRANSFER && $scope.model.transfer) {
                     delete $scope.model["transfer"];
                 }
 

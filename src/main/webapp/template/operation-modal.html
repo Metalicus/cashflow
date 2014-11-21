@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" ng-show="model.type === 'TRANSFER'">
+            <div class="row" ng-show="isTransfer()">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.accountTo.$invalid}">
                         <label>Account to</label>
