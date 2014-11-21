@@ -231,7 +231,11 @@
                     $scope.model.currency = data.currency;
                     $scope.model.category = data.category;
                     $scope.model.info = data.info;
-                    $scope.model.crossCurrency = data.crossCurrency;
+
+                    if (data.crossCurrency)
+                        $scope.model.crossCurrency = data.crossCurrency;
+                    if (data.transfer)
+                        $scope.model.transfer = data.transfer;
                 });
             }
         }]);

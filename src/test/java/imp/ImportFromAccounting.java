@@ -351,7 +351,7 @@ public class ImportFromAccounting {
                 final Transfer transferInfo = operation.getTransfer();
                 if (transferInfo != null) {
                     statement.setInt(1, transferInfo.getTo().getId());
-                    statement.setBigDecimal(2, transfer.getAmount());
+                    statement.setBigDecimal(2, transferInfo.getAmount());
                     statement.executeUpdate();
 
                     final ResultSet generatedKeys = statement.getGeneratedKeys();
