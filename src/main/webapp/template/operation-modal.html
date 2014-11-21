@@ -8,9 +8,10 @@
                 <div class="col-md-12">
                     <div ng-controller="TypeTabController">
                         <tabset type-tabs ng-model="model.type" type="pills">
-                            <tab heading="Expense" active="tabs[0].active"></tab>
-                            <tab heading="Transfer" active="tabs[1].active"></tab>
-                            <tab heading="Income" active="tabs[2].active"></tab>
+                            <tab heading="Expense" active="tabs[0].active" disabled="model.id && !tabs[0].active"></tab>
+                            <tab heading="Transfer" active="tabs[1].active"
+                                 disabled="model.id && !tabs[1].active"></tab>
+                            <tab heading="Income" active="tabs[2].active" disabled="model.id && !tabs[2].active"></tab>
                         </tabset>
                     </div>
                 </div>

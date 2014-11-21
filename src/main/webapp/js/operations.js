@@ -130,9 +130,9 @@
     // controller for model type tabs. Hold all tab operations, like select current, etc.
     operations.controller('TypeTabController', ['$scope', function ($scope) {
         $scope.tabs = [
-            {type: 'EXPENSE', disabled: false, active: true},
-            {type: 'TRANSFER', disabled: false, active: false},
-            {type: 'INCOME', disabled: false, active: false}
+            {type: 'EXPENSE', active: true},
+            {type: 'TRANSFER', active: false},
+            {type: 'INCOME', active: false}
         ];
 
         $scope.getCurrentType = function () {
