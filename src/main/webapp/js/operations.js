@@ -201,6 +201,10 @@
             };
 
             $scope.submit = function () {
+                if ($scope.model.type !== 'TRANSFER' && $scope.model.transfer) {
+                    delete $scope.model["transfer"];
+                }
+
                 operationFactory.save($scope.model, function (model) {
                     $modalInstance.close(model);
                 });
