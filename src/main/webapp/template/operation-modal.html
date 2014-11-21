@@ -76,12 +76,37 @@
                     </div>
                 </div>
             </div>
+            <div class="row" ng-show="model.type === 'TRANSFER'">
+                <div class="col-md-6">
+                    <div class="form-group" ng-class="{'has-error': operationForm.accountTo.$invalid}">
+                        <label>Account to</label>
+                        <ui-select name="accountTo" ng-model="$parent.model.transfer.to" ng-required="true">
+                            <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices repeat="account in accounts | filter: $select.search">
+                                {{account.name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
+                            <label for="transferedMoney">
+                                Transfered money <a href="#" tooltip="Amount of money transferred on the account">
+                                <span class="glyphicon glyphicon-question-sign"></span></a>
+                            </label>
+                            <input type="text" name="transferedMoney" class="form-control input-sm" id="transferedMoney"
+                                   ng-required="true" ng-model="model.transfer.amount" numbers-only/>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
                             <label for="amount">Money <a href="#"
-                                                         tooltip="The amount of money of this operation in the operation currency"><span
+                                                         tooltip="Amount of money of this operation in the operation currency"><span
                                     class="glyphicon glyphicon-question-sign"></span></a></label>
                             <input type="text" name="amount" class="form-control input-sm" id="amount"
                                    ng-model="model.amount"
