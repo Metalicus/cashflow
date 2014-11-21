@@ -80,7 +80,7 @@
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.accountTo.$invalid}">
                         <label>Account to</label>
-                        <ui-select name="accountTo" ng-model="$parent.model.transfer.to" ng-required="true">
+                        <ui-select name="accountTo" ng-model="$parent.model.transfer.to" ng-required="isTransfer()">
                             <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
                             <ui-select-choices repeat="account in accounts | filter: $select.search">
                                 {{account.name}}
@@ -90,13 +90,13 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
+                        <div class="form-group" ng-class="{'has-error': operationForm.transferedMoney.$invalid}">
                             <label for="transferedMoney">
                                 Transfered money <a href="#" tooltip="Amount of money transferred on the account">
                                 <span class="glyphicon glyphicon-question-sign"></span></a>
                             </label>
                             <input type="text" name="transferedMoney" class="form-control input-sm" id="transferedMoney"
-                                   ng-required="true" ng-model="model.transfer.amount" numbers-only/>
+                                   ng-required="isTransfer()" ng-model="model.transfer.amount" numbers-only/>
                         </div>
                     </div>
                 </div>
@@ -117,21 +117,23 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': operationForm.moneyWas.$invalid}">
                         <label for="moneyWas">Money before <a href="#" tooltip="Money was on account before the
                         operation"><span
                                 class="glyphicon glyphicon-question-sign"></span></a></label>
-                        <input type="text" class="form-control input-sm" id="moneyWas" ng-model="model.moneyWas"
-                               ng-change="moneyUpdate()" numbers-only>
+                        <input type="text" class="form-control input-sm" id="moneyWas" name="moneyWas"
+                               ng-model="model.moneyWas"
+                               ng-required="true" ng-change="moneyUpdate()" numbers-only>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error': operationForm.moneyBecome.$invalid}">
                         <label for="moneyBecome">Money after <a href="#"
                                                                 tooltip="Money become on account after operation"><span
                                 class="glyphicon glyphicon-question-sign"></span></a></label>
-                        <input type="text" class="form-control input-sm" id="moneyBecome" ng-model="model.moneyBecome"
-                               numbers-only>
+                        <input type="text" class="form-control input-sm" id="moneyBecome" name="moneyBecome"
+                               ng-model="model.moneyBecome"
+                               ng-required="true" numbers-only>
                     </div>
                 </div>
             </div>
