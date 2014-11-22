@@ -110,6 +110,29 @@
                 }).error(function (data) {
                     errorFactory.handleError('Error while loading categories', data);
                 });
+            },
+            get: function (id, callback) {
+                $http.get('action/category/get/' + id).success(function (data) {
+                    callback(data);
+                }).error(function (data) {
+                    errorFactory.handleError('Error while loading category', data);
+                });
+            },
+            save: function (model, callback) {
+                $http.post('action/category/save', model).success(function (model) {
+                    callback(model);
+                    notify('Successfully saved');
+                }).error(function (data) {
+                    errorFactory.handleError('Error while saving category', data);
+                });
+            },
+            del: function (id, callback) {
+                $http.get('action/category/delete/' + id).success(function () {
+                    notify('Operation deleted');
+                    callback();
+                }).error(function (data) {
+                    errorFactory.handleError('Error while deleting category', data);
+                });
             }
         }
     }]);

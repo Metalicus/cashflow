@@ -8,13 +8,13 @@ import ru.metal.cashflow.server.model.Operation;
 import ru.metal.cashflow.server.service.OperationService;
 
 @RestController
-@RequestMapping(produces = MainController.MEDIA_TYPE)
+@RequestMapping(value = "operation", produces = MainController.MEDIA_TYPE)
 public class OperationController {
 
     @Autowired
     private OperationService operationService;
 
-    @RequestMapping(value = "operation/save", method = RequestMethod.POST)
+    @RequestMapping(value = "save", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public Operation save(@RequestBody Operation operation) throws CFException {
         if (operation.getId() == null)

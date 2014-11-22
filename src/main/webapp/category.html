@@ -2,4 +2,12 @@
     <h1>Category</h1>
 </div>
 
-<div ui-grid="gridOptions" class="grid"></div>
+<button type="button" class="btn btn-primary" ng-click="openNewDialog()">Add</button>
+<button type="button" class="btn btn-default" ng-click="openEditDialog()"
+        ng-disabled="gridApi.selection.getSelectedRows().length === 0">Edit
+</button>
+<button type="button" class="btn btn-danger" ng-click="openDeleteDialog()"
+        ng-disabled="gridApi.selection.getSelectedRows().length === 0">Delete
+</button>
+
+<div ui-grid="gridOptions" class="grid" ui-grid-selection></div>

@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.method.HandlerMethod;
 import ru.metal.cashflow.server.SpringControllerTestCase;
 import ru.metal.cashflow.server.model.Account;
 import ru.metal.cashflow.server.model.Category;
@@ -99,6 +100,10 @@ public class OperationControllerTest extends SpringControllerTestCase {
         assertEquals(Operation.FlowType.EXPENSE, operation.getType());
         assertEquals("test info", operation.getInfo());
         assertNotNull(operation.getCrossCurrency());
+
+        final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
+        assertEquals(OperationController.class, handler.getBean().getClass());
+        assertEquals("save", handler.getMethod().getName());
     }
 
     @Test
@@ -158,7 +163,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 "  \"info\": \"test info\"" +
                 "}";
 
-        mockMvc.perform(post("/operation/save")
+        final MvcResult mvcResult = mockMvc.perform(post("/operation/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
@@ -174,5 +179,9 @@ public class OperationControllerTest extends SpringControllerTestCase {
         assertEquals(Operation.FlowType.EXPENSE, operationFromDB.getType());
         assertEquals("test info", operationFromDB.getInfo());
         assertNull(operation.getCrossCurrency());
+
+        final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
+        assertEquals(OperationController.class, handler.getBean().getClass());
+        assertEquals("save", handler.getMethod().getName());
     }
 }
