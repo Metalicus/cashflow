@@ -18,11 +18,12 @@ import ru.metal.cashflow.utils.HibernateUtilsTest;
 import ru.metal.cashflow.utils.JSONUtils;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class OperationControllerTest extends SpringControllerTestCase {
@@ -37,6 +38,101 @@ public class OperationControllerTest extends SpringControllerTestCase {
     private OperationService operationService;
 
     @Test
+    public void queryTest() throws Exception {
+        final Category category = new Category();
+        category.setName("EUR");
+        categoryService.insert(category);
+
+        final Currency currency = new Currency();
+        currency.setName("EUR");
+        currencyService.insert(currency);
+
+        final Account account = new Account();
+        account.setBalance(BigDecimal.TEN);
+        account.setName("test account");
+        account.setCurrency(currency);
+        accountService.insert(account);
+
+        final Operation operation1 = new Operation();
+        operation1.setDate(new Date());
+        operation1.setCurrency(currency);
+        operation1.setCategory(category);
+        operation1.setAccount(account);
+        operation1.setAmount(BigDecimal.TEN);
+        operation1.setMoneyWas(BigDecimal.ONE);
+        operation1.setMoneyBecome(BigDecimal.TEN);
+        operation1.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation1);
+
+        final Operation operation2 = new Operation();
+        operation2.setDate(new Date());
+        operation2.setCurrency(currency);
+        operation2.setCategory(category);
+        operation2.setAccount(account);
+        operation2.setAmount(BigDecimal.TEN);
+        operation2.setMoneyWas(BigDecimal.ONE);
+        operation2.setMoneyBecome(BigDecimal.TEN);
+        operation2.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation2);
+
+        final MvcResult mvcResult = mockMvc.perform(get("/operation")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        final List<Operation> operations = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
+        assertEquals(2, operations.size());
+
+        assertEquals(operation2, operations.get(0));
+        assertEquals(operation1, operations.get(1));
+
+        final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
+        assertEquals(OperationController.class, handler.getBean().getClass());
+        assertEquals("query", handler.getMethod().getName());
+    }
+
+    @Test
+    public void getTest1() throws Exception {
+        final Category category = new Category();
+        category.setName("EUR");
+        categoryService.insert(category);
+
+        final Currency currency = new Currency();
+        currency.setName("EUR");
+        currencyService.insert(currency);
+
+        final Account account = new Account();
+        account.setBalance(BigDecimal.TEN);
+        account.setName("test account");
+        account.setCurrency(currency);
+        accountService.insert(account);
+
+        final Operation operation = new Operation();
+        operation.setDate(new Date());
+        operation.setCurrency(currency);
+        operation.setCategory(category);
+        operation.setAccount(account);
+        operation.setAmount(BigDecimal.TEN);
+        operation.setMoneyWas(BigDecimal.ONE);
+        operation.setMoneyBecome(BigDecimal.TEN);
+        operation.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation);
+
+        final MvcResult mvcResult = mockMvc.perform(get("/operation/" + operation.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertEquals(operation, JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation.class));
+
+        final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
+        assertEquals(OperationController.class, handler.getBean().getClass());
+        assertEquals("get", handler.getMethod().getName());
+    }
+
+    @Test
     public void insertTest() throws Exception {
         final Currency currency1 = new Currency();
         currency1.setName("EUR");
@@ -45,7 +141,6 @@ public class OperationControllerTest extends SpringControllerTestCase {
         final Currency currency2 = new Currency();
         currency2.setName("EUR");
         currencyService.insert(currency2);
-
 
         final Account account = new Account();
         account.setBalance(BigDecimal.TEN);
@@ -81,7 +176,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
 
         assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
 
-        final MvcResult mvcResult = mockMvc.perform(post("/operation/save")
+        final MvcResult mvcResult = mockMvc.perform(post("/operation/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
@@ -103,7 +198,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(OperationController.class, handler.getBean().getClass());
-        assertEquals("save", handler.getMethod().getName());
+        assertEquals("create", handler.getMethod().getName());
     }
 
     @Test
@@ -163,7 +258,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 "  \"info\": \"test info\"" +
                 "}";
 
-        final MvcResult mvcResult = mockMvc.perform(post("/operation/save")
+        final MvcResult mvcResult = mockMvc.perform(put("/operation/" + operation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
@@ -182,6 +277,44 @@ public class OperationControllerTest extends SpringControllerTestCase {
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(OperationController.class, handler.getBean().getClass());
-        assertEquals("save", handler.getMethod().getName());
+        assertEquals("update", handler.getMethod().getName());
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        final Category category = new Category();
+        category.setName("EUR");
+        categoryService.insert(category);
+
+        final Currency currency = new Currency();
+        currency.setName("EUR");
+        currencyService.insert(currency);
+
+        final Account account = new Account();
+        account.setBalance(BigDecimal.TEN);
+        account.setName("test account");
+        account.setCurrency(currency);
+        accountService.insert(account);
+
+        final Operation operation = new Operation();
+        operation.setDate(new Date());
+        operation.setCurrency(currency);
+        operation.setCategory(category);
+        operation.setAccount(account);
+        operation.setAmount(BigDecimal.TEN);
+        operation.setMoneyWas(BigDecimal.ONE);
+        operation.setMoneyBecome(BigDecimal.TEN);
+        operation.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation);
+
+        final MvcResult mvcResult = mockMvc.perform(delete("/operation/" + operation.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
+        assertEquals(OperationController.class, handler.getBean().getClass());
+        assertEquals("delete", handler.getMethod().getName());
     }
 }

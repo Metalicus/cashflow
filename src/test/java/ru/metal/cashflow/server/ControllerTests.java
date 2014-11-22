@@ -6,7 +6,7 @@ import ru.metal.cashflow.server.controller.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        MainControllerTest.class,
+        RestCRUDControllerTest.class,
         OperationControllerTest.class,
         CategoryControllerTest.class,
         CurrencyControllerTest.class,

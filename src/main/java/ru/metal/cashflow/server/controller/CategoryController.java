@@ -1,25 +1,18 @@
 package ru.metal.cashflow.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import ru.metal.cashflow.server.exception.CFException;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.metal.cashflow.server.model.Category;
-import ru.metal.cashflow.server.service.CategoryService;
+import ru.metal.cashflow.server.service.CRUDService;
 
 @RestController
-@RequestMapping(value = "category", produces = MainController.MEDIA_TYPE)
-public class CategoryController {
+@RequestMapping(value = "category", produces = RestCRUDController.MEDIA_TYPE)
+public class CategoryController extends RestCRUDController<Category> {
 
     @Autowired
-    private CategoryService categoryService;
-
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public Category save(@RequestBody Category category) throws CFException {
-        if (category.getId() == null)
-            return categoryService.insert(category);
-        else
-            return categoryService.update(category);
+    public CategoryController(CRUDService<Category> service) {
+        super(service);
     }
+
 }

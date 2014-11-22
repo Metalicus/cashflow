@@ -1,25 +1,18 @@
 package ru.metal.cashflow.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import ru.metal.cashflow.server.exception.CFException;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.metal.cashflow.server.model.Account;
-import ru.metal.cashflow.server.service.AccountService;
+import ru.metal.cashflow.server.service.CRUDService;
 
 @RestController
-@RequestMapping(value = "account", produces = MainController.MEDIA_TYPE)
-public class AccountController {
+@RequestMapping(value = "account", produces = RestCRUDController.MEDIA_TYPE)
+public class AccountController extends RestCRUDController<Account> {
 
     @Autowired
-    private AccountService accountService;
-
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public Account save(@RequestBody Account account) throws CFException {
-        if (account.getId() == null)
-            return accountService.insert(account);
-        else
-            return accountService.update(account);
+    public AccountController(CRUDService<Account> service) {
+        super(service);
     }
+
 }

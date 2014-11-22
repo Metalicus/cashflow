@@ -1,25 +1,18 @@
 package ru.metal.cashflow.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import ru.metal.cashflow.server.exception.CFException;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.metal.cashflow.server.model.Currency;
-import ru.metal.cashflow.server.service.CurrencyService;
+import ru.metal.cashflow.server.service.CRUDService;
 
 @RestController
-@RequestMapping(value = "currency", produces = MainController.MEDIA_TYPE)
-public class CurrencyController {
+@RequestMapping(value = "currency", produces = RestCRUDController.MEDIA_TYPE)
+public class CurrencyController extends RestCRUDController<Currency> {
 
     @Autowired
-    private CurrencyService currencyService;
-
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public Currency save(@RequestBody Currency currency) throws CFException {
-        if (currency.getId() == null)
-            return currencyService.insert(currency);
-        else
-            return currencyService.update(currency);
+    public CurrencyController(CRUDService<Currency> service) {
+        super(service);
     }
+
 }
