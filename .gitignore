@@ -1,0 +1,7 @@
+.gradle
+.idea/dataSources.ids
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/gradle.xml
+.idea/workspace.xml
+build
