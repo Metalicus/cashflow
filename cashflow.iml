@@ -80,7 +80,6 @@
     <orderEntry type="library" exported="" name="Gradle: org.springframework:spring-expression:4.1.1.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.springframework:spring-web:4.1.1.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.springframework:spring-tx:4.1.1.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="Gradle: junit:junit:4.11" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.yaml:snakeyaml:1.13" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.4.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.4.3" level="project" />
@@ -90,5 +89,6 @@
     <orderEntry type="library" exported="" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-test:4.1.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: p6spy:p6spy:2.1.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: junit:junit:4.11" level="project" />
   </component>
 </module>

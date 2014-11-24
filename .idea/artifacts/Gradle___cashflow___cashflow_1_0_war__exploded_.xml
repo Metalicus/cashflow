@@ -41,7 +41,6 @@
           <element id="library" level="project" name="Gradle: org.springframework:spring-expression:4.1.1.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-web:4.1.1.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-tx:4.1.1.RELEASE" />
-          <element id="library" level="project" name="Gradle: junit:junit:4.11" />
           <element id="library" level="project" name="Gradle: org.yaml:snakeyaml:1.13" />
           <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.4.0" />
           <element id="library" level="project" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.4.3" />
@@ -49,6 +48,7 @@
           <element id="library" level="project" name="Gradle: xml-apis:xml-apis:1.0.b2" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-aop:4.1.1.RELEASE" />
           <element id="library" level="project" name="Gradle: aopalliance:aopalliance:1.0" />
+          <element id="library" level="project" name="Gradle: junit:junit:4.11" />
         </element>
       </element>
       <element id="directory" name="META-INF">
