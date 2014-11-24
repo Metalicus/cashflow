@@ -12,19 +12,6 @@
 
     // -------------------------------- LIBRARIES SETTINGS
 
-    cashFlow.factory('myTest123', ['$q', 'toaster', function ($q, toaster) {
-        return {
-            'responseError': function(response) {
-                toaster.pop('error', "Error", (response.data["message"] !== 'undefined' ? ': ' + response.data["message"] : ''));
-
-                if (response.data["stack"] !== 'undefined')
-                    console.log(response.data["stack"]);
-
-                return $q.reject(response);
-            }
-        }
-    }]);
-
     cashFlow.config(['$routeProvider', 'uiSelectConfig', '$httpProvider', function ($routeProvider, uiSelectConfig, $httpProvider) {
         // route config
         $routeProvider
@@ -53,10 +40,23 @@
         uiSelectConfig.theme = 'bootstrap';
 
         // http provider
-        $httpProvider.interceptors.push('myTest123');
+        $httpProvider.interceptors.push('errorHandlerInterceptor');
     }]);
 
     // -------------------------------- FACTORIES
+
+    cashFlow.factory('errorHandlerInterceptor', ['$q', 'toaster', function ($q, toaster) {
+        return {
+            'responseError': function(response) {
+                toaster.pop('error', "Error", (response.data["message"] !== 'undefined' ? ': ' + response.data["message"] : ''));
+
+                if (response.data["stack"] !== 'undefined')
+                    console.log(response.data["stack"]);
+
+                return $q.reject(response);
+            }
+        }
+    }]);
 
     // crud factories for models
     cashFlow.factory('Operation', ['$resource', function ($resource) {
@@ -65,13 +65,19 @@
         });
     }]);
     cashFlow.factory('Account', ['$resource', function ($resource) {
-        return $resource('action/account/:id');
+        return $resource('action/account/:id', { id: '@id' }, {
+            'update': { method:'PUT' }
+        });
     }]);
     cashFlow.factory('Currency', ['$resource', function ($resource) {
-        return $resource('action/currency/:id');
+        return $resource('action/currency/:id', { id: '@id' }, {
+            'update': { method:'PUT' }
+        });
     }]);
     cashFlow.factory('Category', ['$resource', function ($resource) {
-        return $resource('action/category/:id');
+        return $resource('action/category/:id', { id: '@id' }, {
+            'update': { method:'PUT' }
+        });
     }]);
 
     // common directives
