@@ -1,13 +1,6 @@
 (function () {
     var operations = angular.module('cashflow-operations', []);
 
-    // operations type enum
-    var OperationType = {
-        EXPENSE: 'EXPENSE',
-        INCOME: 'INCOME',
-        TRANSFER: 'TRANSFER'
-    };
-
     operations.directive('typeTabs', function () {
         return {
             restrict: 'A',
@@ -51,7 +44,7 @@
     }]);
 
     // controller for operation table and modal dialogs calls
-    operations.controller('OperationsCtrl', ['$scope', 'operationFactory', '$modal', function ($scope, operationFactory, $modal) {
+    operations.controller('OperationsCtrl', ['$scope', 'Operation', '$modal', function ($scope, Operation, $modal) {
         $scope.gridOptions = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -129,17 +122,15 @@
             });
         };
 
-        operationFactory.list(function (data) {
-            $scope.gridOptions.data = data;
-        });
+        $scope.gridOptions.data = Operation.query();
     }]);
 
     // controller for model type tabs. Hold all tab operations, like select current, etc.
-    operations.controller('TypeTabController', ['$scope', function ($scope) {
+    operations.controller('TypeTabController', ['$scope', 'OPERATION_TYPE', function ($scope, OPERATION_TYPE) {
         $scope.tabs = [
-            {type: OperationType.EXPENSE, active: true},
-            {type: OperationType.TRANSFER, active: false},
-            {type: OperationType.INCOME, active: false}
+            {type: OPERATION_TYPE.EXPENSE, active: true},
+            {type: OPERATION_TYPE.TRANSFER, active: false},
+            {type: OPERATION_TYPE.INCOME, active: false}
         ];
 
         $scope.getCurrentType = function () {
@@ -162,31 +153,13 @@
     }]);
 
     // controller for operation edit or add. Hold operation model
-    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', 'operationFactory', 'accountFactory', 'currencyFactory', 'categoryFactory', '$timeout', 'id',
-        function ($scope, $modalInstance, operationFactory, accountFactory, currencyFactory, categoryFactory, $timeout, id) {
-            // operation model
-            $scope.model = {
-                id: id,
-                type: OperationType.EXPENSE,
-                date: new Date(),
-                amount: null,
-                moneyWas: 0,
-                moneyBecome: 0,
-                account: null,
-                currency: null,
-                category: null,
-                info: '',
-                calcMoneyBecome: function () { // function to calculate money become
-                    var moneyWas = parseFloat($scope.model.moneyWas);
-                    var money = parseFloat($scope.model.amount);
+    operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', 'OPERATION_TYPE', 'Operation', 'Account', 'Currency', 'Category', '$timeout', 'id',
+        function ($scope, $modalInstance, OPERATION_TYPE, Operation, Account, Currency, Category, $timeout, id) {
 
-                    if (this.type === OperationType.EXPENSE) {
-                        this.moneyBecome = (moneyWas - money).toFixed(2);
-                    } else {
-                        this.moneyBecome = (moneyWas + money).toFixed(2);
-                    }
-                }
-            };
+            $scope.model = new Operation();
+            $scope.model.id = id;
+            $scope.model.date = new Date();
+            $scope.model.type = OPERATION_TYPE.EXPENSE;
 
             $scope.changeAccount = function (model) {
                 $scope.model.moneyWas = model["balance"];
@@ -203,64 +176,58 @@
 
                 if ($scope.model.currency.id == $scope.model.account.currency.id) {
                     // if operation currency is equal to account currency we can calculate
-                    $scope.model.calcMoneyBecome();
+                    var moneyWas = parseFloat($scope.model.moneyWas);
+                    var money = parseFloat($scope.model.amount);
+
+                    if (this.type === OPERATION_TYPE.EXPENSE) {
+                        $scope.model.moneyBecome = (moneyWas - money).toFixed(2);
+                    } else {
+                        $scope.model.moneyBecome = (moneyWas + money).toFixed(2);
+                    }
                 }
             };
 
             $scope.isTransfer = function () {
-                return $scope.model.type === OperationType.TRANSFER;
+                return $scope.model.type === OPERATION_TYPE.TRANSFER;
             };
 
             $scope.submit = function () {
-                if ($scope.model.type !== OperationType.TRANSFER && $scope.model.transfer) {
+                if ($scope.model.type !== OPERATION_TYPE.TRANSFER && $scope.model["transfer"]) {
                     delete $scope.model["transfer"];
                 }
 
-                operationFactory.save($scope.model, function (model) {
-                    $modalInstance.close(model);
-                });
+                if (id !== null) {
+                    $scope.model.$update(function (model) {
+                        $modalInstance.close(model);
+                    });
+                } else {
+                    $scope.model.$save(function (model) {
+                        $modalInstance.close(model);
+                    });
+                }
             };
 
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel');
             };
 
-            accountFactory.list(function (data) {
-                $scope.accounts = data;
-            });
-            currencyFactory.list(function (date) {
-                $scope.currencies = date;
-            });
-            categoryFactory.list(function (date) {
-                $scope.categories = date;
-            });
+            $scope.accounts = Account.query();
+            $scope.currencies = Currency.query();
+            $scope.categories = Category.query();
 
             if (id !== null) {
-                operationFactory.get(id, function (data) {
-                    $scope.model.type = data.type;
-                    $scope.model.date = new Date(data.date);
-                    $scope.model.amount = data.amount;
-                    $scope.model.moneyWas = data.moneyWas;
-                    $scope.model.moneyBecome = data.moneyBecome;
-                    $scope.model.account = data.account;
-                    $scope.model.currency = data.currency;
-                    $scope.model.category = data.category;
-                    $scope.model.info = data.info;
-
-                    if (data.crossCurrency)
-                        $scope.model.crossCurrency = data.crossCurrency;
-                    if (data.transfer)
-                        $scope.model.transfer = data.transfer;
+                $scope.model.$get(function () {
+                    $scope.model.date = new Date($scope.model.date);
                 });
             }
         }]);
 
     // controller for deleting operations
-    operations.controller('OperationDeleteCtrl', ['$scope', '$modalInstance', 'operationFactory', 'id', function ($scope, $modalInstance, operationFactory, id) {
+    operations.controller('OperationDeleteCtrl', ['$scope', '$modalInstance', 'Operation', 'id', function ($scope, $modalInstance, Operation, id) {
         $scope.entityName = 'operation';
 
         $scope.ok = function () {
-            operationFactory.del(id, function () {
+            Operation.delete({id: id}, function () {
                 $modalInstance.close();
             });
         };
