@@ -1,0 +1,44 @@
+<div class="modal-header">
+    <h3 class="modal-title">Account</h3>
+</div>
+<div class="modal-body">
+    <form name="accountForm" role="form" ng-submit="submit()" novalidate>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group" ng-class="{'has-error': accountForm.name.$invalid}">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control input-sm" ng-required="true" id="name"
+                               ng-model="model.name"/>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group" ng-class="{'has-error': accountForm.currency.$invalid}">
+                        <label>Currency</label>
+                        <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true">
+                            <ui-select-match placeholder="Select currency...">{{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="currency in currencies | filter: $select.search">
+                                {{currency.name}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-group" ng-class="{'has-error': accountForm.amount.$invalid}">
+                            <label for="amount">Balance <a href="#" tooltip="Current account's balance"><span
+                                    class="glyphicon glyphicon-question-sign"></span></a></label>
+                            <input type="text" name="amount" class="form-control input-sm" id="amount"
+                                   ng-model="model.balance" ng-required="true" numbers-only/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="submit()" ng-disabled="accountForm.$invalid">Save</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
