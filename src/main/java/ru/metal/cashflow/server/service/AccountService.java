@@ -24,12 +24,21 @@ public class AccountService implements CRUDService<Account> {
     @Override
     @Transactional(rollbackFor = CFException.class)
     public Account insert(Account model) throws CFException {
+        // foolproof
+        if (model.getId() != null)
+            throw new CFException("Account already exists");
+
         return accountDAO.insert(model);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
     public Account update(Account model) throws CFException {
+        // foolproof
+        final Account accountOld = get(model.getId());
+        if (!accountOld.getCurrency().equals(model.getCurrency()))
+            throw new CFException("You can't change account's currency!");
+
         return accountDAO.update(model);
     }
 

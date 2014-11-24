@@ -15,7 +15,8 @@
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': accountForm.currency.$invalid}">
                         <label>Currency</label>
-                        <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true">
+                        <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true"
+                                   ng-disabled="$parent.model.id !== null">
                             <ui-select-match placeholder="Select currency...">{{$select.selected.name}}
                             </ui-select-match>
                             <ui-select-choices repeat="currency in currencies | filter: $select.search">
