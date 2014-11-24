@@ -1,7 +1,7 @@
 (function () {
     var category = angular.module('cashflow-category', []);
 
-    category.controller('CategoryCtrl', ['$scope', 'categoryFactory', '$modal', function ($scope, categoryFactory, $modal) {
+    category.controller('CategoryCtrl', ['$scope', 'Category', '$modal', function ($scope, Category, $modal) {
         $scope.gridOptions = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -70,40 +70,38 @@
             });
         };
 
-        categoryFactory.list(function (data) {
-            $scope.gridOptions.data = data;
-        });
+        $scope.gridOptions.data = Category.query();
     }]);
 
-    category.controller('CategoryEditCtrl', ['$scope', '$modalInstance', 'categoryFactory', 'id', function ($scope, $modalInstance, categoryFactory, id) {
-        $scope.model = {
-            id: id,
-            name: null
-        };
+    category.controller('CategoryEditCtrl', ['$scope', '$modalInstance', 'Category', 'id', function ($scope, $modalInstance, Category, id) {
+        $scope.model = new Category();
+        $scope.model.id = id;
 
         $scope.submit = function () {
-            categoryFactory.save($scope.model, function (model) {
-                $modalInstance.close(model);
-            });
+            if (id !== null) {
+                $scope.model.$update(function (model) {
+                    $modalInstance.close(model);
+                });
+            } else {
+                $scope.model.$save(function (model) {
+                    $modalInstance.close(model);
+                });
+            }
         };
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
 
-        if (id !== null) {
-            categoryFactory.get(id, function (data) {
-                $scope.model.type = data.type;
-                $scope.model.name = data.name;
-            });
-        }
+        if (id !== null)
+            $scope.model.$get();
     }]);
 
-    category.controller('CategoryDeleteCtrl', ['$scope', '$modalInstance', 'categoryFactory', 'id', function ($scope, $modalInstance, categoryFactory, id) {
+    category.controller('CategoryDeleteCtrl', ['$scope', '$modalInstance', 'Category', 'id', function ($scope, $modalInstance, Category, id) {
         $scope.entityName = 'category';
 
         $scope.ok = function () {
-            operationFactory.del(id, function () {
+            Category.delete({id: id}, function () {
                 $modalInstance.close();
             });
         };

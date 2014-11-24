@@ -5,3 +5,4 @@
 .idea/gradle.xml
 .idea/workspace.xml
 build
+spy.log

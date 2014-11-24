@@ -1,7 +1,7 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
         'cashflow-category', 'ngRoute', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.bootstrap', 'ui.select',
-        'cgNotify', 'ngResource']);
+        'toaster', 'ngResource']);
 
     // -------------------------------- CONSTANTS
     cashFlow.constant('OPERATION_TYPE', {
@@ -12,7 +12,20 @@
 
     // -------------------------------- LIBRARIES SETTINGS
 
-    cashFlow.config(['$routeProvider', 'uiSelectConfig', function ($routeProvider, uiSelectConfig) {
+    cashFlow.factory('myTest123', ['$q', 'toaster', function ($q, toaster) {
+        return {
+            'responseError': function(response) {
+                toaster.pop('error', "Error", (response.data["message"] !== 'undefined' ? ': ' + response.data["message"] : ''));
+
+                if (response.data["stack"] !== 'undefined')
+                    console.log(response.data["stack"]);
+
+                return $q.reject(response);
+            }
+        }
+    }]);
+
+    cashFlow.config(['$routeProvider', 'uiSelectConfig', '$httpProvider', function ($routeProvider, uiSelectConfig, $httpProvider) {
         // route config
         $routeProvider
 
@@ -38,6 +51,9 @@
 
         //ui-selector theme
         uiSelectConfig.theme = 'bootstrap';
+
+        // http provider
+        $httpProvider.interceptors.push('myTest123');
     }]);
 
     // -------------------------------- FACTORIES
@@ -56,21 +72,6 @@
     }]);
     cashFlow.factory('Category', ['$resource', function ($resource) {
         return $resource('action/category/:id');
-    }]);
-
-    // factory for error handling
-    cashFlow.factory('errorFactory', ['notify', function (notify) {
-        return {
-            handleError: function (title, data) {
-                notify({
-                    message: title + (data["message"] !== 'undefined' ? ': ' + data["message"] : ''),
-                    classes: 'alert alert-danger'
-                });
-
-                if (data["stack"] !== 'undefined')
-                    console.log(data["stack"]);
-            }
-        }
     }]);
 
     // common directives
