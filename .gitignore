@@ -6,3 +6,5 @@
 .idea/workspace.xml
 build
 spy.log
+src/main/webapp/bower_components
+node_modules
