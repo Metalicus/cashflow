@@ -103,7 +103,11 @@
     });
 
     // controller for navigation bar button
-    cashFlow.controller('NavBarCtrl', ['$scope', function ($scope) {
+    cashFlow.controller('NavBarCtrl', ['$scope', '$location', function ($scope, $location) {
         $scope.isCollapsed = true;
+
+        $scope.isActive = function (viewLocation) {
+            return viewLocation === $location.path();
+        };
     }]);
 })();

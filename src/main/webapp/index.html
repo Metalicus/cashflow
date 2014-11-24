@@ -49,10 +49,10 @@
 
             <div class="collapse navbar-collapse" collapse="isCollapsed">
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Operations</a></li>
-                    <li><a href="#category">Category</a></li>
-                    <li><a href="#currency">Currency</a></li>
-                    <li><a href="#account">Account</a></li>
+                    <li ng-class="{ active: isActive('/')}"><a href="#">Operations</a></li>
+                    <li ng-class="{ active: isActive('/category')}"><a href="#category">Category</a></li>
+                    <li ng-class="{ active: isActive('/currency')}"><a href="#currency">Currency</a></li>
+                    <li ng-class="{ active: isActive('/account')}"><a href="#account">Account</a></li>
                 </ul>
             </div>
         </div>
