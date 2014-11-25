@@ -82,7 +82,7 @@ public class CurrencyControllerTest extends SpringControllerTestCase {
 
         final String json = JSONUtils.toJSON(currency);
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Currency.class));
 
         final MvcResult mvcResult = mockMvc.perform(post("/currency")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +96,7 @@ public class CurrencyControllerTest extends SpringControllerTestCase {
         assertNotNull(responseCurrency.getId());
         assertEquals(currency.getName(), responseCurrency.getName());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Currency.class));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(CurrencyController.class, handler.getBean().getClass());
@@ -111,7 +111,7 @@ public class CurrencyControllerTest extends SpringControllerTestCase {
 
         final String json = JSONUtils.toJSON(currency);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Currency.class));
 
         final MvcResult mvcResult = mockMvc.perform(put("/currency/" + currency.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ public class CurrencyControllerTest extends SpringControllerTestCase {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Currency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Currency.class));
 
         final Currency responseCurrency = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Currency.class);
         assertNotNull(responseCurrency);

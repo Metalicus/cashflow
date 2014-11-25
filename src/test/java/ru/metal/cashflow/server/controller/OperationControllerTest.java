@@ -84,8 +84,8 @@ public class OperationControllerTest extends SpringControllerTestCase {
         final List<Operation> operations = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
         assertEquals(2, operations.size());
 
-        assertEquals(operation2, operations.get(0));
-        assertEquals(operation1, operations.get(1));
+        assertEquals(operation1, operations.get(0));
+        assertEquals(operation2, operations.get(1));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(OperationController.class, handler.getBean().getClass());
@@ -174,7 +174,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 "  \"info\": \"test info\"" +
                 "}";
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
 
         final MvcResult mvcResult = mockMvc.perform(post("/operation/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -186,9 +186,9 @@ public class OperationControllerTest extends SpringControllerTestCase {
         final Operation responseOperation = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation.class);
         assertNotNull(responseOperation);
 
-        final List list = sessionFactory.getCurrentSession().createCriteria(Operation.class).list();
+        final List<Operation> list = operationService.list();
         assertEquals(1, list.size());
-        final Operation operation = (Operation) list.get(0);
+        final Operation operation = list.get(0);
         assertEquals(new BigDecimal("27.38"), operation.getAmount());
         assertEquals(new BigDecimal("15858.71"), operation.getMoneyWas());
         assertEquals(new BigDecimal("14351.56"), operation.getMoneyBecome());
@@ -226,9 +226,9 @@ public class OperationControllerTest extends SpringControllerTestCase {
         operation.setDate(new Date());
         operationService.insert(operation);
 
-        List list = sessionFactory.getCurrentSession().createCriteria(Operation.class).list();
+        List<Operation> list = operationService.list();
         assertEquals(1, list.size());
-        Operation operationFromDB = (Operation) list.get(0);
+        Operation operationFromDB = list.get(0);
         assertEquals(BigDecimal.TEN, operationFromDB.getAmount());
         assertEquals(BigDecimal.ZERO, operationFromDB.getMoneyWas());
         assertEquals(BigDecimal.ZERO, operationFromDB.getMoneyBecome());
@@ -265,9 +265,9 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        list = sessionFactory.getCurrentSession().createCriteria(Operation.class).list();
+        list = operationService.list();
         assertEquals(1, list.size());
-        operationFromDB = (Operation) list.get(0);
+        operationFromDB = list.get(0);
         assertEquals(new BigDecimal("27.38"), operationFromDB.getAmount());
         assertEquals(new BigDecimal("15858.71"), operationFromDB.getMoneyWas());
         assertEquals(new BigDecimal("14351.56"), operationFromDB.getMoneyBecome());

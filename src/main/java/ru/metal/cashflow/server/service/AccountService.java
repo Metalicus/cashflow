@@ -3,9 +3,9 @@ package ru.metal.cashflow.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metal.cashflow.server.dao.AccountDAO;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Account;
+import ru.metal.cashflow.server.repository.AccountRepository;
 
 import java.util.List;
 
@@ -13,12 +13,12 @@ import java.util.List;
 public class AccountService implements CRUDService<Account> {
 
     @Autowired
-    private AccountDAO accountDAO;
+    private AccountRepository repository;
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public List<Account> list() throws CFException {
-        return accountDAO.getAccounts();
+    @Transactional(readOnly = true)
+    public List<Account> list() {
+        return repository.findAll();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AccountService implements CRUDService<Account> {
         if (model.getId() != null)
             throw new CFException("Account already exists");
 
-        return accountDAO.insert(model);
+        return repository.saveAndFlush(model);
     }
 
     @Override
@@ -39,18 +39,18 @@ public class AccountService implements CRUDService<Account> {
         if (!accountOld.getCurrency().equals(model.getCurrency()))
             throw new CFException("You can't change account's currency!");
 
-        return accountDAO.update(model);
+        return repository.saveAndFlush(model);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Account get(int id) throws CFException {
-        return accountDAO.get(id);
+    @Transactional(readOnly = true)
+    public Account get(int id) {
+        return repository.findOne(id);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public void delete(Integer id) throws CFException {
-        accountDAO.delete(id);
+    @Transactional
+    public void delete(Integer id) {
+        repository.delete(id);
     }
 }

@@ -9,6 +9,7 @@
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/applicationContext-manager.xml</file>
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/appServlet-servlet.xml</file>
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/controllers.xml</file>
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/applicationContext-repository.xml</file>
         </fileset>
       </configuration>
     </facet>
@@ -16,7 +17,6 @@
       <configuration>
         <datasource-map>
           <unit-entry name="hibernate.cfg.xml" value="d83db055-7957-48fc-b3be-9ecea270aaf6" />
-          <unit-entry name="sessionFactory" value="d83db055-7957-48fc-b3be-9ecea270aaf6" />
         </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/hibernate.cfg.xml" />
@@ -46,10 +46,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/javascript" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/node_modules" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -92,5 +90,12 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-test:4.1.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: p6spy:p6spy:2.1.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: junit:junit:4.11" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.springframework.data:spring-data-jpa:1.7.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.springframework.data:spring-data-commons:1.9.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.aspectj:aspectjrt:1.8.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.slf4j:slf4j-api:1.7.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.slf4j:jcl-over-slf4j:1.7.7" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.hibernate:hibernate-entitymanager:4.3.6.Final" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.slf4j:slf4j-log4j12:1.7.7" level="project" />
   </component>
 </module>

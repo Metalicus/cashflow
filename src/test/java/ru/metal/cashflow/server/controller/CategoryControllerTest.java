@@ -77,7 +77,7 @@ public class CategoryControllerTest extends SpringControllerTestCase {
 
         final String json = JSONUtils.toJSON(category);
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Category.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Category.class));
 
         final MvcResult mvcResult = mockMvc.perform(post("/category")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -91,7 +91,7 @@ public class CategoryControllerTest extends SpringControllerTestCase {
         assertNotNull(responseCategory.getId());
         assertEquals(category.getName(), responseCategory.getName());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Category.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Category.class));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(CategoryController.class, handler.getBean().getClass());
@@ -106,7 +106,7 @@ public class CategoryControllerTest extends SpringControllerTestCase {
 
         final String json = JSONUtils.toJSON(category);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Category.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Category.class));
 
         final MvcResult mvcResult = mockMvc.perform(put("/category/" + category.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +115,7 @@ public class CategoryControllerTest extends SpringControllerTestCase {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Category.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Category.class));
 
         final Category responseCategory = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category.class);
         assertNotNull(responseCategory);

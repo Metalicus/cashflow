@@ -9,7 +9,8 @@
             /WEB-INF/applicationContext-dataSource.xml,
             /WEB-INF/applicationContext-liquibase.xml,
             /WEB-INF/applicationContext-hibernate.xml,
-            /WEB-INF/applicationContext-manager.xml
+            /WEB-INF/applicationContext-repository.xml
+            /WEB-INF/applicationContext-service.xml
         </param-value>
     </context-param>
 

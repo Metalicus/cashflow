@@ -3,9 +3,8 @@ package ru.metal.cashflow.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metal.cashflow.server.dao.CurrencyDAO;
-import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.repository.CurrencyRepository;
 
 import java.util.List;
 
@@ -13,35 +12,35 @@ import java.util.List;
 public class CurrencyService implements CRUDService<Currency> {
 
     @Autowired
-    CurrencyDAO currencyDAO;
+    private CurrencyRepository currencyRepository;
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public List<Currency> list() throws CFException {
-        return currencyDAO.getCurrencies();
+    @Transactional(readOnly = true)
+    public List<Currency> list() {
+        return currencyRepository.findAll();
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public Currency insert(Currency model) throws CFException {
-        return currencyDAO.insert(model);
+    @Transactional
+    public Currency insert(Currency model) {
+        return currencyRepository.saveAndFlush(model);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public Currency update(Currency model) throws CFException {
-        return currencyDAO.update(model);
+    @Transactional
+    public Currency update(Currency model) {
+        return currencyRepository.saveAndFlush(model);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Currency get(int id) throws CFException {
-        return currencyDAO.get(id);
+    @Transactional(readOnly = true)
+    public Currency get(int id) {
+        return currencyRepository.findOne(id);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public void delete(Integer id) throws CFException {
-        currencyDAO.delete(id);
+    @Transactional
+    public void delete(Integer id) {
+        currencyRepository.delete(id);
     }
 }

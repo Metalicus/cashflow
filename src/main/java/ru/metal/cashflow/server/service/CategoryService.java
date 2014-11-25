@@ -3,9 +3,8 @@ package ru.metal.cashflow.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metal.cashflow.server.dao.CategoryDAO;
-import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Category;
+import ru.metal.cashflow.server.repository.CategoryRepository;
 
 import java.util.List;
 
@@ -16,35 +15,35 @@ import java.util.List;
 public class CategoryService implements CRUDService<Category> {
 
     @Autowired
-    private CategoryDAO categoryDAO;
+    private CategoryRepository repository;
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public List<Category> list() throws CFException {
-        return categoryDAO.getCategories();
+    @Transactional(readOnly = true)
+    public List<Category> list() {
+        return repository.findAll();
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public Category insert(Category model) throws CFException {
-        return categoryDAO.insert(model);
+    @Transactional
+    public Category insert(Category model) {
+        return repository.saveAndFlush(model);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public Category update(Category model) throws CFException {
-        return categoryDAO.update(model);
+    @Transactional
+    public Category update(Category model) {
+        return repository.saveAndFlush(model);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Category get(int id) throws CFException {
-        return categoryDAO.get(id);
+    @Transactional(readOnly = true)
+    public Category get(int id) {
+        return repository.findOne(id);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class)
-    public void delete(Integer id) throws CFException {
-        categoryDAO.delete(id);
+    @Transactional
+    public void delete(Integer id) {
+        repository.delete(id);
     }
 }

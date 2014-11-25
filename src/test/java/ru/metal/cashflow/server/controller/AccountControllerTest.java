@@ -103,7 +103,7 @@ public class AccountControllerTest extends SpringControllerTestCase {
 
         final String json = JSONUtils.toJSON(account);
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Account.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Account.class));
 
         final MvcResult mvcResult = mockMvc.perform(post("/account")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +119,7 @@ public class AccountControllerTest extends SpringControllerTestCase {
         assertEquals(account.getCurrency(), responseAccount.getCurrency());
         assertEquals(account.getBalance(), responseAccount.getBalance());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Account.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Account.class));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(AccountController.class, handler.getBean().getClass());
@@ -140,7 +140,7 @@ public class AccountControllerTest extends SpringControllerTestCase {
 
         final String json = JSONUtils.toJSON(account);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Account.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Account.class));
 
         final MvcResult mvcResult = mockMvc.perform(put("/account/" + account.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +156,7 @@ public class AccountControllerTest extends SpringControllerTestCase {
         assertEquals(account.getCurrency(), responseAccount.getCurrency());
         assertEquals(account.getBalance(), responseAccount.getBalance());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Account.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Account.class));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(AccountController.class, handler.getBean().getClass());

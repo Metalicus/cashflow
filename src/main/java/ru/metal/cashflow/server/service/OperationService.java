@@ -3,13 +3,12 @@ package ru.metal.cashflow.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metal.cashflow.server.dao.AccountDAO;
-import ru.metal.cashflow.server.dao.OperationsDAO;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Account;
 import ru.metal.cashflow.server.model.CrossCurrency;
 import ru.metal.cashflow.server.model.Operation;
 import ru.metal.cashflow.server.model.Transfer;
+import ru.metal.cashflow.server.repository.OperationRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,14 +17,14 @@ import java.util.List;
 public class OperationService implements CRUDService<Operation> {
 
     @Autowired
-    private OperationsDAO operationsDAO;
+    private OperationRepository operationRepository;
     @Autowired
-    private AccountDAO accountDAO;
+    private AccountService accountService;
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public List<Operation> list() throws CFException {
-        return operationsDAO.getOperations();
+    @Transactional(readOnly = true)
+    public List<Operation> list() {
+        return operationRepository.findAll();
     }
 
     @Override
@@ -35,32 +34,50 @@ public class OperationService implements CRUDService<Operation> {
         if (model.getId() != null)
             throw new CFException("Operation already exists");
 
+        if (model.getAccount() == null)
+            throw new CFException("Account can not be null");
+
+        if (model.getCurrency() == null)
+            throw new CFException("Currency can not be null");
+
+        if (model.getCategory() == null)
+            throw new CFException("Category can not be null");
+
         // calculate cross-currency
         if (!model.sameCurrency())
             model.setCrossCurrency(createCrossCurrency(model));
 
         // we believe in moneyBecome variable, because person who created this operations knows better
-        final Account account = accountDAO.get(model.getAccount().getId());
+        final Account account = accountService.get(model.getAccount().getId());
         account.setBalance(model.getMoneyBecome());
-        accountDAO.update(account);
+        accountService.update(account);
 
         if (model.getTransfer() != null) {
             if (model.getTransfer().getAmount() == null)
                 model.getTransfer().setAmount(model.getAmount());
 
             // if this is "TRANSFER" we update the account where the money went
-            final Account transferAccount = accountDAO.get(model.getTransfer().getTo().getId());
+            final Account transferAccount = accountService.get(model.getTransfer().getTo().getId());
             transferAccount.setBalance(transferAccount.getBalance().add(model.getTransfer().getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
-            accountDAO.update(transferAccount);
+            accountService.update(transferAccount);
         }
 
-        return operationsDAO.insert(model);
+        return operationRepository.saveAndFlush(model);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
     public Operation update(Operation model) throws CFException {
-        final Operation oldOperation = operationsDAO.get(model.getId());
+        if (model.getAccount() == null)
+            throw new CFException("Account can not be null");
+
+        if (model.getCurrency() == null)
+            throw new CFException("Currency can not be null");
+
+        if (model.getCategory() == null)
+            throw new CFException("Category can not be null");
+
+        final Operation oldOperation = get(model.getId());
 
         // foolproof
         if (!model.getType().equals(oldOperation.getType()))
@@ -81,26 +98,26 @@ public class OperationService implements CRUDService<Operation> {
 
         // before save new data we need revert money flow in old operation and calculate new
         final Account oldAccount = oldOperation.getAccount();
-        final Account newAccount = accountDAO.get(model.getAccount().getId());
+        final Account newAccount = accountService.get(model.getAccount().getId());
         switch (model.getType()) {
             case EXPENSE:
                 // revert old expense operation
                 oldAccount.setBalance(oldAccount.getBalance().add(oldOperation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(oldAccount);
+                accountService.update(oldAccount);
 
                 // update with new expense operation
                 newAccount.setBalance(newAccount.getBalance().subtract(model.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(newAccount);
+                accountService.update(newAccount);
 
                 break;
             case INCOME:
                 // revert old income operation
                 oldAccount.setBalance(oldAccount.getBalance().subtract(oldOperation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(oldAccount);
+                accountService.update(oldAccount);
 
                 // update with new income operation
                 newAccount.setBalance(newAccount.getBalance().add(model.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(newAccount);
+                accountService.update(newAccount);
 
                 break;
             case TRANSFER:
@@ -109,32 +126,36 @@ public class OperationService implements CRUDService<Operation> {
                 // revert old expense and income
                 oldAccount.setBalance(oldAccount.getBalance().add(oldOperation.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
                 oldTransfer.getTo().setBalance(oldTransfer.getTo().getBalance().subtract(oldTransfer.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(oldAccount);
-                accountDAO.update(oldTransfer.getTo());
+                accountService.update(oldAccount);
+                accountService.update(oldTransfer.getTo());
 
                 // update with new "TRANSFER"
-                final Account accountTransfer = accountDAO.get(model.getTransfer().getTo().getId());
+                final Account accountTransfer = accountService.get(model.getTransfer().getTo().getId());
                 newAccount.setBalance(newAccount.getBalance().subtract(model.getMoneyInAccountCurrency()).setScale(2, BigDecimal.ROUND_HALF_UP));
                 accountTransfer.setBalance(accountTransfer.getBalance().add(model.getTransfer().getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(newAccount);
-                accountDAO.update(accountTransfer);
+                accountService.update(newAccount);
+                accountService.update(accountTransfer);
 
                 break;
         }
 
-        return operationsDAO.update(model);
+        return operationRepository.saveAndFlush(model);
     }
 
     @Override
-    @Transactional(rollbackFor = CFException.class, readOnly = true)
-    public Operation get(int id) throws CFException {
-        return operationsDAO.get(id);
+    @Transactional(readOnly = true)
+    public Operation get(int id) {
+        return operationRepository.findOne(id);
     }
 
     @Override
     @Transactional(rollbackFor = CFException.class)
     public void delete(Integer id) throws CFException {
-        final Operation operation = operationsDAO.get(id);
+        final Operation operation = get(id);
+        if (operation == null) {
+            throw new CFException("Object not found");
+        }
+
         final Account account = operation.getAccount();
         switch (operation.getType()) {
             case INCOME:
@@ -149,13 +170,13 @@ public class OperationService implements CRUDService<Operation> {
                 final Transfer transfer = operation.getTransfer();
                 final Account accountTo = transfer.getTo();
                 accountTo.setBalance(accountTo.getBalance().subtract(transfer.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
-                accountDAO.update(accountTo);
+                accountService.update(accountTo);
 
                 break;
         }
-        accountDAO.update(account);
+        accountService.update(account);
 
-        operationsDAO.delete(id);
+        operationRepository.delete(id);
     }
 
     /**

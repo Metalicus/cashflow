@@ -24,6 +24,103 @@ public class OperationServiceTest extends SpringTestCase {
     @Autowired
     private OperationService operationService;
 
+    @Test(expected = CFException.class)
+    public void saveErrorTest() throws Exception {
+        final Operation operation = new Operation();
+        operationService.insert(operation);
+    }
+
+    @Test
+    public void updateTest() throws Exception {
+        final Currency currency = new Currency();
+        currency.setName("new currency");
+        currencyService.insert(currency);
+
+        final Account account = new Account();
+        account.setName("new account");
+        account.setBalance(BigDecimal.valueOf(12));
+        account.setCurrency(currency);
+        accountService.insert(account);
+
+        final Category category = new Category();
+        category.setName("new category");
+        categoryService.insert(category);
+
+        final CrossCurrency crossCurrency = new CrossCurrency();
+        crossCurrency.setAmount(BigDecimal.ONE);
+        crossCurrency.setExchangeRate(new BigDecimal("10.00"));
+
+        final Operation operation = new Operation();
+        operation.setCurrency(currency);
+        operation.setAccount(account);
+        operation.setCategory(category);
+        operation.setCrossCurrency(crossCurrency);
+        operation.setAmount(new BigDecimal("10.00"));
+        operation.setDate(new Date());
+        operation.setInfo("information");
+        operation.setMoneyWas(BigDecimal.ZERO);
+        operation.setMoneyBecome(new BigDecimal("10.00"));
+        operation.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation);
+
+        final Integer id = operation.getId();
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+
+        // clear session to perform re-read from database
+        entityManager.clear();
+
+        operation.setAmount(BigDecimal.valueOf(11));
+        operationService.update(operation);
+        // id doesnt change, it's the same object
+        assertEquals(id, operation.getId());
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+
+        final Operation operationFromDB = operationService.get(operation.getId());
+        assertEquals(operation, operationFromDB);
+    }
+
+    @Test(expected = CFException.class)
+    public void updateErrorTest() throws Exception {
+        final Currency currency = new Currency();
+        currency.setName("new currency");
+        currencyService.insert(currency);
+
+        final Account account = new Account();
+        account.setName("new account");
+        account.setBalance(BigDecimal.valueOf(12));
+        account.setCurrency(currency);
+        accountService.insert(account);
+
+        final Category category = new Category();
+        category.setName("new category");
+        categoryService.insert(category);
+
+        final Operation operation = new Operation();
+        operation.setCurrency(currency);
+        operation.setAccount(account);
+        operation.setCategory(category);
+        operation.setAmount(new BigDecimal("10.00"));
+        operation.setDate(new Date());
+        operation.setType(Operation.FlowType.TRANSFER);
+        operationService.insert(operation);
+
+        // clear session to perform re-read from database
+        entityManager.clear();
+
+        operation.setCurrency(null);
+        operationService.update(operation);
+    }
+
+    @Test
+    public void getNullTest() throws Exception {
+        assertNull(operationService.get(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = CFException.class)
+    public void deleteErrorTest() throws Exception {
+        operationService.delete(Integer.MAX_VALUE);
+    }
+
     @Test
     public void listTest() throws Exception {
         final Currency currency = new Currency();
@@ -44,11 +141,11 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setCurrency(currency);
         operation1.setAccount(account);
         operation1.setCategory(category);
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operation1.setDate(new Date());
         operation1.setInfo("information");
         operation1.setMoneyWas(BigDecimal.ZERO);
-        operation1.setMoneyBecome(BigDecimal.TEN);
+        operation1.setMoneyBecome(new BigDecimal("10.00"));
         operation1.setType(Operation.FlowType.EXPENSE);
         operationService.insert(operation1);
 
@@ -56,11 +153,11 @@ public class OperationServiceTest extends SpringTestCase {
         operation2.setCurrency(currency);
         operation2.setAccount(account);
         operation2.setCategory(category);
-        operation2.setAmount(BigDecimal.TEN);
+        operation2.setAmount(new BigDecimal("10.00"));
         operation2.setDate(new Date());
         operation2.setInfo("information");
         operation2.setMoneyWas(BigDecimal.ZERO);
-        operation2.setMoneyBecome(BigDecimal.TEN);
+        operation2.setMoneyBecome(new BigDecimal("10.00"));
         operation2.setType(Operation.FlowType.EXPENSE);
         operationService.insert(operation2);
 
@@ -68,25 +165,25 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setCurrency(currency);
         operation3.setAccount(account);
         operation3.setCategory(category);
-        operation3.setAmount(BigDecimal.TEN);
+        operation3.setAmount(new BigDecimal("10.00"));
         operation3.setDate(new Date());
         operation3.setInfo("information");
         operation3.setMoneyWas(BigDecimal.ZERO);
-        operation3.setMoneyBecome(BigDecimal.TEN);
+        operation3.setMoneyBecome(new BigDecimal("10.00"));
         operation3.setType(Operation.FlowType.EXPENSE);
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final List<Operation> operations = operationService.list();
         assertNotNull(operations);
         assertEquals(3, operations.size());
-        assertEquals(operation3, operations.get(0));
+        assertEquals(operation1, operations.get(0));
         assertEquals(operation2, operations.get(1));
-        assertEquals(operation1, operations.get(2));
+        assertEquals(operation3, operations.get(2));
     }
 
     @Test
@@ -109,16 +206,16 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setCurrency(currency);
         operation.setAccount(account);
         operation.setCategory(category);
-        operation.setAmount(BigDecimal.TEN);
+        operation.setAmount(new BigDecimal("10.00"));
         operation.setDate(new Date());
         operation.setInfo("information");
         operation.setMoneyWas(BigDecimal.ZERO);
-        operation.setMoneyBecome(BigDecimal.TEN);
+        operation.setMoneyBecome(new BigDecimal("10.00"));
         operation.setType(Operation.FlowType.EXPENSE);
         operationService.insert(operation);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(operation, operationService.get(operation.getId()));
     }
@@ -147,13 +244,13 @@ public class OperationServiceTest extends SpringTestCase {
 
         final Transfer transfer = new Transfer();
         transfer.setTo(account2);
-        transfer.setAmount(BigDecimal.TEN);
+        transfer.setAmount(new BigDecimal("10.00"));
 
         final Operation operation = new Operation();
         operation.setAccount(account);
         operation.setCurrency(currency);
         operation.setCategory(category);
-        operation.setAmount(BigDecimal.TEN);
+        operation.setAmount(new BigDecimal("10.00"));
         operation.setTransfer(transfer);
         operation.setDate(new Date());
         operation.setInfo("information");
@@ -162,21 +259,21 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setType(Operation.FlowType.TRANSFER);
         operationService.insert(operation);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("2.00"), accountService.get(account.getId()).getBalance());
         assertEquals(new BigDecimal("70.00"), accountService.get(account2.getId()).getBalance());
 
         operationService.delete(operation.getId());
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         assertEquals(new BigDecimal("12.00"), accountService.get(account.getId()).getBalance());
         assertEquals(new BigDecimal("60.00"), accountService.get(account2.getId()).getBalance());
@@ -227,24 +324,24 @@ public class OperationServiceTest extends SpringTestCase {
         assertEquals(new BigDecimal("14.19"), operation.getTransfer().getAmount());
         assertEquals(new BigDecimal("11.35"), operation.getCrossCurrency().getAmount());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("88.65"), accountService.get(account.getId()).getBalance());
         assertEquals(new BigDecimal("114.19"), accountService.get(account2.getId()).getBalance());
 
         operationService.delete(operation.getId());
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("100.00"), accountService.get(account.getId()).getBalance());
         assertEquals(new BigDecimal("100.00"), accountService.get(account2.getId()).getBalance());
@@ -278,23 +375,23 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("110.00"), accountService.get(account.getId()).getBalance());
 
         operationService.delete(operation.getId());
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("100.00"), accountService.get(account.getId()).getBalance());
     }
@@ -333,23 +430,23 @@ public class OperationServiceTest extends SpringTestCase {
 
         assertEquals(new BigDecimal("11.35"), operation.getCrossCurrency().getAmount());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("88.65"), accountService.get(account.getId()).getBalance());
 
         operationService.delete(operation.getId());
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("100.00"), accountService.get(account.getId()).getBalance());
     }
@@ -378,12 +475,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setType(Operation.FlowType.INCOME);
         operation.setInfo("test info");
         operation.setMoneyWas(BigDecimal.ZERO);
-        operation.setMoneyBecome(BigDecimal.TEN);
-        operation.setAmount(BigDecimal.TEN);
+        operation.setMoneyBecome(new BigDecimal("10.00"));
+        operation.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         operationService.insert(operation);
     }
@@ -412,12 +509,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setType(Operation.FlowType.INCOME);
         operation.setInfo("test info");
         operation.setMoneyWas(BigDecimal.ZERO);
-        operation.setMoneyBecome(BigDecimal.TEN);
-        operation.setAmount(BigDecimal.TEN);
+        operation.setMoneyBecome(new BigDecimal("10.00"));
+        operation.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         operation.setType(Operation.FlowType.EXPENSE);
         operationService.update(operation);
@@ -448,19 +545,19 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setType(Operation.FlowType.INCOME);
         operation.setInfo("test info");
         operation.setMoneyWas(BigDecimal.ZERO);
-        operation.setMoneyBecome(BigDecimal.TEN);
-        operation.setAmount(BigDecimal.TEN);
+        operation.setMoneyBecome(new BigDecimal("10.00"));
+        operation.setAmount(new BigDecimal("10.00"));
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
         operationService.insert(operation);
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final Operation operationFromDB = operationService.get(operation.getId());
         assertEquals(operation, operationFromDB);
@@ -482,7 +579,7 @@ public class OperationServiceTest extends SpringTestCase {
 
         final Account accountEUR = new Account();
         accountEUR.setName("Test Account");
-        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setBalance(new BigDecimal("10.00"));
         accountEUR.setCurrency(currencyEUR);
         accountService.insert(accountEUR);
 
@@ -501,16 +598,16 @@ public class OperationServiceTest extends SpringTestCase {
         operationUSD.setMoneyBecome(new BigDecimal("109.00"));
         operationUSD.setAmount(new BigDecimal("14.19"));
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
         operationService.insert(operationUSD);
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final Operation operationFromDB = operationService.get(operationUSD.getId());
         assertEquals(operationUSD, operationFromDB);
@@ -533,7 +630,7 @@ public class OperationServiceTest extends SpringTestCase {
 
         final Account accountEUR = new Account();
         accountEUR.setName("Test Account");
-        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setBalance(new BigDecimal("10.00"));
         accountEUR.setCurrency(currencyEUR);
         accountService.insert(accountEUR);
 
@@ -553,21 +650,21 @@ public class OperationServiceTest extends SpringTestCase {
         operationUSD.setAmount(new BigDecimal("14.19"));
         operationService.insert(operationUSD);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         operationUSD.setMoneyBecome(new BigDecimal("107.14"));
         operationUSD.setAmount(new BigDecimal("14.00"));
         operationService.update(operationUSD);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final Operation operationFromDB = operationService.get(operationUSD.getId());
         // update account
@@ -592,7 +689,7 @@ public class OperationServiceTest extends SpringTestCase {
 
         final Account accountEUR = new Account();
         accountEUR.setName("Test Account");
-        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setBalance(new BigDecimal("10.00"));
         accountEUR.setCurrency(currencyEUR);
         accountService.insert(accountEUR);
 
@@ -612,23 +709,23 @@ public class OperationServiceTest extends SpringTestCase {
         operationUSD.setAmount(new BigDecimal("14.19"));
         operationService.insert(operationUSD);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         assertEquals(new BigDecimal("11.35"), operationUSD.getCrossCurrency().getAmount());
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         operationUSD.setAmount(new BigDecimal("11.35"));
         operationUSD.setCurrency(accountEUR.getCurrency());
         operationService.update(operationUSD);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final Operation operationFromDB = operationService.get(operationUSD.getId());
         assertEquals(operationUSD, operationFromDB);
@@ -648,7 +745,7 @@ public class OperationServiceTest extends SpringTestCase {
 
         final Account accountEUR = new Account();
         accountEUR.setName("Test Account");
-        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setBalance(new BigDecimal("10.00"));
         accountEUR.setCurrency(currencyEUR);
         accountService.insert(accountEUR);
 
@@ -669,20 +766,20 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.insert(operationEUR);
         assertNull(operationEUR.getCrossCurrency());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         operationEUR.setCurrency(currencyUSD);
         operationService.update(operationEUR);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final Operation operationFromDB = operationService.get(operationEUR.getId());
 
@@ -706,7 +803,7 @@ public class OperationServiceTest extends SpringTestCase {
 
         final Account accountEUR = new Account();
         accountEUR.setName("Test Account");
-        accountEUR.setBalance(BigDecimal.TEN);
+        accountEUR.setBalance(new BigDecimal("10.00"));
         accountEUR.setCurrency(currency);
         accountService.insert(accountEUR);
 
@@ -727,20 +824,20 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.insert(operation);
         assertNull(operation.getCrossCurrency());
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         operation.setInfo("test info");
         operationService.update(operation);
 
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         final Operation operationFromDB = operationService.get(operation.getId());
         assertEquals(operation, operationFromDB);
@@ -779,20 +876,17 @@ public class OperationServiceTest extends SpringTestCase {
         operation.setType(Operation.FlowType.TRANSFER);
         operation.setInfo("test info");
         operation.setMoneyWas(BigDecimal.ZERO);
-        operation.setMoneyBecome(BigDecimal.TEN);
-        operation.setAmount(BigDecimal.TEN);
+        operation.setMoneyBecome(new BigDecimal("10.00"));
+        operation.setAmount(new BigDecimal("10.00"));
         operation.setTransfer(transfer);
 
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
         operationService.insert(operation);
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
-
-        // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         final Operation operationFromDB = operationService.get(operation.getId());
         assertEquals(operation, operationFromDB);
@@ -831,7 +925,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         // 73
@@ -860,12 +954,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("49.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         // update operation#2 to 33.
         operation2.setMoneyWas(new BigDecimal("90"));
@@ -874,7 +968,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation2);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("8.00"), accountService.get(account.getId()).getBalance());
 
@@ -920,7 +1014,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         final Operation operation2 = new Operation();
@@ -947,12 +1041,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("24.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("66.00"), accountService.get(accountEUR.getId()).getBalance());
         assertEquals(new BigDecimal("83.00"), accountService.get(accountUSD.getId()).getBalance());
@@ -965,7 +1059,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation2);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("33.00"), accountService.get(accountEUR.getId()).getBalance());
         assertEquals(new BigDecimal("100.00"), accountService.get(accountUSD.getId()).getBalance());
@@ -1006,7 +1100,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         final Operation operation2 = new Operation();
@@ -1033,12 +1127,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("24.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("56.00"), accountService.get(accountEUR.getId()).getBalance());
 
@@ -1048,12 +1142,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation2.setAmount(new BigDecimal("25.09"));
         operationService.update(operation2);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("46.00"), accountService.get(accountEUR.getId()).getBalance());
 
@@ -1089,7 +1183,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         final Operation operation2 = new Operation();
@@ -1116,12 +1210,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("49.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         // update operation#2
         operation2.setMoneyWas(new BigDecimal("90"));
@@ -1130,7 +1224,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation2);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("61.00"), accountService.get(account.getId()).getBalance());
 
@@ -1176,7 +1270,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         final Operation operation2 = new Operation();
@@ -1203,12 +1297,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("24.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("66.00"), accountService.get(accountEUR.getId()).getBalance());
         assertEquals(new BigDecimal("117.00"), accountService.get(accountUSD.getId()).getBalance());
@@ -1221,7 +1315,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation2);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("99.00"), accountService.get(accountEUR.getId()).getBalance());
         assertEquals(new BigDecimal("100.00"), accountService.get(accountUSD.getId()).getBalance());
@@ -1262,7 +1356,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         final Operation operation2 = new Operation();
@@ -1289,12 +1383,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("24.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("76.00"), accountService.get(accountEUR.getId()).getBalance());
 
@@ -1304,12 +1398,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation2.setAmount(new BigDecimal("25.09"));
         operationService.update(operation2);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("86.00"), accountService.get(accountEUR.getId()).getBalance());
 
@@ -1351,7 +1445,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         final Transfer transfer = new Transfer();
@@ -1381,12 +1475,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("24.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(0, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(0, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("49.00"), accountService.get(accountEUR1.getId()).getBalance());
         assertEquals(new BigDecimal("117.00"), accountService.get(accountEUR2.getId()).getBalance());
@@ -1399,7 +1493,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation2);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("33.00"), accountService.get(accountEUR1.getId()).getBalance());
         assertEquals(new BigDecimal("133.00"), accountService.get(accountEUR2.getId()).getBalance());
@@ -1446,7 +1540,7 @@ public class OperationServiceTest extends SpringTestCase {
         operation1.setInfo("operation#1");
         operation1.setMoneyWas(new BigDecimal("100.00"));
         operation1.setMoneyBecome(new BigDecimal("90.00"));
-        operation1.setAmount(BigDecimal.TEN);
+        operation1.setAmount(new BigDecimal("10.00"));
         operationService.insert(operation1);
 
         // transfer 12.55 USD to EUR account
@@ -1477,12 +1571,12 @@ public class OperationServiceTest extends SpringTestCase {
         operation3.setAmount(new BigDecimal("56.00"));
         operationService.insert(operation3);
 
-        assertEquals(3, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Operation.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), CrossCurrency.class));
-        assertEquals(1, HibernateUtilsTest.executeCount(sessionFactory.getCurrentSession(), Transfer.class));
+        assertEquals(3, HibernateUtilsTest.executeCount(entityManager, Operation.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, CrossCurrency.class));
+        assertEquals(1, HibernateUtilsTest.executeCount(entityManager, Transfer.class));
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("24.00"), accountService.get(accountEUR.getId()).getBalance());
         assertEquals(new BigDecimal("112.55"), accountService.get(accountUSD.getId()).getBalance());
@@ -1495,7 +1589,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation2);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("14.00"), accountService.get(accountEUR.getId()).getBalance());
         assertEquals(new BigDecimal("125.09"), accountService.get(accountUSD.getId()).getBalance());
@@ -1546,7 +1640,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.insert(operation);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("47.00"), accountService.get(accountEUR1.getId()).getBalance());
         assertEquals(new BigDecimal("150.00"), accountService.get(accountEUR2.getId()).getBalance());
@@ -1556,7 +1650,7 @@ public class OperationServiceTest extends SpringTestCase {
         operationService.update(operation);
 
         // clear session to perform re-read from database
-        sessionFactory.getCurrentSession().clear();
+        entityManager.clear();
 
         assertEquals(new BigDecimal("37.00"), accountService.get(accountEUR1.getId()).getBalance());
         assertEquals(new BigDecimal("160.00"), accountService.get(accountEUR2.getId()).getBalance());

@@ -78,7 +78,7 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
 
         final JSONException exception = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), JSONException.class);
         assertNotNull(exception);
-        assertEquals("Currency is not found", exception.getMessage());
+        assertEquals("No class ru.metal.cashflow.server.model.Currency entity with id 2147483647 exists!", exception.getMessage());
         assertFalse(exception.getStack().isEmpty());
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
