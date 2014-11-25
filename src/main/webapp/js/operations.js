@@ -52,6 +52,7 @@
             enableSorting: true,
             modifierKeysToMultiSelect: false,
             noUnselect: true,
+            infiniteScrollPercentage: 20,
             columnDefs: [
                 {name: 'Date', field: 'date', type: 'date', cellFilter: 'date:"yyyy-MM-dd"', width: 150},
                 {name: 'Type', field: 'type', width: 200},
@@ -64,8 +65,30 @@
             ]
         };
 
+        var page = 1;
+        var getData = function (data, page) {
+            var res = [];
+            for (var i = 0; i < page * 100 && i < data.length; ++i) {
+                res.push(data[i]);
+            }
+            return res;
+        };
+
+        var operations = Operation.query(function () {
+            $scope.gridOptions.data = getData(operations, page);
+            ++page;
+        });
+
         $scope.gridOptions.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
+
+            gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
+                operations = Operation.query(function () {
+                    $scope.gridOptions.data = getData(operations, page);
+                    ++page;
+                    gridApi.infiniteScroll.dataLoaded();
+                });
+            });
         };
 
         $scope.openNewDialog = function () {
@@ -121,8 +144,6 @@
                 $scope.gridOptions.data.splice(rowIndex, 1);
             });
         };
-
-        $scope.gridOptions.data = Operation.query();
     }]);
 
     // controller for model type tabs. Hold all tab operations, like select current, etc.

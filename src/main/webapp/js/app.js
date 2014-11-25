@@ -1,7 +1,7 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
-        'cashflow-category', 'ngRoute', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.bootstrap', 'ui.select',
-        'toaster', 'ngResource']);
+        'cashflow-category', 'ngRoute', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.bootstrap',
+        'ui.select', 'toaster', 'ngResource']);
 
     // -------------------------------- CONSTANTS
     cashFlow.constant('OPERATION_TYPE', {
