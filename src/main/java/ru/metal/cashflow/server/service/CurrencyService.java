@@ -1,6 +1,7 @@
 package ru.metal.cashflow.server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.model.Currency;
@@ -16,8 +17,8 @@ public class CurrencyService implements CRUDService<Currency> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Currency> list() {
-        return currencyRepository.findAll();
+    public List<Currency> list(Pageable pageable) {
+        return currencyRepository.findAll(pageable).getContent();
     }
 
     @Override

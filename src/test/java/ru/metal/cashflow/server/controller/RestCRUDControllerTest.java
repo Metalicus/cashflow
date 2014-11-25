@@ -114,4 +114,15 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
                 .andExpect(status().isNotFound())
                 .andReturn();
     }
+
+    @Test
+    public void paginationTest() throws Exception {
+        final MvcResult mvcResult = mockMvc.perform(get("/category?size=100&page=20")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+
+    }
 }

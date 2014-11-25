@@ -1,6 +1,7 @@
 package ru.metal.cashflow.server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
@@ -21,10 +22,9 @@ public class OperationService implements CRUDService<Operation> {
     @Autowired
     private AccountService accountService;
 
-    @Override
     @Transactional(readOnly = true)
-    public List<Operation> list() {
-        return operationRepository.findAll();
+    public List<Operation> list(Pageable pageable) {
+        return operationRepository.findAll(pageable).getContent();
     }
 
     @Override

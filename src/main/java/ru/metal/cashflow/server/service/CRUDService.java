@@ -1,5 +1,6 @@
 package ru.metal.cashflow.server.service;
 
+import org.springframework.data.domain.Pageable;
 import ru.metal.cashflow.server.exception.CFException;
 
 import java.util.List;
@@ -12,9 +13,10 @@ public interface CRUDService<T> {
     /**
      * Get list of all objects
      *
+     * @param pageable page restriction, can be {@code null}
      * @throws CFException error while executing DB access
      */
-    List<T> list() throws CFException;
+    List<T> list(Pageable pageable) throws CFException;
 
     /**
      * Insert new model to database

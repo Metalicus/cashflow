@@ -49,10 +49,10 @@
             enableRowSelection: true,
             enableRowHeaderSelection: false,
             multiSelect: false,
-            enableSorting: true,
+            useExternalSorting: true,
             modifierKeysToMultiSelect: false,
+            infiniteScroll: 20,
             noUnselect: true,
-            infiniteScrollPercentage: 20,
             columnDefs: [
                 {name: 'Date', field: 'date', type: 'date', cellFilter: 'date:"yyyy-MM-dd"', width: 150},
                 {name: 'Type', field: 'type', width: 200},
@@ -66,25 +66,22 @@
         };
 
         var page = 1;
-        var getData = function (data, page) {
-            var res = [];
-            for (var i = 0; i < page * 100 && i < data.length; ++i) {
-                res.push(data[i]);
-            }
-            return res;
-        };
-
-        var operations = Operation.query(function () {
-            $scope.gridOptions.data = getData(operations, page);
+        $scope.gridOptions.data = Operation.query({page: page, size: 100}, function () {
             ++page;
         });
 
         $scope.gridOptions.onRegisterApi = function (gridApi) {
             $scope.gridApi = gridApi;
 
+            /*            $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
+             Operation.query();
+             });*/
+
             gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
-                operations = Operation.query(function () {
-                    $scope.gridOptions.data = getData(operations, page);
+                var operations = Operation.query({page: page, size: 100}, function () {
+                    for (var i = 0; i < operations.length; i++)
+                        $scope.gridOptions.data.push(operations[i]);
+
                     ++page;
                     gridApi.infiniteScroll.dataLoaded();
                 });

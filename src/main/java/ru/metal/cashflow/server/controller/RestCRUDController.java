@@ -1,5 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,8 @@ public abstract class RestCRUDController<T> {
     }
 
     @RequestMapping
-    public List<T> query() throws CFException {
-        return service.list();
+    public List<T> query(Pageable pageable) throws CFException {
+        return service.list(pageable);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
