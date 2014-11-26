@@ -117,11 +117,11 @@
 
                         scope.gridOptions.page = 1;
                         scope.gridOptions.getRequestParameters = function () {
-                            var parameters = {size: scope.gridOptions.page * 100};
+                            var parameters = {page: 0, size: scope.gridOptions.page * 100};
                             var sortedColumns = scope.gridApi.grid.getColumnSorting();
 
-                            // default sort
                             if (sortedColumns.length == 0) {
+                                // default sort
                                 parameters['sort'] = scope.gridOptions.defaultSort.name + ',' + scope.gridOptions.defaultSort.dir;
                             } else {
                                 for (var i = 0; i < sortedColumns.length; i++) {

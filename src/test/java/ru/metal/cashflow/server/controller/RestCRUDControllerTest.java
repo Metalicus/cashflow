@@ -1,13 +1,20 @@
 package ru.metal.cashflow.server.controller;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.HandlerMethod;
 import ru.metal.cashflow.server.SpringControllerTestCase;
 import ru.metal.cashflow.server.exception.JSONException;
+import ru.metal.cashflow.server.model.Category;
 import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.service.CategoryService;
 import ru.metal.cashflow.utils.JSONUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -18,6 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Common tests for controllers
  */
 public class RestCRUDControllerTest extends SpringControllerTestCase {
+
+    @Autowired
+    CategoryService categoryService;
 
     @Test
     public void queryTest1() throws Exception {
@@ -117,12 +127,74 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
 
     @Test
     public void paginationTest() throws Exception {
-        final MvcResult mvcResult = mockMvc.perform(get("/category?size=100&page=20")
+        final String format = "%1$02d";
+        final List<Category> categories = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            final Category category = new Category();
+            category.setName("a" + String.format(format, i));
+            categoryService.insert(category);
+
+            categories.add(category);
+        }
+
+        MvcResult mvcResult = mockMvc.perform(get("/category?page=0&size=1&sort=id")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
+        List<Category> fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
+        assertEquals(1, fromServer.size());
+        assertEquals(categories.get(0), fromServer.get(0));
 
+        mvcResult = mockMvc.perform(get("/category?page=0&size=2&sort=id,desc")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
+        assertEquals(2, fromServer.size());
+        assertEquals(categories.get(29), fromServer.get(0));
+        assertEquals(categories.get(28), fromServer.get(1));
+
+        mvcResult = mockMvc.perform(get("/category?page=0&size=20&sort=name,desc")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
+        assertEquals(20, fromServer.size());
+        assertEquals(categories.get(29), fromServer.get(0));
+        assertEquals(categories.get(28), fromServer.get(1));
+        assertEquals(categories.get(27), fromServer.get(2));
+    }
+
+    @Test
+    public void withoutPagintaionTest() throws Exception {
+        final String format = "%1$02d";
+        final List<Category> categories = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            final Category category = new Category();
+            category.setName("a" + String.format(format, i));
+            categoryService.insert(category);
+
+            categories.add(category);
+        }
+
+        // we don't want Pageable
+        final MvcResult mvcResult = mockMvc.perform(get("/category")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // returns collection without limits and without sorting
+        final List<Category> fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
+        assertEquals(30, fromServer.size());
+        assertEquals(categories.get(0), fromServer.get(0));
+        assertEquals(categories.get(9), fromServer.get(9));
+        assertEquals(categories.get(29), fromServer.get(29));
     }
 }
