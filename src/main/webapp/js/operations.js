@@ -62,30 +62,10 @@
                 {name: 'Cross currency amount', field: 'crossCurrency.amount', width: 200},
                 {name: 'Exchange rate', field: 'crossCurrency.exchangeRate', width: 200},
                 {name: 'Info', field: 'info', width: 200}
-            ]
-        };
-
-        var page = 1;
-        $scope.gridOptions.data = Operation.query({page: page, size: 100}, function () {
-            ++page;
-        });
-
-        $scope.gridOptions.onRegisterApi = function (gridApi) {
-            $scope.gridApi = gridApi;
-
-            /*            $scope.gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-             Operation.query();
-             });*/
-
-            gridApi.infiniteScroll.on.needLoadMoreData($scope, function () {
-                var operations = Operation.query({page: page, size: 100}, function () {
-                    for (var i = 0; i < operations.length; i++)
-                        $scope.gridOptions.data.push(operations[i]);
-
-                    ++page;
-                    gridApi.infiniteScroll.dataLoaded();
-                });
-            });
+            ],
+            onRegisterApi: function (gridApi) {
+                $scope.grid1Api = gridApi;
+            }
         };
 
         $scope.openNewDialog = function () {

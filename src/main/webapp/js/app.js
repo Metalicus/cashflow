@@ -102,6 +102,62 @@
         };
     });
 
+    // support Spring data fetching from server with sorting. 'factory-name' attribute is required
+    cashFlow.directive('springInfinite', function () {
+        return {
+            restrict: 'A',
+            compile: function () {
+                return {
+                    post: function postLink(scope, iElement, iAttrs) {
+
+                        if (!iAttrs['factoryName'])
+                            throw "'factory-name' attribute is required!";
+
+                        var resource = iElement.injector().get(iAttrs['factoryName']);
+
+                        scope.gridOptions.page = 1;
+                        scope.gridOptions.getRequestParameters = function () {
+                            var parameters = {size: scope.gridOptions.page * 100};
+                            var sortedColumns = scope.gridApi.grid.getColumnSorting();
+                            for (var i = 0; i < sortedColumns.length; i++) {
+                                parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
+                            }
+
+                            return parameters;
+                        };
+
+                        // first loading
+                        scope.gridOptions.data = resource.query({
+                            size: scope.gridOptions.page * 100,
+                            sort: 'date,desc'
+                        }, function () {
+                            ++scope.gridOptions.page;
+                        });
+
+                        // on sorting change
+                        scope.gridApi.core.on.sortChanged(scope, function () {
+                            scope.gridOptions.page = 1;
+                            var data = scope.gridOptions.data = resource.query(scope.gridOptions.getRequestParameters(), function () {
+                                scope.gridOptions.data = data;
+                                ++scope.gridOptions.page;
+                                scope.gridApi.infiniteScroll.dataLoaded();
+                            });
+                        });
+
+                        // needs more data for infinite scroll
+                        scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
+                            var data = resource.query(scope.gridOptions.getRequestParameters(), function () {
+                                scope.gridOptions.data = data;
+                                ++scope.gridOptions.page;
+                                scope.gridApi.infiniteScroll.dataLoaded();
+                            });
+                        });
+                    }
+                }
+            }
+        }
+    });
+
     // controller for navigation bar button
     cashFlow.controller('NavBarCtrl', ['$scope', '$location', function ($scope, $location) {
         $scope.isCollapsed = true;
