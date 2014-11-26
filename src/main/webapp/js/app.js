@@ -114,15 +114,16 @@
                             throw "'factory-name' attribute is required!";
 
                         var resource = iElement.injector().get(iAttrs['factoryName']);
+                        var options = scope.gridOptions;
 
-                        scope.gridOptions.page = 1;
-                        scope.gridOptions.getRequestParameters = function () {
-                            var parameters = {page: 0, size: scope.gridOptions.page * 100};
+                        options.page = 0;
+                        options.getRequestParameters = function () {
+                            var parameters = {page: options.page, size: 100};
                             var sortedColumns = scope.gridApi.grid.getColumnSorting();
 
                             if (sortedColumns.length == 0) {
                                 // default sort
-                                parameters['sort'] = scope.gridOptions.defaultSort.name + ',' + scope.gridOptions.defaultSort.dir;
+                                parameters['sort'] = options.defaultSort.name + ',' + options.defaultSort.dir;
                             } else {
                                 for (var i = 0; i < sortedColumns.length; i++) {
                                     parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
@@ -133,12 +134,12 @@
                         };
 
                         // find default sort column
-                        for (var i = 0; i < scope.gridOptions.columnDefs.length; i++) {
-                            if (scope.gridOptions.columnDefs[i].defaultSort) {
+                        for (var i = 0; i < options.columnDefs.length; i++) {
+                            if (options.columnDefs[i].defaultSort) {
 
-                                scope.gridOptions.defaultSort = {
-                                    name: scope.gridOptions.columnDefs[i].field,
-                                    dir: scope.gridOptions.columnDefs[i].defaultSort.direction
+                                options.defaultSort = {
+                                    name: options.columnDefs[i].field,
+                                    dir: options.columnDefs[i].defaultSort.direction
                                 };
 
                                 break;
@@ -146,31 +147,33 @@
                         }
 
                         // if no default sort when create sort by id
-                        if (!scope.gridOptions.defaultSort) {
-                            scope.gridOptions.defaultSort.name = 'id';
-                            scope.gridOptions.defaultSort.dir = 'desc';
+                        if (!options.defaultSort) {
+                            options.defaultSort.name = 'id';
+                            options.defaultSort.dir = 'desc';
                         }
 
                         // first loading
-                        scope.gridOptions.data = resource.query(scope.gridOptions.getRequestParameters(), function () {
-                            ++scope.gridOptions.page;
+                        options.data = resource.query(options.getRequestParameters(), function () {
+                            ++options.page;
                         });
 
                         // on sorting change
                         scope.gridApi.core.on.sortChanged(scope, function () {
-                            scope.gridOptions.page = 1;
-                            var data = scope.gridOptions.data = resource.query(scope.gridOptions.getRequestParameters(), function () {
-                                scope.gridOptions.data = data;
-                                ++scope.gridOptions.page;
+                            options.page = 0;
+                            var data = options.data = resource.query(options.getRequestParameters(), function () {
+                                options.data = data;
+                                ++options.page;
                                 scope.gridApi.infiniteScroll.dataLoaded();
                             });
                         });
 
                         // needs more data for infinite scroll
                         scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
-                            var data = resource.query(scope.gridOptions.getRequestParameters(), function () {
-                                scope.gridOptions.data = data;
-                                ++scope.gridOptions.page;
+                            var data = resource.query(options.getRequestParameters(), function () {
+                                for (var i = 0; i < data.length; i++)
+                                    options.data.push(data[i]);
+
+                                ++options.page;
                                 scope.gridApi.infiniteScroll.dataLoaded();
                             });
                         });
