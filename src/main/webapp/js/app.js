@@ -47,7 +47,7 @@
 
     cashFlow.factory('errorHandlerInterceptor', ['$q', 'toaster', function ($q, toaster) {
         return {
-            'responseError': function(response) {
+            'responseError': function (response) {
                 toaster.pop('error', "Error", (response.data["message"] !== 'undefined' ? ': ' + response.data["message"] : ''));
 
                 if (response.data["stack"] !== 'undefined')
@@ -60,23 +60,23 @@
 
     // crud factories for models
     cashFlow.factory('Operation', ['$resource', function ($resource) {
-        return $resource('action/operation/:id', { id: '@id' }, {
-            'update': { method:'PUT' }
+        return $resource('action/operation/:id', {id: '@id'}, {
+            'update': {method: 'PUT'}
         });
     }]);
     cashFlow.factory('Account', ['$resource', function ($resource) {
-        return $resource('action/account/:id', { id: '@id' }, {
-            'update': { method:'PUT' }
+        return $resource('action/account/:id', {id: '@id'}, {
+            'update': {method: 'PUT'}
         });
     }]);
     cashFlow.factory('Currency', ['$resource', function ($resource) {
-        return $resource('action/currency/:id', { id: '@id' }, {
-            'update': { method:'PUT' }
+        return $resource('action/currency/:id', {id: '@id'}, {
+            'update': {method: 'PUT'}
         });
     }]);
     cashFlow.factory('Category', ['$resource', function ($resource) {
-        return $resource('action/category/:id', { id: '@id' }, {
-            'update': { method:'PUT' }
+        return $resource('action/category/:id', {id: '@id'}, {
+            'update': {method: 'PUT'}
         });
     }]);
 
@@ -119,18 +119,40 @@
                         scope.gridOptions.getRequestParameters = function () {
                             var parameters = {size: scope.gridOptions.page * 100};
                             var sortedColumns = scope.gridApi.grid.getColumnSorting();
-                            for (var i = 0; i < sortedColumns.length; i++) {
-                                parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
+
+                            // default sort
+                            if (sortedColumns.length == 0) {
+                                parameters['sort'] = scope.gridOptions.defaultSort.name + ',' + scope.gridOptions.defaultSort.dir;
+                            } else {
+                                for (var i = 0; i < sortedColumns.length; i++) {
+                                    parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
+                                }
                             }
 
                             return parameters;
                         };
 
+                        // find default sort column
+                        for (var i = 0; i < scope.gridOptions.columnDefs.length; i++) {
+                            if (scope.gridOptions.columnDefs[i].defaultSort) {
+
+                                scope.gridOptions.defaultSort = {
+                                    name: scope.gridOptions.columnDefs[i].field,
+                                    dir: scope.gridOptions.columnDefs[i].defaultSort.direction
+                                };
+
+                                break;
+                            }
+                        }
+
+                        // if no default sort when create sort by id
+                        if (!scope.gridOptions.defaultSort) {
+                            scope.gridOptions.defaultSort.name = 'id';
+                            scope.gridOptions.defaultSort.dir = 'desc';
+                        }
+
                         // first loading
-                        scope.gridOptions.data = resource.query({
-                            size: scope.gridOptions.page * 100,
-                            sort: 'date,desc'
-                        }, function () {
+                        scope.gridOptions.data = resource.query(scope.gridOptions.getRequestParameters(), function () {
                             ++scope.gridOptions.page;
                         });
 

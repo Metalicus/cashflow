@@ -44,7 +44,7 @@
     }]);
 
     // controller for operation table and modal dialogs calls
-    operations.controller('OperationsCtrl', ['$scope', 'Operation', '$modal', function ($scope, Operation, $modal) {
+    operations.controller('OperationsCtrl', ['$scope', 'uiGridConstants', 'Operation', '$modal', function ($scope, uiGridConstants, Operation, $modal) {
         $scope.gridOptions = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -54,7 +54,14 @@
             infiniteScroll: 20,
             noUnselect: true,
             columnDefs: [
-                {name: 'Date', field: 'date', type: 'date', cellFilter: 'date:"yyyy-MM-dd"', width: 150},
+                {
+                    name: 'Date',
+                    field: 'date',
+                    type: 'date',
+                    cellFilter: 'date:"yyyy-MM-dd"',
+                    width: 150,
+                    defaultSort: {direction: uiGridConstants.DESC}
+                },
                 {name: 'Type', field: 'type', width: 200},
                 {name: 'Account', field: 'account.name', width: 200},
                 {name: 'Currency', field: 'currency.name', width: 200},
