@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.model.Category;
 import ru.metal.cashflow.server.repository.CategoryRepository;
+import ru.metal.cashflow.server.request.FilterRequest;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class CategoryService implements CRUDService<Category> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Category> list(Pageable pageable) {
+    public List<Category> list(Pageable pageable, FilterRequest filterRequest) {
         return repository.findAll(pageable).getContent();
     }
 

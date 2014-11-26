@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.metal.cashflow.server.exception.CFException;
+import ru.metal.cashflow.server.request.FilterRequest;
 import ru.metal.cashflow.server.service.CRUDService;
 
 import java.util.List;
@@ -31,8 +32,8 @@ public abstract class RestCRUDController<T> {
     }
 
     @RequestMapping
-    public List<T> query(Pageable pageable) throws CFException {
-        return service.list(pageable);
+    public List<T> query(Pageable pageable, FilterRequest filterRequest) throws CFException {
+        return service.list(pageable, filterRequest);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})

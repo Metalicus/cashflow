@@ -10,6 +10,7 @@ import ru.metal.cashflow.server.model.CrossCurrency;
 import ru.metal.cashflow.server.model.Operation;
 import ru.metal.cashflow.server.model.Transfer;
 import ru.metal.cashflow.server.repository.OperationRepository;
+import ru.metal.cashflow.server.request.FilterRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,7 +24,14 @@ public class OperationService implements CRUDService<Operation> {
     private AccountService accountService;
 
     @Transactional(readOnly = true)
-    public List<Operation> list(Pageable pageable) {
+    public List<Operation> list(Pageable pageable, FilterRequest filterRequest) {
+        if (filterRequest != null) {
+            // обрабатываем фильтры
+            final FilterRequest.Filter categoryFilter = filterRequest.getFilter("category");
+            if (categoryFilter != null)
+                return operationRepository.findByCategoryId(Integer.parseInt(categoryFilter.getValue()), pageable).getContent();
+        }
+
         return operationRepository.findAll(pageable).getContent();
     }
 

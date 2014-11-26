@@ -2,13 +2,30 @@
     <h1>Cash flow</h1>
 </div>
 
-<button type="button" class="btn btn-primary" ng-click="openNewDialog()">Add</button>
-<button type="button" class="btn btn-default" ng-click="openEditDialog()"
-        ng-disabled="gridApi.selection.getSelectedRows().length === 0">Edit
-</button>
-<button type="button" class="btn btn-danger" ng-click="openDeleteDialog()"
-        ng-disabled="gridApi.selection.getSelectedRows().length === 0">Delete
-</button>
-
-<div ui-grid="gridOptions" class="grid" ui-grid-selection ui-grid-infinite-scroll spring-infinite
-     factory-name="Operation"></div>
+<div class="row">
+    <div class="col-md-10">
+        <button type="button" class="btn btn-primary" ng-click="openNewDialog()">Add</button>
+        <button type="button" class="btn btn-default" ng-click="openEditDialog()"
+                ng-disabled="gridApi.selection.getSelectedRows().length === 0">Edit
+        </button>
+        <button type="button" class="btn btn-danger" ng-click="openDeleteDialog()"
+                ng-disabled="gridApi.selection.getSelectedRows().length === 0">Delete
+        </button>
+    </div>
+    <div class="col-md-2">
+        {{test}}
+        <ui-select ng-model="$parent.filter.category" ng-required="true">
+            <ui-select-match placeholder="Select category...">{{$select.selected.name}}
+            </ui-select-match>
+            <ui-select-choices repeat="category in categories | filter: $select.search">
+                {{category.name}}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+</div>
+<div class="row height100">
+    <div class="col-md-12 height100">
+        <div ui-grid="gridOptions" class="grid" ui-grid-selection ui-grid-infinite-scroll
+             spring-fetch="Operation" spring-filter></div>
+    </div>
+</div>

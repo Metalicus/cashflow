@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.model.Currency;
 import ru.metal.cashflow.server.repository.CurrencyRepository;
+import ru.metal.cashflow.server.request.FilterRequest;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class CurrencyService implements CRUDService<Currency> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Currency> list(Pageable pageable) {
+    public List<Currency> list(Pageable pageable, FilterRequest filterRequest) {
         return currencyRepository.findAll(pageable).getContent();
     }
 

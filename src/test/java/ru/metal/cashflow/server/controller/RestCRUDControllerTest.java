@@ -7,13 +7,20 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.HandlerMethod;
 import ru.metal.cashflow.server.SpringControllerTestCase;
 import ru.metal.cashflow.server.exception.JSONException;
+import ru.metal.cashflow.server.model.Account;
 import ru.metal.cashflow.server.model.Category;
 import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.model.Operation;
+import ru.metal.cashflow.server.service.AccountService;
 import ru.metal.cashflow.server.service.CategoryService;
+import ru.metal.cashflow.server.service.CurrencyService;
+import ru.metal.cashflow.server.service.OperationService;
 import ru.metal.cashflow.utils.JSONUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -28,6 +35,12 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
 
     @Autowired
     CategoryService categoryService;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    CurrencyService currencyService;
+    @Autowired
+    OperationService operationService;
 
     @Test
     public void queryTest1() throws Exception {
@@ -196,5 +209,100 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
         assertEquals(categories.get(0), fromServer.get(0));
         assertEquals(categories.get(9), fromServer.get(9));
         assertEquals(categories.get(29), fromServer.get(29));
+    }
+
+    @Test
+    public void filteringTest() throws Exception {
+        // prepare operation
+        final Category category1 = new Category();
+        category1.setName("category 1");
+        categoryService.insert(category1);
+
+        final Category category2 = new Category();
+        category2.setName("category 2");
+        categoryService.insert(category2);
+
+        final Currency currency = new Currency();
+        currency.setName("EUR");
+        currencyService.insert(currency);
+
+        final Account account = new Account();
+        account.setCurrency(currency);
+        account.setName("account");
+        account.setBalance(BigDecimal.TEN);
+        accountService.insert(account);
+
+        final Operation operation1 = new Operation();
+        operation1.setAccount(account);
+        operation1.setCurrency(currency);
+        operation1.setCategory(category1);
+        operation1.setMoneyWas(BigDecimal.ZERO);
+        operation1.setMoneyBecome(BigDecimal.TEN);
+        operation1.setDate(new Date());
+        operation1.setAmount(BigDecimal.TEN);
+        operation1.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation1);
+
+        final Operation operation2 = new Operation();
+        operation2.setAccount(account);
+        operation2.setCurrency(currency);
+        operation2.setCategory(category2);
+        operation2.setMoneyWas(BigDecimal.ZERO);
+        operation2.setMoneyBecome(BigDecimal.TEN);
+        operation2.setDate(new Date());
+        operation2.setAmount(BigDecimal.TEN);
+        operation2.setType(Operation.FlowType.INCOME);
+        operationService.insert(operation2);
+
+        final Operation operation3 = new Operation();
+        operation3.setAccount(account);
+        operation3.setCurrency(currency);
+        operation3.setCategory(category2);
+        operation3.setMoneyWas(BigDecimal.TEN);
+        operation3.setMoneyBecome(BigDecimal.ZERO);
+        operation3.setDate(new Date());
+        operation3.setAmount(BigDecimal.TEN);
+        operation3.setType(Operation.FlowType.EXPENSE);
+        operationService.insert(operation3);
+
+        MvcResult mvcResult = mockMvc.perform(get("/operation")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<Operation> fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
+        assertEquals(3, fromServer.size());
+
+        mvcResult = mockMvc.perform(get("/operation?category=" + category1.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
+        assertEquals(1, fromServer.size());
+        assertEquals(operation1, fromServer.get(0));
+
+        mvcResult = mockMvc.perform(get("/operation?category=" + category2.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
+        assertEquals(2, fromServer.size());
+        assertEquals(operation2, fromServer.get(0));
+        assertEquals(operation3, fromServer.get(1));
+
+        mvcResult = mockMvc.perform(get("/operation?page=0&size=1&sort=id,desc&category=" + category2.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
+        assertEquals(1, fromServer.size());
+        assertEquals(operation3, fromServer.get(0));
     }
 }

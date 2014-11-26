@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.Account;
 import ru.metal.cashflow.server.repository.AccountRepository;
+import ru.metal.cashflow.server.request.FilterRequest;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class AccountService implements CRUDService<Account> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Account> list(Pageable pageable){
+    public List<Account> list(Pageable pageable, FilterRequest filterRequest) {
         return repository.findAll(pageable).getContent();
     }
 

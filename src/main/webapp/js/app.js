@@ -102,35 +102,54 @@
         };
     });
 
-    // support Spring data fetching from server with sorting. 'factory-name' attribute is required
-    cashFlow.directive('springInfinite', function () {
+    // support Spring data fetching from server with sorting
+    cashFlow.directive('springFetch', function () {
         return {
             restrict: 'A',
             compile: function () {
                 return {
                     post: function postLink(scope, iElement, iAttrs) {
 
-                        if (!iAttrs['factoryName'])
-                            throw "'factory-name' attribute is required!";
+                        if (!iAttrs['springFetch'])
+                            throw "$resource factory is required!";
 
-                        var resource = iElement.injector().get(iAttrs['factoryName']);
+                        var resource = iElement.injector().get(iAttrs['springFetch']);
                         var options = scope.gridOptions;
 
                         options.page = 0;
-                        options.getRequestParameters = function () {
+                        options.getRequestParameters = function (filters) {
                             var parameters = {page: options.page, size: 100};
                             var sortedColumns = scope.gridApi.grid.getColumnSorting();
+
+                            if (options.springFilters) {
+                                for (var i = 0; i < options.springFilters.length; i++)
+                                    parameters[options.springFilters[i]['name']] = options.springFilters[i]['value'];
+                            }
 
                             if (sortedColumns.length == 0) {
                                 // default sort
                                 parameters['sort'] = options.defaultSort.name + ',' + options.defaultSort.dir;
                             } else {
-                                for (var i = 0; i < sortedColumns.length; i++) {
+                                for (i = 0; i < sortedColumns.length; i++) {
                                     parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
                                 }
                             }
 
                             return parameters;
+                        };
+                        options.fetchData = function (partial) {
+                            var data = options.data = resource.query(options.getRequestParameters(), function () {
+
+                                if (partial) {
+                                    for (var i = 0; i < data.length; i++)
+                                        options.data.push(data[i]);
+                                } else {
+                                    options.data = data;
+                                }
+
+                                ++options.page;
+                                scope.gridApi.infiniteScroll.dataLoaded();
+                            });
                         };
 
                         // find default sort column
@@ -153,32 +172,46 @@
                         }
 
                         // first loading
-                        options.data = resource.query(options.getRequestParameters(), function () {
-                            ++options.page;
-                        });
+                        options.fetchData();
 
                         // on sorting change
                         scope.gridApi.core.on.sortChanged(scope, function () {
                             options.page = 0;
-                            var data = options.data = resource.query(options.getRequestParameters(), function () {
-                                options.data = data;
-                                ++options.page;
-                                scope.gridApi.infiniteScroll.dataLoaded();
-                            });
+                            options.fetchData();
                         });
 
                         // needs more data for infinite scroll
                         scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
-                            var data = resource.query(options.getRequestParameters(), function () {
-                                for (var i = 0; i < data.length; i++)
-                                    options.data.push(data[i]);
-
-                                ++options.page;
-                                scope.gridApi.infiniteScroll.dataLoaded();
-                            });
+                            options.fetchData();
                         });
                     }
                 }
+            }
+        }
+    });
+
+    // add filtering support, depends on spring-infinite
+    cashFlow.directive('springFilter', function () {
+        return {
+            restrict: 'A',
+            link: function (scope) {
+                scope.filter = {};
+                scope.$watch('filter', function (newVal) {
+                    if (newVal) {
+                        var filters = [];
+                        for (var name in newVal) {
+                            if (newVal.hasOwnProperty(name)) {
+                                filters.push({
+                                    name: name,
+                                    value: (newVal[name].hasOwnProperty('id') ? newVal[name]['id'] : newVal[name])
+                                });
+                            }
+                        }
+                        scope.gridOptions.page = 0;
+                        scope.gridOptions.springFilters = filters;
+                        scope.gridOptions.fetchData();
+                    }
+                }, true);
             }
         }
     });

@@ -186,7 +186,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
         final Operation responseOperation = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation.class);
         assertNotNull(responseOperation);
 
-        final List<Operation> list = operationService.list(null);
+        final List<Operation> list = operationService.list(null, null);
         assertEquals(1, list.size());
         final Operation operation = list.get(0);
         assertEquals(new BigDecimal("27.38"), operation.getAmount());
@@ -226,7 +226,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
         operation.setDate(new Date());
         operationService.insert(operation);
 
-        List<Operation> list = operationService.list(null);
+        List<Operation> list = operationService.list(null, null);
         assertEquals(1, list.size());
         Operation operationFromDB = list.get(0);
         assertEquals(BigDecimal.TEN, operationFromDB.getAmount());
@@ -265,7 +265,7 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        list = operationService.list(null);
+        list = operationService.list(null, null);
         assertEquals(1, list.size());
         operationFromDB = list.get(0);
         assertEquals(new BigDecimal("27.38"), operationFromDB.getAmount());

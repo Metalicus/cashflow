@@ -44,91 +44,97 @@
     }]);
 
     // controller for operation table and modal dialogs calls
-    operations.controller('OperationsCtrl', ['$scope', 'uiGridConstants', 'Operation', '$modal', function ($scope, uiGridConstants, Operation, $modal) {
-        $scope.gridOptions = {
-            enableRowSelection: true,
-            enableRowHeaderSelection: false,
-            multiSelect: false,
-            useExternalSorting: true,
-            modifierKeysToMultiSelect: false,
-            infiniteScroll: 20,
-            noUnselect: true,
-            columnDefs: [
-                {
-                    name: 'Date',
-                    field: 'date',
-                    type: 'date',
-                    cellFilter: 'date:"yyyy-MM-dd"',
-                    width: 150,
-                    defaultSort: {direction: uiGridConstants.DESC}
-                },
-                {name: 'Type', field: 'type', width: 200},
-                {name: 'Account', field: 'account.name', width: 200},
-                {name: 'Currency', field: 'currency.name', width: 200},
-                {name: 'Amount', field: 'amount', width: 200},
-                {name: 'Cross currency amount', field: 'crossCurrency.amount', width: 200},
-                {name: 'Exchange rate', field: 'crossCurrency.exchangeRate', width: 200},
-                {name: 'Info', field: 'info', width: 200}
-            ],
-            onRegisterApi: function (gridApi) {
-                $scope.gridApi = gridApi;
-            }
-        };
+    operations.controller('OperationsCtrl', ['$scope', 'uiGridConstants', 'Operation', 'Category', '$modal',
+        function ($scope, uiGridConstants, Operation, Category, $modal) {
 
-        $scope.openNewDialog = function () {
-            var modalInstance = $modal.open({
-                templateUrl: 'template/operation-modal.html',
-                controller: 'OperationEditCtrl',
-                resolve: {
-                    id: function () {
-                        return null;
-                    }
+            // filters
+            $scope.categories = Category.query();
+
+            $scope.gridOptions = {
+                enableRowSelection: true,
+                enableRowHeaderSelection: false,
+                multiSelect: false,
+                useExternalSorting: true,
+                modifierKeysToMultiSelect: false,
+                infiniteScroll: 20,
+                noUnselect: true,
+                columnDefs: [
+                    {
+                        name: 'Date',
+                        field: 'date',
+                        type: 'date',
+                        cellFilter: 'date:"yyyy-MM-dd"',
+                        width: 150,
+                        defaultSort: {direction: uiGridConstants.DESC}
+                    },
+                    {name: 'Type', field: 'type', width: 180},
+                    {name: 'Category', field: 'category.name', width: 180},
+                    {name: 'Account', field: 'account.name', width: 180},
+                    {name: 'Currency', field: 'currency.name', width: 180},
+                    {name: 'Amount', field: 'amount', width: 180},
+                    {name: 'Cross currency amount', field: 'crossCurrency.amount', width: 180},
+                    {name: 'Exchange rate', field: 'crossCurrency.exchangeRate', width: 180},
+                    {name: 'Info', field: 'info', width: 150}
+                ],
+                onRegisterApi: function (gridApi) {
+                    $scope.gridApi = gridApi;
                 }
-            });
+            };
 
-            modalInstance.result.then(function (model) {
-                // add new model to top of the data array
-                $scope.gridOptions.data.unshift(model);
-            });
-        };
-
-        $scope.openEditDialog = function () {
-            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
-            var modalInstance = $modal.open({
-                templateUrl: 'template/operation-modal.html',
-                controller: 'OperationEditCtrl',
-                resolve: {
-                    id: function () {
-                        return selectedRow["id"];
+            $scope.openNewDialog = function () {
+                var modalInstance = $modal.open({
+                    templateUrl: 'template/operation-modal.html',
+                    controller: 'OperationEditCtrl',
+                    resolve: {
+                        id: function () {
+                            return null;
+                        }
                     }
-                }
-            });
+                });
 
-            modalInstance.result.then(function (model) {
-                // update model in data array
-                var rowIndex = $scope.gridApi.grid.rowHashMap.get(selectedRow).i;
-                $scope.gridOptions.data[rowIndex] = model;
-            });
-        };
+                modalInstance.result.then(function (model) {
+                    // add new model to top of the data array
+                    $scope.gridOptions.data.unshift(model);
+                });
+            };
 
-        $scope.openDeleteDialog = function () {
-            var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
-            var modalInstance = $modal.open({
-                templateUrl: 'template/delete-modal.html',
-                controller: 'OperationDeleteCtrl',
-                resolve: {
-                    id: function () {
-                        return selectedRow["id"];
+            $scope.openEditDialog = function () {
+                var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
+                var modalInstance = $modal.open({
+                    templateUrl: 'template/operation-modal.html',
+                    controller: 'OperationEditCtrl',
+                    resolve: {
+                        id: function () {
+                            return selectedRow["id"];
+                        }
                     }
-                }
-            });
+                });
 
-            modalInstance.result.then(function () {
-                var rowIndex = $scope.gridApi.grid.rowHashMap.get(selectedRow).i;
-                $scope.gridOptions.data.splice(rowIndex, 1);
-            });
-        };
-    }]);
+                modalInstance.result.then(function (model) {
+                    // update model in data array
+                    var rowIndex = $scope.gridApi.grid.rowHashMap.get(selectedRow).i;
+                    $scope.gridOptions.data[rowIndex] = model;
+                });
+            };
+
+            $scope.openDeleteDialog = function () {
+                var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
+                var modalInstance = $modal.open({
+                    templateUrl: 'template/delete-modal.html',
+                    controller: 'OperationDeleteCtrl',
+                    resolve: {
+                        id: function () {
+                            return selectedRow["id"];
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    var rowIndex = $scope.gridApi.grid.rowHashMap.get(selectedRow).i;
+                    $scope.gridOptions.data.splice(rowIndex, 1);
+                });
+            };
+        }]);
 
     // controller for model type tabs. Hold all tab operations, like select current, etc.
     operations.controller('TypeTabController', ['$scope', 'OPERATION_TYPE', function ($scope, OPERATION_TYPE) {
