@@ -64,7 +64,7 @@
                 {name: 'Info', field: 'info', width: 200}
             ],
             onRegisterApi: function (gridApi) {
-                $scope.grid1Api = gridApi;
+                $scope.gridApi = gridApi;
             }
         };
 
