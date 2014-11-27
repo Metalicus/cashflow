@@ -1,6 +1,6 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
-        'cashflow-category', 'ngRoute', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.bootstrap',
+        'cashflow-category', 'cashflow-reports', 'ngRoute', 'ngTouch', 'ui.grid', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.bootstrap',
         'ui.select', 'toaster', 'ngResource']);
 
     // -------------------------------- CONSTANTS
@@ -34,6 +34,11 @@
             .when('/account', {
                 templateUrl: 'account.html',
                 controller: 'AccountCtrl'
+            })
+
+            .when('/reports', {
+                templateUrl: 'reports.html',
+                controller: 'ReportsCtrl'
             });
 
         //ui-selector theme
