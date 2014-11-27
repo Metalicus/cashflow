@@ -61,21 +61,42 @@
     // crud factories for models
     cashFlow.factory('Operation', ['$resource', function ($resource) {
         return $resource('action/operation/:id', {id: '@id'}, {
+            'query': {
+                method: 'GET', isArray: true, transformResponse: function (data) {
+                    return JSON.parse(data)['content'];
+                }
+            },
+            'fetch': {method: 'GET'},
             'update': {method: 'PUT'}
         });
     }]);
     cashFlow.factory('Account', ['$resource', function ($resource) {
         return $resource('action/account/:id', {id: '@id'}, {
+            'query': {
+                method: 'GET', isArray: true, transformResponse: function (data) {
+                    return JSON.parse(data)['content'];
+                }
+            },
             'update': {method: 'PUT'}
         });
     }]);
     cashFlow.factory('Currency', ['$resource', function ($resource) {
         return $resource('action/currency/:id', {id: '@id'}, {
+            'query': {
+                method: 'GET', isArray: true, transformResponse: function (data) {
+                    return JSON.parse(data)['content'];
+                }
+            },
             'update': {method: 'PUT'}
         });
     }]);
     cashFlow.factory('Category', ['$resource', function ($resource) {
         return $resource('action/category/:id', {id: '@id'}, {
+            'query': {
+                method: 'GET', isArray: true, transformResponse: function (data) {
+                    return JSON.parse(data)['content'];
+                }
+            },
             'update': {method: 'PUT'}
         });
     }]);
@@ -116,40 +137,54 @@
                         var resource = iElement.injector().get(iAttrs['springFetch']);
                         var options = scope.gridOptions;
 
-                        options.page = 0;
-                        options.getRequestParameters = function (filters) {
-                            var parameters = {page: options.page, size: 100};
-                            var sortedColumns = scope.gridApi.grid.getColumnSorting();
+                        options.springFetch = {
+                            page: 0, // index of current page
+                            last: false, // true is this is last page
+                            getRequestParameters: function () {
+                                var parameters = {page: options.springFetch.page, size: 100};
+                                var sortedColumns = scope.gridApi.grid.getColumnSorting();
 
-                            if (options.springFilters) {
-                                for (var i = 0; i < options.springFilters.length; i++)
-                                    parameters[options.springFilters[i]['name']] = options.springFilters[i]['value'];
-                            }
-
-                            if (sortedColumns.length == 0) {
-                                // default sort
-                                parameters['sort'] = options.defaultSort.name + ',' + options.defaultSort.dir;
-                            } else {
-                                for (i = 0; i < sortedColumns.length; i++) {
-                                    parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
+                                if (options.springFetch.springFilters) {
+                                    for (var i = 0; i < options.springFetch.springFilters.length; i++)
+                                        parameters[options.springFetch.springFilters[i]['name']] = options.springFetch.springFilters[i]['value'];
                                 }
-                            }
 
-                            return parameters;
-                        };
-                        options.fetchData = function (partial) {
-                            var data = options.data = resource.query(options.getRequestParameters(), function () {
-
-                                if (partial) {
-                                    for (var i = 0; i < data.length; i++)
-                                        options.data.push(data[i]);
+                                if (sortedColumns.length == 0) {
+                                    // default sort
+                                    parameters['sort'] = options.defaultSort.name + ',' + options.defaultSort.dir;
                                 } else {
-                                    options.data = data;
+                                    for (i = 0; i < sortedColumns.length; i++) {
+                                        parameters['sort'] = scope.gridApi.grid.getColumnSorting()[0].field + ',' + scope.gridApi.grid.getColumnSorting()[0].sort.direction;
+                                    }
                                 }
 
-                                ++options.page;
-                                scope.gridApi.infiniteScroll.dataLoaded();
-                            });
+                                return parameters;
+                            },
+                            fetchData: function () {
+                                var data = resource.fetch(options.springFetch.getRequestParameters(), function () {
+                                    // if this is first page set last to false
+                                    if (options.springFetch.page == 0)
+                                        options.springFetch.last = false;
+
+                                    // prevent fetching then last page
+                                    if (options.springFetch.last)
+                                        return;
+
+                                    if (options.springFetch.page > 0) {
+                                        // if this is not first page populate date to the exisiting array
+                                        for (var i = 0; i < data['content'].length; i++)
+                                            options.data.push(data['content'][i]);
+
+                                    } else {
+                                        // if this is first page just set new data
+                                        options.data = data['content'];
+                                    }
+
+                                    options.springFetch.last = data['last'];
+                                    ++options.springFetch.page;
+                                    scope.gridApi.infiniteScroll.dataLoaded();
+                                });
+                            }
                         };
 
                         // find default sort column
@@ -172,17 +207,17 @@
                         }
 
                         // first loading
-                        options.fetchData();
+                        options.springFetch.fetchData();
 
                         // on sorting change
                         scope.gridApi.core.on.sortChanged(scope, function () {
-                            options.page = 0;
-                            options.fetchData();
+                            options.springFetch.page = 0;
+                            options.springFetch.fetchData();
                         });
 
                         // needs more data for infinite scroll
                         scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
-                            options.fetchData();
+                            options.springFetch.fetchData();
                         });
                     }
                 }
@@ -207,9 +242,9 @@
                                 });
                             }
                         }
-                        scope.gridOptions.page = 0;
-                        scope.gridOptions.springFilters = filters;
-                        scope.gridOptions.fetchData();
+                        scope.gridOptions.springFetch.page = 0;
+                        scope.gridOptions.springFetch.springFilters = filters;
+                        scope.gridOptions.springFetch.fetchData();
                     }
                 }, true);
             }

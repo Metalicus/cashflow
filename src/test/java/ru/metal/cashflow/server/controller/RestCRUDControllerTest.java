@@ -1,7 +1,9 @@
 package ru.metal.cashflow.server.controller;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.HandlerMethod;
@@ -19,14 +21,13 @@ import ru.metal.cashflow.utils.JSONUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Common tests for controllers
@@ -59,7 +60,7 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals(0, JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Currency[].class).length);
+        assertEquals(0, JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Page.class).getContent().size());
     }
 
     @Test
@@ -150,38 +151,41 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
             categories.add(category);
         }
 
-        MvcResult mvcResult = mockMvc.perform(get("/category?page=0&size=1&sort=id")
+        mockMvc.perform(get("/category?page=0&size=1&sort=id")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
+                .andExpect(jsonPath("totalPages").value(30))
+                .andExpect(jsonPath("totalElements").value(30))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$.content[0].id").value(categories.get(0).getId()));
 
-        List<Category> fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
-        assertEquals(1, fromServer.size());
-        assertEquals(categories.get(0), fromServer.get(0));
-
-        mvcResult = mockMvc.perform(get("/category?page=0&size=2&sort=id,desc")
+        mockMvc.perform(get("/category?page=0&size=2&sort=id,desc")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
+                .andExpect(jsonPath("totalPages").value(15))
+                .andExpect(jsonPath("totalElements").value(30))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.content[0].id").value(categories.get(29).getId()))
+                .andExpect(jsonPath("$.content[1].id").value(categories.get(28).getId()));
 
-        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
-        assertEquals(2, fromServer.size());
-        assertEquals(categories.get(29), fromServer.get(0));
-        assertEquals(categories.get(28), fromServer.get(1));
-
-        mvcResult = mockMvc.perform(get("/category?page=0&size=20&sort=name,desc")
+        mockMvc.perform(get("/category?page=0&size=20&sort=name,desc")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
-        assertEquals(20, fromServer.size());
-        assertEquals(categories.get(29), fromServer.get(0));
-        assertEquals(categories.get(28), fromServer.get(1));
-        assertEquals(categories.get(27), fromServer.get(2));
+                .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
+                .andExpect(jsonPath("totalPages").value(2))
+                .andExpect(jsonPath("totalElements").value(30))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(20)))
+                .andExpect(jsonPath("$.content[0].id").value(categories.get(29).getId()))
+                .andExpect(jsonPath("$.content[1].id").value(categories.get(28).getId()))
+                .andExpect(jsonPath("$.content[2].id").value(categories.get(27).getId()));
     }
 
     @Test
@@ -197,18 +201,17 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
         }
 
         // we don't want Pageable
-        final MvcResult mvcResult = mockMvc.perform(get("/category")
+        mockMvc.perform(get("/category")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        // returns collection without limits and without sorting
-        final List<Category> fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
-        assertEquals(30, fromServer.size());
-        assertEquals(categories.get(0), fromServer.get(0));
-        assertEquals(categories.get(9), fromServer.get(9));
-        assertEquals(categories.get(29), fromServer.get(29));
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(30))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(30)))
+                .andExpect(jsonPath("$.content[0].id").value(categories.get(0).getId()))
+                .andExpect(jsonPath("$.content[9].id").value(categories.get(9).getId()))
+                .andExpect(jsonPath("$.content[29].id").value(categories.get(29).getId()));
     }
 
     @Test
@@ -265,44 +268,44 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
         operation3.setType(Operation.FlowType.EXPENSE);
         operationService.insert(operation3);
 
-        MvcResult mvcResult = mockMvc.perform(get("/operation")
+        mockMvc.perform(get("/operation")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(3))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(3)));
 
-        List<Operation> fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
-        assertEquals(3, fromServer.size());
-
-        mvcResult = mockMvc.perform(get("/operation?category=" + category1.getId())
+        mockMvc.perform(get("/operation?category=" + category1.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(1))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$.content[0].id").value(operation1.getId()));
 
-        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
-        assertEquals(1, fromServer.size());
-        assertEquals(operation1, fromServer.get(0));
-
-        mvcResult = mockMvc.perform(get("/operation?category=" + category2.getId())
+        mockMvc.perform(get("/operation?category=" + category2.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(2))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.content[0].id").value(operation2.getId()))
+                .andExpect(jsonPath("$.content[1].id").value(operation3.getId()));
 
-        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
-        assertEquals(2, fromServer.size());
-        assertEquals(operation2, fromServer.get(0));
-        assertEquals(operation3, fromServer.get(1));
-
-        mvcResult = mockMvc.perform(get("/operation?page=0&size=1&sort=id,desc&category=" + category2.getId())
+        mockMvc.perform(get("/operation?page=0&size=1&sort=id,desc&category=" + category2.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        fromServer = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
-        assertEquals(1, fromServer.size());
-        assertEquals(operation3, fromServer.get(0));
+                .andExpect(jsonPath("totalPages").value(2))
+                .andExpect(jsonPath("totalElements").value(2))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$.content[0].id").value(operation3.getId()));
     }
 }

@@ -1,5 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -7,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.request.FilterRequest;
 import ru.metal.cashflow.server.service.CRUDService;
-
-import java.util.List;
 
 /**
  * Standart controller for CRUD operations
@@ -23,7 +22,7 @@ import java.util.List;
  */
 public abstract class RestCRUDController<T> {
 
-    public static final String MEDIA_TYPE = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8";
+    public static final String MEDIA_TYPE = MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8";
 
     private CRUDService<T> service;
 
@@ -32,7 +31,7 @@ public abstract class RestCRUDController<T> {
     }
 
     @RequestMapping
-    public List<T> query(Pageable pageable, FilterRequest filterRequest) throws CFException {
+    public Page<T> query(Pageable pageable, FilterRequest filterRequest) throws CFException {
         return service.list(pageable, filterRequest);
     }
 

@@ -1,6 +1,7 @@
 package ru.metal.cashflow.server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,6 @@ import ru.metal.cashflow.server.repository.OperationRepository;
 import ru.metal.cashflow.server.request.FilterRequest;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class OperationService implements CRUDService<Operation> {
@@ -24,15 +24,15 @@ public class OperationService implements CRUDService<Operation> {
     private AccountService accountService;
 
     @Transactional(readOnly = true)
-    public List<Operation> list(Pageable pageable, FilterRequest filterRequest) {
+    public Page<Operation> list(Pageable pageable, FilterRequest filterRequest) {
         if (filterRequest != null) {
             // обрабатываем фильтры
             final FilterRequest.Filter categoryFilter = filterRequest.getFilter("category");
             if (categoryFilter != null)
-                return operationRepository.findByCategoryId(Integer.parseInt(categoryFilter.getValue()), pageable).getContent();
+                return operationRepository.findByCategoryId(Integer.parseInt(categoryFilter.getValue()), pageable);
         }
 
-        return operationRepository.findAll(pageable).getContent();
+        return operationRepository.findAll(pageable);
     }
 
     @Override

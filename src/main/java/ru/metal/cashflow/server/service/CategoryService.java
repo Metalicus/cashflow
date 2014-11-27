@@ -1,14 +1,13 @@
 package ru.metal.cashflow.server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.model.Category;
 import ru.metal.cashflow.server.repository.CategoryRepository;
 import ru.metal.cashflow.server.request.FilterRequest;
-
-import java.util.List;
 
 /**
  * Business layer for categories
@@ -21,8 +20,8 @@ public class CategoryService implements CRUDService<Category> {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Category> list(Pageable pageable, FilterRequest filterRequest) {
-        return repository.findAll(pageable).getContent();
+    public Page<Category> list(Pageable pageable, FilterRequest filterRequest) {
+        return repository.findAll(pageable);
     }
 
     @Override

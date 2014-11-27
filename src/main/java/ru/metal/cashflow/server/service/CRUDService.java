@@ -1,10 +1,9 @@
 package ru.metal.cashflow.server.service;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.request.FilterRequest;
-
-import java.util.List;
 
 /**
  * Interface for Create/Read/Update/Delete services
@@ -14,11 +13,12 @@ public interface CRUDService<T> {
     /**
      * Get list of all objects
      *
-     * @param pageable  page restriction, can be {@code null}
+     * @param pageable      page restriction, can be {@code null}
      * @param filterRequest filtreing information, can be {@code null}
+     * @return page with data
      * @throws CFException error while executing DB access
      */
-    List<T> list(Pageable pageable, FilterRequest filterRequest) throws CFException;
+    Page<T> list(Pageable pageable, FilterRequest filterRequest) throws CFException;
 
     /**
      * Insert new model to database

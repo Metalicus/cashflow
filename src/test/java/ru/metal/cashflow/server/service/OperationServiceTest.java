@@ -178,7 +178,7 @@ public class OperationServiceTest extends SpringTestCase {
         // clear session to perform re-read from database
         entityManager.clear();
 
-        final List<Operation> operations = operationService.list(null, null);
+        final List<Operation> operations = operationService.list(null, null).getContent();
         assertNotNull(operations);
         assertEquals(3, operations.size());
         assertEquals(operation1, operations.get(0));
