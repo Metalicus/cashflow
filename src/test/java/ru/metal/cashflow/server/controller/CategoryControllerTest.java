@@ -1,5 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,13 +12,10 @@ import ru.metal.cashflow.server.service.CategoryService;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 import ru.metal.cashflow.utils.JSONUtils;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class CategoryControllerTest extends SpringControllerTestCase {
 
@@ -38,13 +36,14 @@ public class CategoryControllerTest extends SpringControllerTestCase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(2))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.content[0].id").value(category1.getId()))
+                .andExpect(jsonPath("$.content[1].id").value(category2.getId()))
                 .andReturn();
-
-        final List<Category> categories = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Category[].class));
-        assertEquals(2, categories.size());
-
-        assertEquals(category1, categories.get(0));
-        assertEquals(category2, categories.get(1));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(CategoryController.class, handler.getBean().getClass());

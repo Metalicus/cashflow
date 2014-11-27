@@ -3,7 +3,6 @@ package ru.metal.cashflow.server.controller;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.HandlerMethod;
@@ -54,13 +53,14 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
 
     @Test
     public void queryTest2() throws Exception {
-        final MvcResult mvcResult = mockMvc.perform(get("/category")
+        mockMvc.perform(get("/category")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        assertEquals(0, JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Page.class).getContent().size());
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(0))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(0)));
     }
 
     @Test

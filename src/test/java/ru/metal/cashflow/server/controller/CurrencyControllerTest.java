@@ -1,5 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,13 +12,10 @@ import ru.metal.cashflow.server.service.CurrencyService;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 import ru.metal.cashflow.utils.JSONUtils;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class CurrencyControllerTest extends SpringControllerTestCase {
 
@@ -38,16 +36,14 @@ public class CurrencyControllerTest extends SpringControllerTestCase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(2))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.content[0].id").value(currency1.getId()))
+                .andExpect(jsonPath("$.content[1].id").value(currency2.getId()))
                 .andReturn();
-
-        final List<Currency> currencies = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Currency[].class));
-        assertEquals(2, currencies.size());
-
-        assertEquals(currency1.getId(), currencies.get(0).getId());
-        assertEquals(currency1.getName(), currencies.get(0).getName());
-
-        assertEquals(currency2.getId(), currencies.get(1).getId());
-        assertEquals(currency2.getName(), currencies.get(1).getName());
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(CurrencyController.class, handler.getBean().getClass());

@@ -1,5 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,13 +19,12 @@ import ru.metal.cashflow.utils.HibernateUtilsTest;
 import ru.metal.cashflow.utils.JSONUtils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class OperationControllerTest extends SpringControllerTestCase {
 
@@ -79,13 +79,14 @@ public class OperationControllerTest extends SpringControllerTestCase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(2))
+                .andExpect(jsonPath("content").isArray())
+                .andExpect(jsonPath("content", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$.content[0].id").value(operation1.getId()))
+                .andExpect(jsonPath("$.content[1].id").value(operation2.getId()))
                 .andReturn();
-
-        final List<Operation> operations = Arrays.asList(JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), Operation[].class));
-        assertEquals(2, operations.size());
-
-        assertEquals(operation1, operations.get(0));
-        assertEquals(operation2, operations.get(1));
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(OperationController.class, handler.getBean().getClass());
