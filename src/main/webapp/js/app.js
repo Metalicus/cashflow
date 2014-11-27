@@ -219,34 +219,29 @@
                         scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
                             options.springFetch.fetchData();
                         });
+
+                        // filtering
+                        scope.filter = {};
+                        scope.$watch('filter', function (newVal) {
+                            if (newVal) {
+                                var filters = [];
+                                for (var name in newVal) {
+                                    if (newVal.hasOwnProperty(name)) {
+                                        if (newVal[name]) {
+                                            filters.push({
+                                                name: name,
+                                                value: (newVal[name].hasOwnProperty('id') ? newVal[name]['id'] : newVal[name])
+                                            });
+                                        }
+                                    }
+                                }
+                                options.springFetch.page = 0;
+                                options.springFetch.springFilters = filters;
+                                options.springFetch.fetchData();
+                            }
+                        }, true);
                     }
                 }
-            }
-        }
-    });
-
-    // add filtering support, depends on spring-infinite
-    cashFlow.directive('springFilter', function () {
-        return {
-            restrict: 'A',
-            link: function (scope) {
-                scope.filter = {};
-                scope.$watch('filter', function (newVal) {
-                    if (newVal) {
-                        var filters = [];
-                        for (var name in newVal) {
-                            if (newVal.hasOwnProperty(name)) {
-                                filters.push({
-                                    name: name,
-                                    value: (newVal[name].hasOwnProperty('id') ? newVal[name]['id'] : newVal[name])
-                                });
-                            }
-                        }
-                        scope.gridOptions.springFetch.page = 0;
-                        scope.gridOptions.springFetch.springFilters = filters;
-                        scope.gridOptions.springFetch.fetchData();
-                    }
-                }, true);
             }
         }
     });

@@ -13,19 +13,26 @@
         </button>
     </div>
     <div class="col-md-2">
-        {{test}}
-        <ui-select ng-model="$parent.filter.category" ng-required="true">
-            <ui-select-match placeholder="Select category...">{{$select.selected.name}}
-            </ui-select-match>
-            <ui-select-choices repeat="category in categories | filter: $select.search">
-                {{category.name}}
-            </ui-select-choices>
-        </ui-select>
+        <div class="input-group">
+            <ui-select ng-model="$parent.filter.category">
+                <ui-select-match placeholder="Select category...">{{$select.selected.name}}
+                </ui-select-match>
+                <ui-select-choices repeat="category in categories | filter: $select.search">
+                    {{category.name}}
+                </ui-select-choices>
+            </ui-select>
+
+            <span class="input-group-btn">
+              <button ng-click="filter.category = undefined" class="btn btn-default">
+                  <span class="glyphicon glyphicon-trash"></span>
+              </button>
+            </span>
+        </div>
     </div>
 </div>
 <div class="row height100">
     <div class="col-md-12 height100">
         <div ui-grid="gridOptions" class="grid" ui-grid-selection ui-grid-infinite-scroll
-             spring-fetch="Operation" spring-filter></div>
+             spring-fetch="Operation"></div>
     </div>
 </div>
