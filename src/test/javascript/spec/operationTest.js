@@ -326,4 +326,59 @@ describe('Operation Tests ', function () {
             expect(modalInstance.close).toHaveBeenCalled();
         });
     });
+
+    describe('TypeTabController', function () {
+        var $scope, $httpBackend, controller, OPERATION_TYPE;
+
+        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _OPERATION_TYPE_) {
+            $scope = {};
+            $httpBackend = _$httpBackend_;
+            OPERATION_TYPE = _OPERATION_TYPE_;
+
+            controller = _$controller_('TypeTabController', {
+                $scope: $scope
+            });
+        }));
+
+        it('should create default tabs map', function () {
+            expect($scope.tabs[0].type).toEqual(OPERATION_TYPE.EXPENSE);
+            expect($scope.tabs[0].active).toEqual(true);
+
+            expect($scope.tabs[1].type).toEqual(OPERATION_TYPE.TRANSFER);
+            expect($scope.tabs[1].active).toEqual(false);
+
+            expect($scope.tabs[2].type).toEqual(OPERATION_TYPE.INCOME);
+            expect($scope.tabs[2].active).toEqual(false);
+        });
+
+        it('should return current type', function () {
+            expect($scope.getCurrentType()).toEqual(OPERATION_TYPE.EXPENSE);
+
+            $scope.tabs[0].active = false;
+            $scope.tabs[1].active = true;
+            expect($scope.getCurrentType()).toEqual(OPERATION_TYPE.TRANSFER);
+
+            $scope.tabs[1].active = false;
+            $scope.tabs[2].active = true;
+            expect($scope.getCurrentType()).toEqual(OPERATION_TYPE.INCOME);
+        });
+
+        it('should select tab', function () {
+            expect($scope.tabs[0].active).toEqual(true);
+            $scope.selTab(OPERATION_TYPE.EXPENSE);
+            expect($scope.tabs[0].active).toEqual(true);
+            expect($scope.tabs[1].active).toEqual(false);
+            expect($scope.tabs[2].active).toEqual(false);
+
+            $scope.selTab(OPERATION_TYPE.TRANSFER);
+            expect($scope.tabs[0].active).toEqual(false);
+            expect($scope.tabs[1].active).toEqual(true);
+            expect($scope.tabs[2].active).toEqual(false);
+
+            $scope.selTab(OPERATION_TYPE.INCOME);
+            expect($scope.tabs[0].active).toEqual(false);
+            expect($scope.tabs[1].active).toEqual(false);
+            expect($scope.tabs[2].active).toEqual(true);
+        });
+    });
 });
