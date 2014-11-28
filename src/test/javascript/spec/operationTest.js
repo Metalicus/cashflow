@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Operation Tests ', function () {
+describe('Operation tests ', function () {
 
     beforeEach(module('cashFlow'));
 
