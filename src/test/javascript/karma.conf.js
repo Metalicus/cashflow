@@ -20,7 +20,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-ui-select/dist/select.js',
             'src/main/webapp/bower_components/AngularJS-Toaster/toaster.js',
             'src/main/webapp/js/*.js',
-            'src/test/javascript/**/!(karma.conf).js'
+            'src/test/javascript/spec/operationTest.js'
         ],
 
         // list of files / patterns to exclude

@@ -381,4 +381,47 @@ describe('Operation tests ', function () {
             expect($scope.tabs[2].active).toEqual(true);
         });
     });
+
+    describe('directive: typeTabs', function () {
+        var $scope, $compile;
+
+        beforeEach(module('cashFlow'));
+
+        beforeEach(inject(function (_$rootScope_, _$compile_) {
+            $compile = _$compile_;
+            $scope = _$rootScope_.$new();
+
+            $scope.value = "firstValue";
+            $scope.selTab = function () {
+            };
+            $scope.getCurrentType = function () {
+            };
+
+            spyOn($scope, 'selTab');
+            spyOn($scope, 'getCurrentType');
+        }));
+
+        it('should ignore if ng-model is not specified', function () {
+            // ng-model is requirement
+            function errorWrapper() {
+                $compile('<tabset type-tabs></tabset>')($scope);
+                $scope.$digest();
+            }
+
+            expect(errorWrapper).toThrow();
+        });
+
+        it('should watch for type changes', function () {
+            $compile('<tabset type-tabs ng-model="value"></tabset>')($scope);
+            $scope.$digest();
+            expect($scope.selTab).toHaveBeenCalledWith("firstValue");
+
+            // this can be done with usual testing, it should go to protractor
+            // $scope.value.$setViewValue = "secondValue";
+            // expect($scope.selTab).toHaveBeenCalledWith("secondValue");
+
+            // end click also should go to protractor
+        });
+
+    });
 });
