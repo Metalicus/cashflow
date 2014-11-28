@@ -1,10 +1,9 @@
 plugins {
-    id "com.eriwen.gradle.js" version "1.12.1"
+    id "com.moowork.grunt" version "0.6"
 }
 
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'idea'
 
 version = '1.0'
 
@@ -44,3 +43,5 @@ dependencies {
 test {
     include 'ru/metal/cashflow/server/AllTests.class'
 }
+
+test.dependsOn grunt_karma
