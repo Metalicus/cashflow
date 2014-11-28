@@ -287,4 +287,43 @@ describe('Operation Tests ', function () {
             expect(modalInstance.close).toHaveBeenCalled();
         });
     });
+
+    describe('OperationDeleteCtrl', function () {
+        var $scope, $httpBackend, modalInstance, controller;
+
+        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_) {
+            $scope = {};
+            $httpBackend = _$httpBackend_;
+
+            modalInstance = {
+                close: jasmine.createSpy('modalInstance.close'),
+                dismiss: jasmine.createSpy('modalInstance.dismiss'),
+                result: {
+                    then: jasmine.createSpy('modalInstance.result.then')
+                }
+            };
+
+            controller = _$controller_('OperationDeleteCtrl', {
+                $scope: $scope,
+                $modalInstance: modalInstance,
+                id: 1
+            });
+        }));
+
+        it('pressed cancel', function () {
+            expect($scope.entityName).toEqual('operation');
+            $scope.cancel();
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+            expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
+        });
+
+        it('pressed ok', function () {
+            $httpBackend.expectDELETE('action/operation/1').respond();
+            expect($scope.entityName).toEqual('operation');
+            $scope.ok();
+            $httpBackend.flush();
+            expect(modalInstance.close).toHaveBeenCalled();
+        });
+    });
 });
