@@ -190,7 +190,7 @@
                     var moneyWas = parseFloat($scope.model.moneyWas);
                     var money = parseFloat($scope.model.amount);
 
-                    if (this.type === OPERATION_TYPE.EXPENSE) {
+                    if ($scope.model.type === OPERATION_TYPE.EXPENSE || $scope.model.type === OPERATION_TYPE.TRANSFER) {
                         $scope.model.moneyBecome = (moneyWas - money).toFixed(2);
                     } else {
                         $scope.model.moneyBecome = (moneyWas + money).toFixed(2);
