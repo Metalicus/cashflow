@@ -3,10 +3,37 @@
 describe('App tests ', function () {
 
     describe('ErrorHandlerInterceptor Test', function () {
+        var toaster, $httpBackend, Operation;
 
-    });
+        beforeEach(module('cashFlow'));
 
-    describe('NumbersOnly Test', function () {
+        beforeEach(inject(function (_$httpBackend_, _Operation_, _toaster_) {
+            $httpBackend = _$httpBackend_;
+            Operation = _Operation_;
+            toaster = _toaster_;
+
+            spyOn(console, 'log');
+            spyOn(toaster, 'pop');
+        }));
+
+        it('should call toaster on $http error, no message specified', function () {
+            $httpBackend.whenGET('action/operation').respond(500);
+            Operation.query();
+            $httpBackend.flush();
+            expect(toaster.pop).toHaveBeenCalledWith('error', 'Error', '');
+            expect(console.log).not.toHaveBeenCalled();
+        });
+
+        it('should call toaster on $http error, with message and stack', function () {
+            $httpBackend.whenGET('action/operation/12').respond(500, {
+                "message": "error message",
+                "stack": "stack trace"
+            });
+            Operation.get({id: 12});
+            $httpBackend.flush();
+            expect(toaster.pop).toHaveBeenCalledWith('error', 'Error', 'error message');
+            expect(console.log).toHaveBeenCalledWith('stack trace');
+        });
 
     });
 

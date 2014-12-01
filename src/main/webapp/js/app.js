@@ -53,9 +53,9 @@
     cashFlow.factory('errorHandlerInterceptor', ['$q', 'toaster', function ($q, toaster) {
         return {
             'responseError': function (response) {
-                toaster.pop('error', "Error", (response.data["message"] !== 'undefined' ? ': ' + response.data["message"] : ''));
+                toaster.pop('error', "Error", (response.data && response.data["message"] ? response.data["message"] : ''));
 
-                if (response.data["stack"] !== 'undefined')
+                if (response.data && response.data["stack"])
                     console.log(response.data["stack"]);
 
                 return $q.reject(response);
