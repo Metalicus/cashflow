@@ -102,7 +102,7 @@
     }]);
 
     account.controller('AccountDeleteCtrl', ['$scope', '$modalInstance', 'Account', 'id', function ($scope, $modalInstance, Account, id) {
-        $scope.entityName = 'currency';
+        $scope.entityName = 'account';
 
         $scope.ok = function () {
             Account.delete({id: id}, function () {

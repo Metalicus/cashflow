@@ -5,12 +5,11 @@ describe('Operation tests ', function () {
     beforeEach(module('cashFlow'));
 
     describe('OperationsCtrl', function () {
-        var $scope, $rootScope, $modal, modalInstance, $httpBackend, controller, deferred;
+        var $scope, $modal, modalInstance, $httpBackend, controller, deferred;
 
-        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _$q_) {
+        beforeEach(inject(function (_$controller_, _$httpBackend_, _$q_) {
             $scope = {};
             $httpBackend = _$httpBackend_;
-            $rootScope = _$rootScope_;
 
             // expecting request for category loading for filter
             $httpBackend.expectGET('action/category').respond('{"content":[] }');
@@ -212,11 +211,10 @@ describe('Operation tests ', function () {
     });
 
     describe('OperationEditCtrl: edit', function () {
-        var $scope, OPERATION_TYPE, controller, $controller, modalInstance, $httpBackend, $timeout;
+        var $scope, OPERATION_TYPE, controller, modalInstance, $httpBackend, $timeout;
 
         beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _OPERATION_TYPE_, _$timeout_) {
             $scope = {};
-            $controller = _$controller_;
             $httpBackend = _$httpBackend_;
             $timeout = _$timeout_;
             OPERATION_TYPE = _OPERATION_TYPE_;
@@ -435,7 +433,7 @@ describe('Operation tests ', function () {
     describe('OperationDeleteCtrl', function () {
         var $scope, $httpBackend, modalInstance, controller;
 
-        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_) {
+        beforeEach(inject(function (_$controller_, _$httpBackend_) {
             $scope = {};
             $httpBackend = _$httpBackend_;
 
