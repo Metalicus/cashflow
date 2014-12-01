@@ -13,7 +13,10 @@
                 {name: 'Name', field: 'name'},
                 {name: 'Currency', field: 'currency.name'},
                 {name: 'Current balance', field: 'balance'}
-            ]
+            ],
+            serverData: {
+                source: Account
+            }
         };
 
         $scope.gridOptions.onRegisterApi = function (gridApi) {
@@ -71,8 +74,6 @@
                 $scope.gridOptions.data.splice(rowIndex, 1);
             });
         };
-
-        $scope.gridOptions.data = Account.query();
     }]);
 
     account.controller('AccountEditCtrl', ['$scope', '$modalInstance', 'Currency', 'Account', 'id', function ($scope, $modalInstance, Currency, Account, id) {

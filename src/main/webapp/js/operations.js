@@ -78,6 +78,9 @@
                 ],
                 onRegisterApi: function (gridApi) {
                     $scope.gridApi = gridApi;
+                },
+                serverData: {
+                    source: Operation
                 }
             };
 

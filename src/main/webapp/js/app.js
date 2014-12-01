@@ -128,30 +128,48 @@
         };
     });
 
-    // support Spring data fetching from server with sorting
-    cashFlow.directive('springFetch', function () {
+    // simple fetching without server sorting or filtering and without pageable support
+    cashFlow.directive('serverData', function () {
+        return {
+            restrict: 'A',
+            link: function (scope) {
+                if (!scope.gridOptions["serverData"])
+                    throw 'Required serverData.source is not found!';
+
+                if (!scope.gridOptions["serverData"]["source"])
+                    throw 'Required serverData.source is not found!';
+
+                scope.gridOptions.data = scope.gridOptions["serverData"]["source"].query();
+            }
+        }
+    });
+
+    // support Spring data fetching in pages from server with sorting and filtering
+    cashFlow.directive('pageable', function () {
         return {
             restrict: 'A',
             compile: function () {
                 return {
-                    post: function postLink(scope, iElement, iAttrs) {
+                    post: function postLink(scope) {
+                        if (!scope.gridOptions["serverData"])
+                            throw 'Required serverData.source is not found!';
 
-                        if (!iAttrs['springFetch'])
-                            throw "$resource factory is required!";
+                        if (!scope.gridOptions["serverData"]["source"])
+                            throw 'Required serverData.source is not found!';
 
-                        var resource = iElement.injector().get(iAttrs['springFetch']);
+                        var resource = scope.gridOptions["serverData"]["source"];
                         var options = scope.gridOptions;
 
-                        options.springFetch = {
+                        options.serverData = {
                             page: 0, // index of current page
-                            last: false, // true is this is last page
+                            last: false, // true if this is last page
                             getRequestParameters: function () {
-                                var parameters = {page: options.springFetch.page, size: 100};
+                                var parameters = {page: options.serverData.page, size: 100};
                                 var sortedColumns = scope.gridApi.grid.getColumnSorting();
 
-                                if (options.springFetch.springFilters) {
-                                    for (var i = 0; i < options.springFetch.springFilters.length; i++)
-                                        parameters[options.springFetch.springFilters[i]['name']] = options.springFetch.springFilters[i]['value'];
+                                if (options.serverData.filters) {
+                                    for (var i = 0; i < options.serverData.filters.length; i++)
+                                        parameters[options.serverData.filters[i]['name']] = options.serverData.filters[i]['value'];
                                 }
 
                                 if (sortedColumns.length == 0) {
@@ -166,16 +184,16 @@
                                 return parameters;
                             },
                             fetchData: function () {
-                                var data = resource.fetch(options.springFetch.getRequestParameters(), function () {
-                                    // if this is first page set last to false
-                                    if (options.springFetch.page == 0)
-                                        options.springFetch.last = false;
+                                // if this is first page set last to false
+                                if (options.serverData.page == 0)
+                                    options.serverData.last = false;
 
-                                    // prevent fetching then last page
-                                    if (options.springFetch.last)
-                                        return;
+                                // prevent fetching then last page
+                                if (options.serverData.last)
+                                    return;
 
-                                    if (options.springFetch.page > 0) {
+                                var data = resource.fetch(options.serverData.getRequestParameters(), function () {
+                                    if (options.serverData.page > 0) {
                                         // if this is not first page populate date to the exisiting array
                                         for (var i = 0; i < data['content'].length; i++)
                                             options.data.push(data['content'][i]);
@@ -185,10 +203,14 @@
                                         options.data = data['content'];
                                     }
 
-                                    options.springFetch.last = data['last'];
-                                    ++options.springFetch.page;
+                                    options.serverData.last = data['last'];
+                                    ++options.serverData.page;
                                     scope.gridApi.infiniteScroll.dataLoaded();
                                 });
+                            },
+                            resort: function () {
+                                options.serverData.page = 0;
+                                options.serverData.fetchData();
                             }
                         };
 
@@ -207,28 +229,29 @@
 
                         // if no default sort when create sort by id
                         if (!options.defaultSort) {
-                            options.defaultSort.name = 'id';
-                            options.defaultSort.dir = 'desc';
+                            options.defaultSort = {
+                                name: 'id',
+                                dir: 'desc'
+                            };
                         }
 
                         // first loading
-                        options.springFetch.fetchData();
+                        options.serverData.fetchData();
 
                         // on sorting change
                         scope.gridApi.core.on.sortChanged(scope, function () {
-                            options.springFetch.page = 0;
-                            options.springFetch.fetchData();
+                            options.serverData.resort();
                         });
 
                         // needs more data for infinite scroll
                         scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
-                            options.springFetch.fetchData();
+                            options.serverData.fetchData();
                         });
 
                         // filtering
                         scope.filter = {};
-                        scope.$watch('filter', function (newVal) {
-                            if (newVal) {
+                        scope.$watch('filter', function (newVal, oldVal) {
+                            if (newVal && newVal !== oldVal) {
                                 var filters = [];
                                 for (var name in newVal) {
                                     if (newVal.hasOwnProperty(name)) {
@@ -240,9 +263,9 @@
                                         }
                                     }
                                 }
-                                options.springFetch.page = 0;
-                                options.springFetch.springFilters = filters;
-                                options.springFetch.fetchData();
+                                options.serverData.page = 0;
+                                options.serverData.filters = filters;
+                                options.serverData.fetchData();
                             }
                         }, true);
                     }

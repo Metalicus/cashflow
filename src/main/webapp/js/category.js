@@ -11,7 +11,10 @@
             noUnselect: true,
             columnDefs: [
                 {name: 'Name', field: 'name'}
-            ]
+            ],
+            serverData: {
+                source: Category
+            }
         };
 
         $scope.gridOptions.onRegisterApi = function (gridApi) {
@@ -69,8 +72,6 @@
                 $scope.gridOptions.data.splice(rowIndex, 1);
             });
         };
-
-        $scope.gridOptions.data = Category.query();
     }]);
 
     category.controller('CategoryEditCtrl', ['$scope', '$modalInstance', 'Category', 'id', function ($scope, $modalInstance, Category, id) {

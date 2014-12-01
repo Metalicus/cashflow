@@ -7,6 +7,11 @@ module.exports = function (config) {
         // testing framework to use (jasmine/mocha/qunit/...)
         frameworks: ['jasmine'],
 
+        // coverege settings
+        preprocessors: {
+            'src/main/webapp/js/*.js': ['coverage']
+        },
+
         // list of files / patterns to load in the browser
         files: [
             'src/main/webapp/bower_components/angular/angular.js',
@@ -20,6 +25,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-ui-select/dist/select.js',
             'src/main/webapp/bower_components/AngularJS-Toaster/toaster.js',
             'src/main/webapp/js/*.js',
+            'src/test/javascript/spec/appTest.js',
             'src/test/javascript/spec/operationTest.js'
         ],
 

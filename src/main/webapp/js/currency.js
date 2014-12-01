@@ -11,7 +11,10 @@
             noUnselect: true,
             columnDefs: [
                 {name: 'Name', field: 'name'}
-            ]
+            ],
+            serverData: {
+                source: Currency
+            }
         };
 
         $scope.gridOptions.onRegisterApi = function (gridApi) {
@@ -69,8 +72,6 @@
                 $scope.gridOptions.data.splice(rowIndex, 1);
             });
         };
-
-        $scope.gridOptions.data = Currency.query();
     }]);
 
     currency.controller('CurrencyEditCtrl', ['$scope', '$modalInstance', 'Currency', 'id', function ($scope, $modalInstance, Currency, id) {
