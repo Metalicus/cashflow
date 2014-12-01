@@ -4,6 +4,150 @@ describe('Operation tests ', function () {
 
     beforeEach(module('cashFlow'));
 
+    describe('OperationsCtrl', function () {
+        var $scope, $rootScope, $modal, modalInstance, $httpBackend, controller, deferred;
+
+        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _$q_) {
+            $scope = {};
+            $httpBackend = _$httpBackend_;
+            $rootScope = _$rootScope_;
+
+            // expecting request for category loading for filter
+            $httpBackend.expectGET('action/category').respond('{"content":[] }');
+
+            $scope.gridOptions = {};
+
+            deferred = _$q_.defer();
+            modalInstance = {
+                close: jasmine.createSpy('modalInstance.close'),
+                dismiss: jasmine.createSpy('modalInstance.dismiss'),
+                result: deferred.promise
+            };
+
+            $modal = {
+                open: jasmine.createSpy('modal.open').and.returnValue(modalInstance)
+            };
+
+            controller = _$controller_('OperationsCtrl', {
+                $scope: $scope,
+                $modal: $modal
+            });
+        }));
+
+        it('should create default parameters', function () {
+            $httpBackend.flush();
+
+            // grid
+            expect($scope.gridOptions.columnDefs).not.toBeUndefined();
+            expect($scope.gridOptions.serverData).not.toBeUndefined();
+            expect($scope.gridOptions.onRegisterApi).not.toBeUndefined();
+
+            // modal methods
+            expect($scope.openNewDialog).not.toBeUndefined();
+            expect($scope.openEditDialog).not.toBeUndefined();
+            expect($scope.openDeleteDialog).not.toBeUndefined();
+        });
+
+        it('should call modal dialog and add new model', function () {
+            $httpBackend.flush();
+
+            spyOn(deferred.promise, 'then').and.callFake(function (callback) {
+                return callback({id: 3});
+            });
+
+            $scope.gridOptions.data = [
+                {id: 1},
+                {id: 2}
+            ];
+            expect($scope.gridOptions.data.length).toEqual(2);
+
+            $scope.openNewDialog();
+            expect($modal.open).toHaveBeenCalled();
+            expect($scope.gridOptions.data.length).toEqual(3);
+
+            expect($scope.gridOptions.data[0]['id']).toEqual(3);
+            expect($scope.gridOptions.data[1]['id']).toEqual(1);
+            expect($scope.gridOptions.data[2]['id']).toEqual(2);
+        });
+
+        it('should call modal dialog and edit existing model', function () {
+            $httpBackend.flush();
+
+            $scope.gridApi = {
+                selection: {
+                    getSelectedRows: function () {
+                        return [{id: 1, name: 'old name 1'}]
+                    }
+                },
+                grid: {
+                    rowHashMap: {
+                        get: function () {
+                            return {
+                                i: 1
+                            }
+                        }
+                    }
+                }
+            };
+
+            spyOn(deferred.promise, 'then').and.callFake(function (callback) {
+                return callback({id: 1, name: 'new name 1'});
+            });
+
+            $scope.gridOptions.data = [
+                {id: 3, name: 'old name 3'},
+                {id: 1, name: 'old name 1'},
+                {id: 2, name: 'old name 2'}
+            ];
+            expect($scope.gridOptions.data.length).toEqual(3);
+
+            $scope.openEditDialog();
+            expect($modal.open).toHaveBeenCalled();
+            expect($scope.gridOptions.data.length).toEqual(3);
+            expect($scope.gridOptions.data[0]['name']).toEqual('old name 3');
+            expect($scope.gridOptions.data[1]['name']).toEqual('new name 1');
+            expect($scope.gridOptions.data[2]['name']).toEqual('old name 2');
+        });
+
+        it('should call modal dialog and delet existing model', function () {
+            $httpBackend.flush();
+
+            $scope.gridApi = {
+                selection: {
+                    getSelectedRows: function () {
+                        return [{id: 1, name: 'old name 1'}]
+                    }
+                },
+                grid: {
+                    rowHashMap: {
+                        get: function () {
+                            return {
+                                i: 1
+                            }
+                        }
+                    }
+                }
+            };
+
+            spyOn(deferred.promise, 'then').and.callFake(function (callback) {
+                return callback();
+            });
+
+            $scope.gridOptions.data = [
+                {id: 3},
+                {id: 1},
+                {id: 2}
+            ];
+            expect($scope.gridOptions.data.length).toEqual(3);
+
+            $scope.openDeleteDialog();
+            expect($modal.open).toHaveBeenCalled();
+            expect($scope.gridOptions.data.length).toEqual(2);
+            expect($scope.gridOptions.data[0]['id']).toEqual(3);
+            expect($scope.gridOptions.data[1]['id']).toEqual(2);
+        });
+    });
+
     describe('OperationEditCtrl: new', function () {
         var $scope, OPERATION_TYPE, controller, modalInstance, $httpBackend;
 
@@ -416,7 +560,7 @@ describe('Operation tests ', function () {
             $scope.$digest();
             expect($scope.selTab).toHaveBeenCalledWith("firstValue");
 
-            // this can be done with usual testing, it should go to protractor
+            // this can't be done with usual testing, it should go to protractor
             // $scope.value.$setViewValue = "secondValue";
             // expect($scope.selTab).toHaveBeenCalledWith("secondValue");
 
