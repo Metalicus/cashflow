@@ -12,13 +12,12 @@
             columnDefs: [
                 {name: 'Name', field: 'name'}
             ],
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+            },
             serverData: {
                 source: Currency
             }
-        };
-
-        $scope.gridOptions.onRegisterApi = function (gridApi) {
-            $scope.gridApi = gridApi;
         };
 
         $scope.openNewDialog = function () {

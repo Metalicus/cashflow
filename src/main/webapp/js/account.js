@@ -14,13 +14,12 @@
                 {name: 'Currency', field: 'currency.name'},
                 {name: 'Current balance', field: 'balance'}
             ],
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+            },
             serverData: {
                 source: Account
             }
-        };
-
-        $scope.gridOptions.onRegisterApi = function (gridApi) {
-            $scope.gridApi = gridApi;
         };
 
         $scope.openNewDialog = function () {

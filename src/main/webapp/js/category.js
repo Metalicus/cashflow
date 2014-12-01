@@ -12,6 +12,9 @@
             columnDefs: [
                 {name: 'Name', field: 'name'}
             ],
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+            },
             serverData: {
                 source: Category
             }
