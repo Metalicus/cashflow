@@ -9,10 +9,8 @@ import ru.metal.cashflow.server.utils.DateUtils;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ReportServiceTest extends SpringTestCase {
 
@@ -244,45 +242,64 @@ public class ReportServiceTest extends SpringTestCase {
         final MonthlyBalance report = reportService.buildMonthlyReport(7, 2014);
 
         // expense
-        final Map<Category, Map<Currency, BigDecimal>> expense = report.getExpense();
-        assertEquals(3, expense.size());
+        final MonthlyBalance.Type expense = report.getExpense();
+        assertEquals(3, expense.getRows().size());
         // 1
-        Map<Currency, BigDecimal> sumByCurrency = expense.get(shop);
-        assertTrue(sumByCurrency.containsKey(eur));
-        assertEquals(new BigDecimal("15.30"), sumByCurrency.get(eur));
-        assertTrue(sumByCurrency.containsKey(rub));
-        assertEquals(new BigDecimal("2905.94"), sumByCurrency.get(rub));
+
+        MonthlyBalance.Row row = null;
+        for (MonthlyBalance.Row iteratedRow : expense.getRows()) {
+            if (iteratedRow.getCategory().equals(shop)) {
+                row = iteratedRow;
+                break;
+            }
+        }
+        assertNotNull(row);
+        assertEquals(2, row.getValues().size());
+        assertTrue(row.getValues().contains(new BigDecimal("15.30")));
+        assertTrue(row.getValues().contains(new BigDecimal("2905.94")));
         // 2
-        sumByCurrency = expense.get(fastFood);
-        assertTrue(sumByCurrency.containsKey(eur));
-        assertEquals(new BigDecimal("25.90"), sumByCurrency.get(eur));
-        assertTrue(sumByCurrency.containsKey(rub));
-        assertEquals(BigDecimal.ZERO, sumByCurrency.get(rub));
+        row = null;
+        for (MonthlyBalance.Row iteratedRow : expense.getRows()) {
+            if (iteratedRow.getCategory().equals(fastFood)) {
+                row = iteratedRow;
+                break;
+            }
+        }
+        assertNotNull(row);
+        assertEquals(2, row.getValues().size());
+        assertTrue(row.getValues().contains(new BigDecimal("25.90")));
+        assertTrue(row.getValues().contains(BigDecimal.ZERO));
         // 3
-        sumByCurrency = expense.get(games);
-        assertTrue(sumByCurrency.containsKey(eur));
-        assertEquals(BigDecimal.ZERO, sumByCurrency.get(eur));
-        assertTrue(sumByCurrency.containsKey(rub));
-        assertEquals(new BigDecimal("300.00"), sumByCurrency.get(rub));
+        row = null;
+        for (MonthlyBalance.Row iteratedRow : expense.getRows()) {
+            if (iteratedRow.getCategory().equals(games)) {
+                row = iteratedRow;
+                break;
+            }
+        }
+        assertNotNull(row);
+        assertEquals(2, row.getValues().size());
+        assertTrue(row.getValues().contains(BigDecimal.ZERO));
+        assertTrue(row.getValues().contains(new BigDecimal("300.00")));
 
         // income
-        final Map<Category, Map<Currency, BigDecimal>> income = report.getIncome();
-        assertEquals(1, income.size());
+        final MonthlyBalance.Type income = report.getIncome();
+        assertEquals(1, income.getRows().size());
         // 1
-        sumByCurrency = income.get(salary);
-        assertTrue(sumByCurrency.containsKey(eur));
-        assertEquals(BigDecimal.ZERO, sumByCurrency.get(eur));
-        assertTrue(sumByCurrency.containsKey(rub));
-        assertEquals(new BigDecimal("83406.58"), sumByCurrency.get(rub));
+        row = income.getRows().get(0);
+        assertEquals(salary, row.getCategory());
+        assertEquals(2, row.getValues().size());
+        assertTrue(row.getValues().contains(BigDecimal.ZERO));
+        assertTrue(row.getValues().contains(new BigDecimal("83406.58")));
 
         // transfer
-        final Map<Category, Map<Currency, BigDecimal>> transferFlow = report.getTransfer();
-        assertEquals(1, transferFlow.size());
+        final MonthlyBalance.Type transferFlow = report.getTransfer();
+        assertEquals(1, transferFlow.getRows().size());
         // 1
-        sumByCurrency = transferFlow.get(transfer);
-        assertTrue(sumByCurrency.containsKey(eur));
-        assertEquals(BigDecimal.ZERO, sumByCurrency.get(eur));
-        assertTrue(sumByCurrency.containsKey(rub));
-        assertEquals(new BigDecimal("11122.27"), sumByCurrency.get(rub));
+        row = transferFlow.getRows().get(0);
+        assertEquals(transfer, row.getCategory());
+        assertEquals(2, row.getValues().size());
+        assertTrue(row.getValues().contains(BigDecimal.ZERO));
+        assertTrue(row.getValues().contains(new BigDecimal("11122.27")));
     }
 }

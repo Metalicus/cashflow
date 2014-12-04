@@ -78,7 +78,6 @@ public class ReportService {
             category = categoryService.get((Integer) objects[2]);
             report.addRow(category, currency, (Operation.FlowType) objects[3], (BigDecimal) objects[0]);
         }
-        report.prepare();
 
         return report;
     }

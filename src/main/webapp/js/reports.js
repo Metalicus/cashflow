@@ -50,10 +50,25 @@
             year: currentDate.getFullYear()
         };
 
+        $scope.report = {
+            "expense": {
+                "currencies": [{"name": "test"}]
+            }
+        };
+
+        $scope.loadReport = function () {
+            $http.get('action/report/' + $scope.request.type + '?month=' + $scope.request.month.index + '&year=' + $scope.request.year).then(function (response) {
+                $scope.report = response.data;
+
+            })
+        };
+
         $scope.$watch('request', function (newVal, oldVal) {
             if (newVal && newVal !== oldVal) {
-                alert('new value: ' + newVal);
+                $scope.loadReport();
             }
         }, true);
+
+        $scope.loadReport();
     }]);
 })();

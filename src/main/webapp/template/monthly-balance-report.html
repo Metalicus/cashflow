@@ -1,0 +1,45 @@
+<div class="panel panel-default">
+    <div class="panel-heading">Monthy balance report</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <ui-select ng-model="$parent.request.month" search-enabled="false">
+                    <ui-select-match placeholder="Select month...">{{$select.selected.name}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="month in months">{{month.name}}</ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-3">
+                <ui-select ng-model="$parent.request.year" search-enabled="false">
+                    <ui-select-match placeholder="Select month...">{{$select.selected}}</ui-select-match>
+                    <ui-select-choices repeat="year in years">{{year}}</ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th ng-repeat="currency in report['expense']['currencies']">{{currency.name}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in report['expense']['rows']">
+                            <td>{{row['category']['name']}}</td>
+                            <td ng-repeat="value in row['values']">{{value}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

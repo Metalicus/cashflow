@@ -1,7 +1,6 @@
 package ru.metal.cashflow.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.metal.cashflow.server.exception.CFException;
@@ -23,7 +22,7 @@ public class ReportController {
         dataBinder.registerCustomEditor(ReportType.class, new ReportTypeConverter());
     }
 
-    @RequestMapping(value = "/{type}", method = RequestMethod.GET, consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/{type}", method = RequestMethod.GET)
     public Report get(@PathVariable ReportType type, ReportRequest request) throws CFException {
         return service.buildReport(type, request);
     }

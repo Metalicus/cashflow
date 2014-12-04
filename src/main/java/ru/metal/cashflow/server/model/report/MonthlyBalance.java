@@ -5,10 +5,7 @@ import ru.metal.cashflow.server.model.business.Currency;
 import ru.metal.cashflow.server.model.business.Operation;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Model of the Monthly Balance report
@@ -24,22 +21,22 @@ public class MonthlyBalance extends Report {
     /**
      * @return expenses grouped by category and currency
      */
-    public Map<Category, Map<Currency, BigDecimal>> getExpense() {
-        return expense;
+    public Type getExpense() {
+        return prepareType(expense);
     }
 
     /**
      * @return incomes grouped by category and currency
      */
-    public Map<Category, Map<Currency, BigDecimal>> getIncome() {
-        return income;
+    public Type getIncome() {
+        return prepareType(income);
     }
 
     /**
      * @return transfer grouped by category and currency
      */
-    public Map<Category, Map<Currency, BigDecimal>> getTransfer() {
-        return transfer;
+    public Type getTransfer() {
+        return prepareType(transfer);
     }
 
     /**
@@ -66,17 +63,6 @@ public class MonthlyBalance extends Report {
         currencies.add(currency);
     }
 
-    /**
-     * Prepare calculated lines before send to client. Fill with ZERO
-     */
-    public void prepare() {
-        for (Currency currency : currencies) {
-            expense.keySet().stream().filter(category -> !expense.get(category).containsKey(currency)).forEach(category -> expense.get(category).put(currency, BigDecimal.ZERO));
-            income.keySet().stream().filter(category -> !income.get(category).containsKey(currency)).forEach(category -> income.get(category).put(currency, BigDecimal.ZERO));
-            transfer.keySet().stream().filter(category -> !transfer.get(category).containsKey(currency)).forEach(category -> transfer.get(category).put(currency, BigDecimal.ZERO));
-        }
-    }
-
     private void proceed(Map<Category, Map<Currency, BigDecimal>> map, Category category, Currency currency, BigDecimal sum) {
         if (!map.containsKey(category))
             map.put(category, new HashMap<>());
@@ -89,8 +75,73 @@ public class MonthlyBalance extends Report {
         rows.put(currency, byCurrency.add(sum));
     }
 
+    private Type prepareType(Map<Category, Map<Currency, BigDecimal>> map) {
+        final Type type = new Type();
+        currencies.stream().forEach(type::addCurrency);
+
+        for (Category category : map.keySet()) {
+            final Row row = new Row();
+            row.setCategory(category);
+
+            BigDecimal byCurrency;
+            for (Currency currency : currencies) {
+                byCurrency = map.get(category).get(currency);
+                row.addValue(byCurrency == null ? BigDecimal.ZERO : byCurrency);
+            }
+
+            type.addRow(row);
+        }
+
+        return type;
+    }
+
     @Override
     public ReportType getReportType() {
         return ReportType.MONTHLY_BALANCE;
+    }
+
+    public static class Type {
+
+        private List<Currency> currencies = new ArrayList<>();
+        private List<Row> rows = new ArrayList<>();
+
+        public List<Currency> getCurrencies() {
+            return currencies;
+        }
+
+        public void addCurrency(Currency currency) {
+            currencies.add(currency);
+        }
+
+        public List<Row> getRows() {
+            return rows;
+        }
+
+        public void addRow(Row row) {
+            rows.add(row);
+        }
+
+    }
+
+    public static class Row {
+
+        private Category category;
+        private List<BigDecimal> values = new ArrayList<>();
+
+        public Category getCategory() {
+            return category;
+        }
+
+        public void setCategory(Category category) {
+            this.category = category;
+        }
+
+        public List<BigDecimal> getValues() {
+            return values;
+        }
+
+        public void addValue(BigDecimal value) {
+            values.add(value);
+        }
     }
 }

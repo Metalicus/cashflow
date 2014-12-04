@@ -22,7 +22,7 @@ public class ReportControllerTest extends SpringControllerTestCase {
                 .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
                 .andReturn();
 
-        assertEquals(mvcResult.getResponse().getContentAsString(), "{\"expense\":{},\"income\":{},\"transfer\":{},\"reportType\":\"MONTHLY_BALANCE\"}");
+        assertEquals("{\"expense\":{\"currencies\":[],\"rows\":[]},\"income\":{\"currencies\":[],\"rows\":[]},\"transfer\":{\"currencies\":[],\"rows\":[]},\"reportType\":\"MONTHLY_BALANCE\"}", mvcResult.getResponse().getContentAsString());
 
         HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(ReportController.class, handler.getBean().getClass());
@@ -35,7 +35,7 @@ public class ReportControllerTest extends SpringControllerTestCase {
                 .andExpect(content().contentType(RestCRUDController.MEDIA_TYPE))
                 .andReturn();
 
-        assertEquals(mvcResult.getResponse().getContentAsString(), "{\"expense\":{},\"income\":{},\"transfer\":{},\"reportType\":\"MONTHLY_BALANCE\"}");
+        assertEquals("{\"expense\":{\"currencies\":[],\"rows\":[]},\"income\":{\"currencies\":[],\"rows\":[]},\"transfer\":{\"currencies\":[],\"rows\":[]},\"reportType\":\"MONTHLY_BALANCE\"}", mvcResult.getResponse().getContentAsString());
 
         handler = (HandlerMethod) mvcResult.getHandler();
         assertEquals(ReportController.class, handler.getBean().getClass());
