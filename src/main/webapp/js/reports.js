@@ -50,11 +50,7 @@
             year: currentDate.getFullYear()
         };
 
-        $scope.report = {
-            "expense": {
-                "currencies": [{"name": "test"}]
-            }
-        };
+        $scope.report = {};
 
         $scope.loadReport = function () {
             $http.get('action/report/' + $scope.request.type + '?month=' + $scope.request.month.index + '&year=' + $scope.request.year).then(function (response) {

@@ -20,6 +20,7 @@
 </div>
 
 <div class="panel panel-default">
+    <div class="panel-heading">Expense</div>
     <div class="panel-body">
         <div class="row">
             <div class="col-md-12">
@@ -35,6 +36,40 @@
                         <tr ng-repeat="row in report['expense']['rows']">
                             <td>{{row['category']['name']}}</td>
                             <td ng-repeat="value in row['values']">{{value}}</td>
+                        </tr>
+                        <tr class="info">
+                            <td><strong>TOTAL</strong></td>
+                            <td ng-repeat="total in report['expense']['totals']">{{total}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Income</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th ng-repeat="currency in report['income']['currencies']">{{currency.name}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in report['income']['rows']">
+                            <td>{{row['category']['name']}}</td>
+                            <td ng-repeat="value in row['values']">{{value}}</td>
+                        </tr>
+                        <tr class="info">
+                            <td><strong>TOTAL</strong></td>
+                            <td ng-repeat="total in report['income']['totals']">{{total}}</td>
                         </tr>
                         </tbody>
                     </table>

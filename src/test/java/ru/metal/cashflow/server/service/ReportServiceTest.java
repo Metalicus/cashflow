@@ -244,6 +244,8 @@ public class ReportServiceTest extends SpringTestCase {
         // expense
         final MonthlyBalance.Type expense = report.getExpense();
         assertEquals(3, expense.getRows().size());
+        assertTrue(expense.getTotals().contains(new BigDecimal("3205.94"))); //2905.94 + 0 + 300
+        assertTrue(expense.getTotals().contains(new BigDecimal("41.20"))); //15.30 + 25.90 + 0
         // 1
 
         MonthlyBalance.Row row = null;
@@ -285,6 +287,8 @@ public class ReportServiceTest extends SpringTestCase {
         // income
         final MonthlyBalance.Type income = report.getIncome();
         assertEquals(1, income.getRows().size());
+        assertTrue(income.getTotals().contains(BigDecimal.ZERO));
+        assertTrue(income.getTotals().contains(new BigDecimal("83406.58")));
         // 1
         row = income.getRows().get(0);
         assertEquals(salary, row.getCategory());
@@ -295,6 +299,8 @@ public class ReportServiceTest extends SpringTestCase {
         // transfer
         final MonthlyBalance.Type transferFlow = report.getTransfer();
         assertEquals(1, transferFlow.getRows().size());
+        assertTrue(transferFlow.getTotals().contains(BigDecimal.ZERO));
+        assertTrue(transferFlow.getTotals().contains(new BigDecimal("11122.27")));
         // 1
         row = transferFlow.getRows().get(0);
         assertEquals(transfer, row.getCategory());

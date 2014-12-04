@@ -104,6 +104,11 @@ public class MonthlyBalance extends Report {
 
         private List<Currency> currencies = new ArrayList<>();
         private List<Row> rows = new ArrayList<>();
+        private List<BigDecimal> totals = new ArrayList<>();
+
+        public List<BigDecimal> getTotals() {
+            return totals;
+        }
 
         public List<Currency> getCurrencies() {
             return currencies;
@@ -118,6 +123,17 @@ public class MonthlyBalance extends Report {
         }
 
         public void addRow(Row row) {
+            if (totals.isEmpty()) {
+                for (int i = 0; i < row.getValues().size(); i++)
+                    totals.add(BigDecimal.ZERO);
+            }
+
+            BigDecimal value;
+            for (int i = 0; i < row.getValues().size(); i++) {
+                value = row.getValues().get(i);
+                totals.set(i, totals.get(i).add(value));
+            }
+
             rows.add(row);
         }
 
