@@ -8,4 +8,13 @@
     <!-- Определяем папку, в которой будем искать веб компоненты (контроллеры)-->
     <context:component-scan base-package="ru.metal.cashflow.server.controller"/>
 
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="ru.metal.cashflow.server.model.report.ReportType"
+                       value="ru.metal.cashflow.server.resolver.ReportTypeConverter"/>
+            </map>
+        </property>
+    </bean>
+
 </beans>

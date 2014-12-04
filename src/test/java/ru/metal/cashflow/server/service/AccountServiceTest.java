@@ -6,8 +6,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.metal.cashflow.server.SpringTestCase;
 import ru.metal.cashflow.server.exception.CFException;
-import ru.metal.cashflow.server.model.Account;
-import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.model.business.Account;
+import ru.metal.cashflow.server.model.business.Currency;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 
 import java.math.BigDecimal;

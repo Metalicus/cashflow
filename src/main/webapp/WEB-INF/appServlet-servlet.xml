@@ -20,6 +20,7 @@
             </beans:bean>
             <beans:bean class="org.springframework.data.web.SortHandlerMethodArgumentResolver"/>
             <beans:bean class="ru.metal.cashflow.server.resolver.FilteringHandlerMethodArgumentResolver"/>
+            <beans:bean class="ru.metal.cashflow.server.resolver.ReportHandlerMethodArgumentResolver"/>
         </argument-resolvers>
     </annotation-driven>
 

@@ -21,12 +21,12 @@
         <property name="hbm2ddl.auto">validate</property>
 
         <!-- Maping -->
-        <mapping class="ru.metal.cashflow.server.model.Category" />
-        <mapping class="ru.metal.cashflow.server.model.Currency" />
-        <mapping class="ru.metal.cashflow.server.model.Account" />
-        <mapping class="ru.metal.cashflow.server.model.CrossCurrency" />
-        <mapping class="ru.metal.cashflow.server.model.Transfer" />
-        <mapping class="ru.metal.cashflow.server.model.Operation" />
+        <mapping class="ru.metal.cashflow.server.model.business.Category"/>
+        <mapping class="ru.metal.cashflow.server.model.business.Currency"/>
+        <mapping class="ru.metal.cashflow.server.model.business.Account"/>
+        <mapping class="ru.metal.cashflow.server.model.business.CrossCurrency"/>
+        <mapping class="ru.metal.cashflow.server.model.business.Transfer"/>
+        <mapping class="ru.metal.cashflow.server.model.business.Operation"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -10,7 +10,8 @@ import ru.metal.cashflow.server.controller.*;
         OperationControllerTest.class,
         CategoryControllerTest.class,
         CurrencyControllerTest.class,
-        AccountControllerTest.class
+        AccountControllerTest.class,
+        ReportControllerTest.class
 })
 public class ControllerTests {
 }

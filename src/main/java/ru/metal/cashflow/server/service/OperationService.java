@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
-import ru.metal.cashflow.server.model.Account;
-import ru.metal.cashflow.server.model.CrossCurrency;
-import ru.metal.cashflow.server.model.Operation;
-import ru.metal.cashflow.server.model.Transfer;
+import ru.metal.cashflow.server.model.business.Account;
+import ru.metal.cashflow.server.model.business.CrossCurrency;
+import ru.metal.cashflow.server.model.business.Operation;
+import ru.metal.cashflow.server.model.business.Transfer;
 import ru.metal.cashflow.server.repository.OperationRepository;
 import ru.metal.cashflow.server.request.FilterRequest;
 

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.metal.cashflow.server.SpringTestCase;
-import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.model.business.Currency;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 
 import static org.junit.Assert.*;

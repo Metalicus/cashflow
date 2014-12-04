@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.model.business.Currency;
 import ru.metal.cashflow.server.repository.CurrencyRepository;
 import ru.metal.cashflow.server.request.FilterRequest;
 

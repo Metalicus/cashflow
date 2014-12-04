@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.HandlerMethod;
 import ru.metal.cashflow.server.SpringControllerTestCase;
-import ru.metal.cashflow.server.model.Category;
+import ru.metal.cashflow.server.model.business.Category;
 import ru.metal.cashflow.server.service.CategoryService;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 import ru.metal.cashflow.utils.JSONUtils;

@@ -1,7 +1,7 @@
 package imp;
 
-import ru.metal.cashflow.server.model.*;
-import ru.metal.cashflow.server.model.Currency;
+import ru.metal.cashflow.server.model.business.*;
+import ru.metal.cashflow.server.model.business.Currency;
 
 import java.math.BigDecimal;
 import java.sql.*;

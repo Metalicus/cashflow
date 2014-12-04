@@ -37,8 +37,7 @@
             })
 
             .when('/reports', {
-                templateUrl: 'reports.html',
-                controller: 'ReportsCtrl'
+                templateUrl: 'reports.html'
             });
 
         //ui-selector theme

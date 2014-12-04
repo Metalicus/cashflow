@@ -1,3 +1,46 @@
 <div class="page-header">
     <h1>Reports</h1>
 </div>
+
+<div class="row" ng-controller="ReportListCtrl">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="#" class="list-group-item" ng-class="{active: isActive(REPORT_TYPE.MONTHLY_BALANCE)}"
+               ng-click="selectReport(REPORT_TYPE.MONTHLY_BALANCE); preventClick($event)">Monthly Balance</a>
+            <a href="#" class="list-group-item" ng-class="{active: isActive(REPORT_TYPE.SECOND_REPORT)}"
+               ng-click="selectReport(REPORT_TYPE.SECOND_REPORT); preventClick($event)">Empty Report</a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div ng-show="isActive(REPORT_TYPE.MONTHLY_BALANCE)" ng-controller="MonthlyBalanceCrtl">
+            <div class="panel panel-default">
+                <div class="panel-heading">Monthy balance report</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <ui-select ng-model="$parent.request.month" search-enabled="false">
+                                <ui-select-match placeholder="Select month...">{{$select.selected.name}}
+                                </ui-select-match>
+                                <ui-select-choices repeat="month in months">{{month.name}}</ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-3">
+                            <ui-select ng-model="$parent.request.year" search-enabled="false">
+                                <ui-select-match placeholder="Select month...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="year in years">{{year}}</ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="isActive(REPORT_TYPE.SECOND_REPORT)">
+            <div class="panel panel-default">
+                <div class="panel-heading">Report 2</div>
+                <div class="panel-body">
+                    Report 2 content
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

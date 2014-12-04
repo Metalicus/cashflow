@@ -1,4 +1,4 @@
-package ru.metal.cashflow.server.model;
+package ru.metal.cashflow.server.model.business;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

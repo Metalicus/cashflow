@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
-import ru.metal.cashflow.server.model.Account;
+import ru.metal.cashflow.server.model.business.Account;
 import ru.metal.cashflow.server.repository.AccountRepository;
 import ru.metal.cashflow.server.request.FilterRequest;
 

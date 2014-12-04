@@ -8,10 +8,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.method.HandlerMethod;
 import ru.metal.cashflow.server.SpringControllerTestCase;
 import ru.metal.cashflow.server.exception.JSONException;
-import ru.metal.cashflow.server.model.Account;
-import ru.metal.cashflow.server.model.Category;
-import ru.metal.cashflow.server.model.Currency;
-import ru.metal.cashflow.server.model.Operation;
+import ru.metal.cashflow.server.model.business.Account;
+import ru.metal.cashflow.server.model.business.Category;
+import ru.metal.cashflow.server.model.business.Currency;
+import ru.metal.cashflow.server.model.business.Operation;
 import ru.metal.cashflow.server.service.AccountService;
 import ru.metal.cashflow.server.service.CategoryService;
 import ru.metal.cashflow.server.service.CurrencyService;
@@ -102,7 +102,7 @@ public class RestCRUDControllerTest extends SpringControllerTestCase {
 
         final JSONException exception = JSONUtils.fromJSON(mvcResult.getResponse().getContentAsString(), JSONException.class);
         assertNotNull(exception);
-        assertEquals("No class ru.metal.cashflow.server.model.Currency entity with id 2147483647 exists!", exception.getMessage());
+        assertEquals("No class ru.metal.cashflow.server.model.business.Currency entity with id 2147483647 exists!", exception.getMessage());
         assertFalse(exception.getStack().isEmpty());
 
         final HandlerMethod handler = (HandlerMethod) mvcResult.getHandler();

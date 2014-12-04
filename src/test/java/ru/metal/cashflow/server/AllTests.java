@@ -2,11 +2,9 @@ package ru.metal.cashflow.server;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-import ru.metal.cashflow.server.model.OperationTest;
-import ru.metal.cashflow.server.service.AccountServiceTest;
-import ru.metal.cashflow.server.service.CategoryServiceTest;
-import ru.metal.cashflow.server.service.CurrencyServiceTest;
-import ru.metal.cashflow.server.service.OperationServiceTest;
+import ru.metal.cashflow.server.model.business.OperationTest;
+import ru.metal.cashflow.server.service.*;
+import ru.metal.cashflow.server.utils.DateUtilsTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -16,7 +14,9 @@ import ru.metal.cashflow.server.service.OperationServiceTest;
         AccountServiceTest.class,
         OperationServiceTest.class,
         CategoryServiceTest.class,
-        ControllerTests.class
+        ControllerTests.class,
+        DateUtilsTest.class,
+        ReportServiceTest.class
 })
 public class AllTests {
 }

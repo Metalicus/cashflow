@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.metal.cashflow.server.SpringTestCase;
 import ru.metal.cashflow.server.exception.CFException;
-import ru.metal.cashflow.server.model.*;
+import ru.metal.cashflow.server.model.business.*;
 import ru.metal.cashflow.utils.HibernateUtilsTest;
 
 import java.math.BigDecimal;
