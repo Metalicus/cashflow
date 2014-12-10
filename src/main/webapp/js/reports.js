@@ -2,8 +2,7 @@
     var reports = angular.module('cashflow-reports', []);
 
     reports.constant('REPORT_TYPE', {
-        MONTHLY_BALANCE: 'MONTHLY_BALANCE',
-        SECOND_REPORT: 'SECOND_REPORT'
+        MONTHLY_BALANCE: 'MONTHLY_BALANCE'
     });
 
     //controller for list-group
@@ -55,7 +54,6 @@
         $scope.loadReport = function () {
             $http.get('action/report/' + $scope.request.type + '?month=' + $scope.request.month.index + '&year=' + $scope.request.year).then(function (response) {
                 $scope.report = response.data;
-
             })
         };
 

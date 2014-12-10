@@ -150,7 +150,7 @@ describe('Operation tests ', function () {
     describe('OperationEditCtrl: new', function () {
         var $scope, OPERATION_TYPE, controller, modalInstance, $httpBackend;
 
-        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _OPERATION_TYPE_) {
+        beforeEach(inject(function (_$controller_, _$httpBackend_, _OPERATION_TYPE_) {
             $scope = {};
             $httpBackend = _$httpBackend_;
             OPERATION_TYPE = _OPERATION_TYPE_;
@@ -472,7 +472,7 @@ describe('Operation tests ', function () {
     describe('TypeTabController', function () {
         var $scope, $httpBackend, controller, OPERATION_TYPE;
 
-        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _OPERATION_TYPE_) {
+        beforeEach(inject(function (_$controller_, _$httpBackend_, _OPERATION_TYPE_) {
             $scope = {};
             $httpBackend = _$httpBackend_;
             OPERATION_TYPE = _OPERATION_TYPE_;
