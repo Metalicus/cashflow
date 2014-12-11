@@ -44,8 +44,20 @@
         }
 
         .calculator-modal-dialog-content {
-            padding: 10px;
+            padding: 30px 10px 10px;
             text-align: left;
+        }
+
+        .calculator-modal-close {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 120%;
+            display: inline-block;
+            font-weight: bold;
+            font-family: 'arial', 'sans-serif';
         }
     </style>
 
@@ -63,7 +75,10 @@
 <button type="button" class="btn btn-default" ng-click="toggleCalculator()">Show calculator</button>
 
 <div class='calculator-modal' ng-show='show'>
-    <div class='calculator-modal-dialog' ng-style='dialogStyle'>
+    <div class='calculator-modal-dialog'>
+        <div class='calculator-modal-close' ng-click='toggleCalculator()'>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </div>
         <div class='calculator-modal-dialog-content'>
             <table class="calculator" ng-controller="CalculatorCtrl">
                 <tr>
