@@ -12,35 +12,40 @@
         $scope.OPERATION = OPERATION;
 
         $scope.model = {
+            total: null,
             firstNumber: '',
             secondNumber: '',
+            newNumber: false,
             operation: null,
-            getNumber: function () {
-
-            },
             toScreen: function () {
                 var screen = '';
-                if (this.firstNumber !== '')
-                    screen += this.firstNumber;
-                if (this.operation !== null) {
-                    switch (this.operation) {
-                        case OPERATION.DIVIDE:
-                            screen += '/';
-                            break;
-                        case OPERATION.MULTIPLY:
-                            screen += '*';
-                            break;
-                        case OPERATION.ADD:
-                            screen += '+';
-                            break;
-                        case OPERATION.SUBTRACT:
-                            screen += '-';
-                            break;
-                    }
-                }
-                if (this.secondNumber !== '')
-                    screen += this.secondNumber;
+                if (this.firstNumber === '')
+                    return screen;
 
+                screen += this.firstNumber;
+
+                if (this.operation === null)
+                    return screen;
+
+                switch (this.operation) {
+                    case OPERATION.DIVIDE:
+                        screen += '/';
+                        break;
+                    case OPERATION.MULTIPLY:
+                        screen += '*';
+                        break;
+                    case OPERATION.ADD:
+                        screen += '+';
+                        break;
+                    case OPERATION.SUBTRACT:
+                        screen += '-';
+                        break;
+                }
+
+                if (this.secondNumber === '')
+                    return screen;
+
+                screen += this.secondNumber;
                 return screen;
             },
             clear: function () {
@@ -71,13 +76,11 @@
                 this.firstNumber = result;
                 this.secondNumber = '';
                 this.operation = null;
+                this.newNumber = true;
             },
             backspace: function () {
                 if (this.secondNumber !== '') {
-                    this.secondNumber = this.secondNumber.substr(0, this.secondNumber.length - 1);
-                    if (this.secondNumber.length == 0)
-                        this.secondNumber = '';
-
+                    this.secondNumber = removeLastNumber(this.secondNumber);
                     return;
                 }
 
@@ -86,13 +89,15 @@
                     return;
                 }
 
-                if (this.firstNumber !== '') {
-                    this.firstNumber = this.firstNumber.substr(0, this.firstNumber.length - 1);
-                    if (this.firstNumber.length == 0)
-                        this.firstNumber = '';
-                }
+                if (this.firstNumber !== '')
+                    this.firstNumber = this.removeLastNumber(this.firstNumber);
             },
             addNumber: function (number) {
+                if (this.newNumber) {
+                    this.clear();
+                    this.newNumber = false;
+                }
+
                 if (this.operation === null) {
                     this.firstNumber += number;
                 } else {
@@ -100,27 +105,31 @@
                 }
             },
             addDelimeter: function () {
-                var delimeter = '.';
                 if (this.operation === null) {
-                    if (this.firstNumber === '')
-                        delimeter = '0.';
-
                     if (this.firstNumber.indexOf('.') === -1)
-                        this.firstNumber += delimeter;
+                        this.addNumber(this.firstNumber === '' ? '0.' : '.');
                 } else {
-                    if (this.secondNumber === '')
-                        delimeter = '0.';
-
                     if (this.secondNumber.indexOf('.') === -1)
-                        this.secondNumber += delimeter;
+                        this.addNumber(this.secondNumber === '' ? '0.' : '.');
                 }
             },
             setOperation: function (operation) {
                 if (this.operation !== null)
                     this.calculate();
 
-                if (this.operation === null)
+                if (this.operation === null) {
+                    this.newNumber = false;
                     this.operation = operation;
+                }
+            },
+            removeLastNumber: function (number) {
+                number = number.substr(0, number.length - 1);
+                if (number.length === 0)
+                    return '';
+                if (number.charAt(number.length - 1) === '.')
+                    return this.removeLastNumber(number);
+
+                return number;
             }
         };
 
