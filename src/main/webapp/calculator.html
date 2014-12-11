@@ -11,6 +11,11 @@
         @import "bower_components/angular-ui-grid/ui-grid.css";
         @import "css/cashflow.css";
 
+        .calculator {
+            border-collapse: separate;
+            border-spacing: 2px
+        }
+
         .calculator button {
             width: 100%;
             min-width: 30px;
@@ -20,8 +25,28 @@
         .calculator input {
             width: 100%;
             text-align: right;
+            background-color: #fff !important;
+            cursor: default !important;
         }
 
+        .calculator-modal-dialog {
+            z-index: 10000;
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%);
+            -moz-transform: translate(-50%, -50%);
+
+            background-color: #fff;
+            box-shadow: 0 0 20px #000;
+        }
+
+        .calculator-modal-dialog-content {
+            padding: 10px;
+            text-align: left;
+        }
     </style>
 
     <!-- libs -->
@@ -33,79 +58,86 @@
     <script src="js/calculator.js"></script>
 </head>
 
-<body ng-controller="CalculatorCtrl">
-fisrtNumber: {{model.firstNumber}}<br/>
-secondNumber: {{model.secondNumber}}<br/>
-operation: {{model.operation}}<br/>
-<table class="calculator">
-    <tr>
-        <td colspan="4"><input ng-model="screen" readonly type="text"/></td>
-    </tr>
-    <tr>
-        <td colspan="3" ng-click="clear()">
-            <button>Clear</button>
-        </td>
-        <td>
-            <button ng-click="backspace()">&#8592;</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button ng-click="pressNum(7)">7</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(8)">8</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(9)">9</button>
-        </td>
-        <td>
-            <button ng-click="pressOpertaion(OPERATION.DIVIDE)">&divide;</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button ng-click="pressNum(4)">4</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(5)">5</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(6)">6</button>
-        </td>
-        <td>
-            <button ng-click="pressOpertaion(OPERATION.MULTIPLY)">*</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button ng-click="pressNum(1)">1</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(2)">2</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(3)">3</button>
-        </td>
-        <td>
-            <button ng-click="pressOpertaion(OPERATION.SUBTRACT)">-</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button ng-click="pressDelimeter()">.</button>
-        </td>
-        <td>
-            <button ng-click="pressNum(0)">0</button>
-        </td>
-        <td>
-            <button ng-click="calculate()">=</button>
-        </td>
-        <td>
-            <button ng-click="pressOpertaion(OPERATION.ADD)">+</button>
-        </td>
-    </tr>
-</table>
+<body ng-controller="CalculatorModalCtrl">
 
+<button type="button" class="btn btn-default" ng-click="toggleCalculator()">Show calculator</button>
+
+<div class='calculator-modal' ng-show='show'>
+    <div class='calculator-modal-dialog' ng-style='dialogStyle'>
+        <div class='calculator-modal-dialog-content'>
+            <table class="calculator" ng-controller="CalculatorCtrl">
+                <tr>
+                    <td colspan="4"><input class="form-control" ng-model="screen" readonly type="text"/></td>
+                </tr>
+                <tr>
+                    <td colspan="3" ng-click="clear()">
+                        <button type="button">Clear</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="backspace()">
+                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" ng-click="pressNum(7)">7</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(8)">8</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(9)">9</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressOpertaion(OPERATION.DIVIDE)">&divide;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" ng-click="pressNum(4)">4</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(5)">5</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(6)">6</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressOpertaion(OPERATION.MULTIPLY)">*</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" ng-click="pressNum(1)">1</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(2)">2</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(3)">3</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressOpertaion(OPERATION.SUBTRACT)">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" ng-click="pressDelimeter()">.</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressNum(0)">0</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="calculate()">=</button>
+                    </td>
+                    <td>
+                        <button type="button" ng-click="pressOpertaion(OPERATION.ADD)">+</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

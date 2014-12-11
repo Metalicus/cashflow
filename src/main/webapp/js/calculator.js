@@ -8,6 +8,13 @@
         SUBTRACT: 'SUBTRACT'
     });
 
+    calculator.controller('CalculatorModalCtrl', ['$scope', function ($scope) {
+        $scope.show = false;
+        $scope.toggleCalculator = function () {
+            $scope.show = !$scope.show;
+        }
+    }]);
+
     calculator.controller('CalculatorCtrl', ['$scope', 'OPERATION', function ($scope, OPERATION) {
         $scope.OPERATION = OPERATION;
 
