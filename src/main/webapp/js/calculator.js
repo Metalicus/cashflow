@@ -87,7 +87,7 @@
             },
             backspace: function () {
                 if (this.secondNumber !== '') {
-                    this.secondNumber = removeLastNumber(this.secondNumber);
+                    this.secondNumber = this.removeLastNumber(this.secondNumber);
                     return;
                 }
 
