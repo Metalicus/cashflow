@@ -428,6 +428,14 @@ describe('Operation tests ', function () {
             $httpBackend.flush();
             expect(modalInstance.close).toHaveBeenCalled();
         });
+
+        it('should change showCalculator', function () {
+            expect($scope.showCalculator).not.toBeUndefined();
+            expect($scope.showCalculator).toEqual(false);
+
+            $scope.toggleCalculator();
+            expect($scope.showCalculator).toEqual(true);
+        });
     });
 
     describe('OperationDeleteCtrl', function () {

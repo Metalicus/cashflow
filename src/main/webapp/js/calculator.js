@@ -1,25 +1,17 @@
 (function () {
-    var calculator = angular.module('cashflow-calculator', ['ngTouch']);
+    var calculator = angular.module('cashflow-calculator', []);
 
-    calculator.constant('OPERATION', {
+    calculator.constant('CALC_OPERATION', {
         DIVIDE: 'DIVIDE',
         MULTIPLY: 'MULTIPLY',
         ADD: 'ADD',
         SUBTRACT: 'SUBTRACT'
     });
 
-    calculator.controller('CalculatorModalCtrl', ['$scope', function ($scope) {
-        $scope.show = false;
-        $scope.toggleCalculator = function () {
-            $scope.show = !$scope.show;
-        }
-    }]);
-
-    calculator.controller('CalculatorCtrl', ['$scope', 'OPERATION', function ($scope, OPERATION) {
-        $scope.OPERATION = OPERATION;
+    calculator.controller('CalculatorCtrl', ['$scope', 'CALC_OPERATION', function ($scope, CALC_OPERATION) {
+        $scope.CALC_OPERATION = CALC_OPERATION;
 
         $scope.model = {
-            total: null,
             firstNumber: '',
             secondNumber: '',
             newNumber: false,
@@ -35,16 +27,16 @@
                     return screen;
 
                 switch (this.operation) {
-                    case OPERATION.DIVIDE:
+                    case CALC_OPERATION.DIVIDE:
                         screen += '/';
                         break;
-                    case OPERATION.MULTIPLY:
+                    case CALC_OPERATION.MULTIPLY:
                         screen += '*';
                         break;
-                    case OPERATION.ADD:
+                    case CALC_OPERATION.ADD:
                         screen += '+';
                         break;
-                    case OPERATION.SUBTRACT:
+                    case CALC_OPERATION.SUBTRACT:
                         screen += '-';
                         break;
                 }
@@ -66,16 +58,16 @@
 
                 var result;
                 switch (this.operation) {
-                    case OPERATION.DIVIDE:
+                    case CALC_OPERATION.DIVIDE:
                         result = (Number(this.firstNumber) / Number(this.secondNumber)).toString();
                         break;
-                    case OPERATION.MULTIPLY:
+                    case CALC_OPERATION.MULTIPLY:
                         result = (Number(this.firstNumber) * Number(this.secondNumber)).toString();
                         break;
-                    case OPERATION.ADD:
+                    case CALC_OPERATION.ADD:
                         result = (Number(this.firstNumber) + Number(this.secondNumber)).toString();
                         break;
-                    case OPERATION.SUBTRACT:
+                    case CALC_OPERATION.SUBTRACT:
                         result = (Number(this.firstNumber) - Number(this.secondNumber)).toString();
                         break;
                 }
@@ -106,12 +98,12 @@
                 }
 
                 if (this.operation === null) {
-                    this.firstNumber += number;
+                    this.firstNumber = this.firstNumber === '0' ? String(number) : this.firstNumber + number;
                 } else {
-                    this.secondNumber += number;
+                    this.secondNumber = this.secondNumber === '0' ? String(number) : this.secondNumber + number;
                 }
             },
-            addDelimeter: function () {
+            setDecimal: function () {
                 if (this.operation === null) {
                     if (this.firstNumber.indexOf('.') === -1)
                         this.addNumber(this.firstNumber === '' ? '0.' : '.');
@@ -125,6 +117,9 @@
                     this.calculate();
 
                 if (this.operation === null) {
+                    if (this.firstNumber.charAt(this.firstNumber.length - 1) === '.')
+                        this.firstNumber = this.removeLastNumber(this.firstNumber);
+
                     this.newNumber = false;
                     this.operation = operation;
                 }
@@ -152,8 +147,8 @@
             $scope.model.calculate();
         };
 
-        $scope.pressDelimeter = function () {
-            $scope.model.addDelimeter();
+        $scope.pressDecimalMark = function () {
+            $scope.model.setDecimal();
         };
 
         $scope.pressNum = function (number) {

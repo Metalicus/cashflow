@@ -170,6 +170,11 @@
     operations.controller('OperationEditCtrl', ['$scope', '$modalInstance', 'OPERATION_TYPE', 'Operation', 'Account', 'Currency', 'Category', '$timeout', 'id',
         function ($scope, $modalInstance, OPERATION_TYPE, Operation, Account, Currency, Category, $timeout, id) {
 
+            $scope.showCalculator = false;
+            $scope.toggleCalculator = function () {
+                $scope.showCalculator = !$scope.showCalculator;
+            };
+
             $scope.model = new Operation();
             $scope.model.id = id;
             $scope.model.date = new Date();

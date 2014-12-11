@@ -2,6 +2,88 @@
     <h3 class="modal-title">Operation</h3>
 </div>
 <div class="modal-body">
+
+    <div class='calculator-modal' ng-show='showCalculator'>
+        <div class='calculator-modal-dialog'>
+            <div class='calculator-modal-close' ng-click='toggleCalculator()'>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </div>
+            <div class='calculator-modal-dialog-content'>
+                <table class="calculator" ng-controller="CalculatorCtrl">
+                    <tr>
+                        <td colspan="4"><input class="form-control" ng-model="screen" readonly type="text"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" ng-click="clear()">
+                            <button type="button">Clear</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="backspace()">
+                                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" ng-click="pressNum(7)">7</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(8)">8</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(9)">9</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.DIVIDE)">&divide;</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" ng-click="pressNum(4)">4</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(5)">5</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(6)">6</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.MULTIPLY)">*</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" ng-click="pressNum(1)">1</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(2)">2</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(3)">3</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.SUBTRACT)">-</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="button" ng-click="pressDecimalMark()">.</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressNum(0)">0</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="calculate()">=</button>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.ADD)">+</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <form name="operationForm" role="form" ng-submit="submit()" novalidate>
         <div class="container-fluid">
             <div class="row">
@@ -89,28 +171,32 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="form-group" ng-class="{'has-error': operationForm.transferedMoney.$invalid}">
-                            <label for="transferedMoney">
-                                Transfered money <a href="#" tooltip="Amount of money transferred on the account">
-                                <span class="glyphicon glyphicon-question-sign"></span></a>
-                            </label>
-                            <input type="text" name="transferedMoney" class="form-control input-sm" id="transferedMoney"
-                                   ng-required="isTransfer()" ng-model="model.transfer.amount" numbers-only/>
-                        </div>
+                    <div class="form-group" ng-class="{'has-error': operationForm.transferedMoney.$invalid}">
+                        <label for="transferedMoney">
+                            Transfered money <a href="#" tooltip="Amount of money transferred on the account">
+                            <span class="glyphicon glyphicon-question-sign"></span></a>
+                        </label>
+                        <input type="text" name="transferedMoney" class="form-control input-sm" id="transferedMoney"
+                               ng-required="isTransfer()" ng-model="model.transfer.amount" numbers-only/>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="form-group">
-                        <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
-                            <label for="amount">Money <a href="#"
-                                                         tooltip="Amount of money of this operation in the operation currency"><span
-                                    class="glyphicon glyphicon-question-sign"></span></a></label>
+                    <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
+                        <label for="amount">Money <a href="#"
+                                                     tooltip="Amount of money of this operation in the operation currency"><span
+                                class="glyphicon glyphicon-question-sign"></span></a></label>
+
+                        <div class="input-group">
                             <input type="text" name="amount" class="form-control input-sm" id="amount"
                                    ng-model="model.amount"
                                    ng-required="true" ng-change="moneyUpdate()" numbers-only/>
+                              <span class="input-group-btn">
+                                <button class="btn btn-default btn-sm" type="button" ng-click="toggleCalculator()">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </button>
+                              </span>
                         </div>
                     </div>
                 </div>
@@ -140,12 +226,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <div class="form-group">
-                            <label for="info">Info <a href="#"
-                                                      tooltip="Additional information about opertaion"><span
-                                    class="glyphicon glyphicon-question-sign"></span></a></label>
-                            <input type="text" class="form-control input-sm" id="info" ng-model="model.info"/>
-                        </div>
+                        <label for="info">Info <a href="#"
+                                                  tooltip="Additional information about opertaion"><span
+                                class="glyphicon glyphicon-question-sign"></span></a></label>
+                        <input type="text" class="form-control input-sm" id="info" ng-model="model.info"/>
                     </div>
                 </div>
             </div>
