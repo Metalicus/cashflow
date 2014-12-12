@@ -15,6 +15,9 @@ repositories {
     mavenCentral()
 }
 
+// localtion of builded by grunt web files
+project.webAppDirName = 'dist'
+
 dependencies {
     compile 'org.hibernate:hibernate-core:4.3.6.Final'
     compile 'org.hibernate:hibernate-c3p0:4.1.0.Final'
@@ -44,4 +47,5 @@ test {
     include 'ru/metal/cashflow/server/AllTests.class'
 }
 
-test.dependsOn grunt_karma
+test.dependsOn grunt_test
+build.dependsOn grunt_build

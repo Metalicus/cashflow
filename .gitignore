@@ -5,6 +5,8 @@
 .idea/gradle.xml
 .idea/workspace.xml
 build
+.tmp
+dist
 spy.log
 src/main/webapp/bower_components
 node_modules
