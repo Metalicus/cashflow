@@ -107,6 +107,8 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('build', [
+        'bower',
+        'test',
         'clean:dist',
         'useminPrepare',
         'concat',
@@ -117,11 +119,6 @@ module.exports = function (grunt) {
         'usemin',
         'cssmin',
         'htmlmin'
-    ]);
-
-    grunt.registerTask('dist', [
-        'test',
-        'build'
     ]);
 
     grunt.registerTask('default', [
