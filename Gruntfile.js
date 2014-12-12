@@ -8,6 +8,13 @@ module.exports = function (grunt) {
         cashflow: {
             dist: 'dist'
         },
+        bower: {
+            install: {
+                options: {
+                    targetDir: "src/main/webapp/bower_components"
+                }
+            }
+        },
         karma: {
             unit: {
                 configFile: 'src/test/javascript/karma.conf.js',
