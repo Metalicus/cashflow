@@ -52,4 +52,5 @@ test {
 }
 
 grunt_build.dependsOn 'npmInstall'
+grunt_build.dependsOn test
 war.dependsOn grunt_build
