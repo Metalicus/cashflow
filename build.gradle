@@ -47,7 +47,7 @@ test {
     include 'ru/metal/cashflow/server/AllTests.class'
 }
 
-grunt_build.dependsOn 'npmInstall'
 grunt_build.dependsOn 'installGrunt'
+grunt_build.dependsOn 'npmInstall'
 test.dependsOn grunt_test
 build.dependsOn grunt_build
