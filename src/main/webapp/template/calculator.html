@@ -1,0 +1,71 @@
+<table class="calculator" ng-controller="CalculatorCtrl">
+    <tr>
+        <td colspan="4"><input class="form-control" ng-model="screen" readonly type="text"/></td>
+    </tr>
+    <tr>
+        <td colspan="3" ng-click="clear()">
+            <button type="button">{{ 'calculator.clear' | translate}}</button>
+        </td>
+        <td>
+            <button type="button" ng-click="backspace()">
+                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" ng-click="pressNum(7)">7</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(8)">8</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(9)">9</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.DIVIDE)">&divide;</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" ng-click="pressNum(4)">4</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(5)">5</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(6)">6</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.MULTIPLY)">*</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" ng-click="pressNum(1)">1</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(2)">2</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(3)">3</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.SUBTRACT)">-</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" ng-click="pressDecimalMark()">.</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressNum(0)">0</button>
+        </td>
+        <td>
+            <button type="button" ng-click="calculate()">=</button>
+        </td>
+        <td>
+            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.ADD)">+</button>
+        </td>
+    </tr>
+</table>

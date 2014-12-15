@@ -67,7 +67,8 @@ module.exports = function (grunt) {
                 src: [
                     '*.html',
                     'template/*.html',
-                    'WEB-INF/*.xml'
+                    'WEB-INF/*.xml',
+                    'i18n/*.json'
                 ]
             },
             bootstrap: {

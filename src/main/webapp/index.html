@@ -19,7 +19,12 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.js"></script>
+    <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+    <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
@@ -46,18 +51,22 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Home Bookkeeping</a>
+                <a class="navbar-brand" href="#">{{'title' | translate}}</a>
             </div>
 
             <div class="collapse navbar-collapse" collapse="isCollapsed">
                 <ul class="nav navbar-nav">
-                    <li ng-class="{ active: isActive('/')}"><a href="#">Operations</a></li>
-                    <li ng-class="{ active: isActive('/category')}"><a href="#category">Category</a></li>
-                    <li ng-class="{ active: isActive('/currency')}"><a href="#currency">Currency</a></li>
-                    <li ng-class="{ active: isActive('/account')}"><a href="#account">Account</a></li>
+                    <li ng-class="{ active: isActive('/')}"><a href="#">{{ 'menu.operations' | translate}}</a></li>
+                    <li ng-class="{ active: isActive('/category')}"><a href="#category">{{ 'menu.category' |
+                        translate}}</a></li>
+                    <li ng-class="{ active: isActive('/currency')}"><a href="#currency">{{ 'menu.currency' |
+                        translate}}</a></li>
+                    <li ng-class="{ active: isActive('/account')}"><a href="#account">{{ 'menu.account' |
+                        translate}}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-class="{ active: isActive('/reports')}"><a href="#reports">Reports</a></li>
+                    <li ng-class="{ active: isActive('/reports')}"><a href="#reports">{{ 'menu.reports' |
+                        translate}}</a></li>
                 </ul>
             </div>
         </div>

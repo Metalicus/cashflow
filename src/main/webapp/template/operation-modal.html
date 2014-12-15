@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Operation</h3>
+    <h3 class="modal-title">{{ 'operations.edit.title' | translate}}</h3>
 </div>
 <div class="modal-body">
 
@@ -9,77 +9,7 @@
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </div>
             <div class='calculator-modal-dialog-content'>
-                <table class="calculator" ng-controller="CalculatorCtrl">
-                    <tr>
-                        <td colspan="4"><input class="form-control" ng-model="screen" readonly type="text"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" ng-click="clear()">
-                            <button type="button">Clear</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="backspace()">
-                                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" ng-click="pressNum(7)">7</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(8)">8</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(9)">9</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.DIVIDE)">&divide;</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" ng-click="pressNum(4)">4</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(5)">5</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(6)">6</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.MULTIPLY)">*</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" ng-click="pressNum(1)">1</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(2)">2</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(3)">3</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.SUBTRACT)">-</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="button" ng-click="pressDecimalMark()">.</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressNum(0)">0</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="calculate()">=</button>
-                        </td>
-                        <td>
-                            <button type="button" ng-click="pressOpertaion(CALC_OPERATION.ADD)">+</button>
-                        </td>
-                    </tr>
-                </table>
+                <div ng-include="'template/calculator.html'"></div>
             </div>
         </div>
     </div>
@@ -90,10 +20,12 @@
                 <div class="col-md-12">
                     <div ng-controller="TypeTabController">
                         <tabset type-tabs ng-model="model.type" type="pills">
-                            <tab heading="Expense" active="tabs[0].active" disabled="model.id && !tabs[0].active"></tab>
-                            <tab heading="Transfer" active="tabs[1].active"
-                                 disabled="model.id && !tabs[1].active"></tab>
-                            <tab heading="Income" active="tabs[2].active" disabled="model.id && !tabs[2].active"></tab>
+                            <tab heading="{{ 'operations.edit.field.type.expense' | translate }}"
+                                 active="tabs[0].active" disabled="model.id && !tabs[0].active"></tab>
+                            <tab heading="{{ 'operations.edit.field.type.transfer' | translate }}"
+                                 active="tabs[1].active" disabled="model.id && !tabs[1].active"></tab>
+                            <tab heading="{{ 'operations.edit.field.type.income' | translate }}"
+                                 active="tabs[2].active" disabled="model.id && !tabs[2].active"></tab>
                         </tabset>
                     </div>
                 </div>
@@ -102,7 +34,7 @@
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': operationForm.date.$invalid}"
                          ng-controller="DPickerCtrl">
-                        <label>Date of operation</label>
+                        <label>{{ 'operations.edit.field.date' | translate}}</label>
 
                         <p class="input-group">
                             <input type="text" name="date" class="form-control input-sm" datepicker-popup="{{format}}"
@@ -121,10 +53,12 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.account.$invalid}">
-                        <label>Account</label>
+                        <label>{{ 'operations.edit.field.account.title' | translate}}</label>
                         <ui-select name="account" ng-model="$parent.model.account" on-select="changeAccount($model)"
                                    ng-required="true">
-                            <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-match placeholder="{{ 'operations.edit.field.account.tooltip' | translate}}">
+                                {{$select.selected.name}}
+                            </ui-select-match>
                             <ui-select-choices repeat="account in accounts | filter: $select.search">
                                 {{account.name}}
                             </ui-select-choices>
@@ -133,9 +67,10 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.currency.$invalid}">
-                        <label>Currency</label>
+                        <label>{{ 'operations.edit.field.currency.title' | translate}}</label>
                         <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true">
-                            <ui-select-match placeholder="Select currency...">{{$select.selected.name}}
+                            <ui-select-match placeholder="{{ 'operations.edit.field.currency.tooltip' | translate}}">
+                                {{$select.selected.name}}
                             </ui-select-match>
                             <ui-select-choices repeat="currency in currencies | filter: $select.search">
                                 {{currency.name}}
@@ -147,9 +82,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': operationForm.category.$invalid}">
-                        <label>Category</label>
+                        <label>{{ 'operations.edit.field.category.title' | translate}}</label>
                         <ui-select name="category" ng-model="$parent.model.category" ng-required="true">
-                            <ui-select-match placeholder="Select category...">{{$select.selected.name}}
+                            <ui-select-match placeholder="{{ 'operations.edit.field.category.tooltip' | translate}}">
+                                {{$select.selected.name}}
                             </ui-select-match>
                             <ui-select-choices repeat="category in categories | filter: $select.search">
                                 {{category.name}}
@@ -161,9 +97,12 @@
             <div class="row" ng-show="isTransfer()">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.accountTo.$invalid}">
-                        <label>Account to</label>
+                        <label>{{ 'operations.edit.field.transfer.account.title' | translate}}</label>
                         <ui-select name="accountTo" ng-model="$parent.model.transfer.to" ng-required="isTransfer()">
-                            <ui-select-match placeholder="Select account...">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-match
+                                    placeholder="{{ 'operations.edit.field.transfer.account.tooltip' | translate}}">
+                                {{$select.selected.name}}
+                            </ui-select-match>
                             <ui-select-choices repeat="account in accounts | filter: $select.search">
                                 {{account.name}}
                             </ui-select-choices>
@@ -173,7 +112,8 @@
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.transferedMoney.$invalid}">
                         <label for="transferedMoney">
-                            Transfered money <a href="#" tooltip="Amount of money transferred on the account">
+                            {{ 'operations.edit.field.transfer.amount.title' | translate}}
+                            <a href="#" tooltip="{{ 'operations.edit.field.transfer.amount.tooltip' | translate}}">
                             <span class="glyphicon glyphicon-question-sign"></span></a>
                         </label>
                         <input type="text" name="transferedMoney" class="form-control input-sm" id="transferedMoney"
@@ -184,8 +124,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
-                        <label for="amount">Money <a href="#"
-                                                     tooltip="Amount of money of this operation in the operation currency"><span
+                        <label for="amount">{{ 'operations.edit.field.amount.title' | translate}}
+                            <a href="#" tooltip="{{ 'operations.edit.field.amount.tooltip' | translate}}"><span
                                 class="glyphicon glyphicon-question-sign"></span></a></label>
 
                         <div class="input-group">
@@ -204,9 +144,9 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.moneyWas.$invalid}">
-                        <label for="moneyWas">Money before <a href="#" tooltip="Money was on account before the
-                        operation"><span
-                                class="glyphicon glyphicon-question-sign"></span></a></label>
+                        <label for="moneyWas">{{ 'operations.edit.field.moneyWas.title' | translate}}
+                            <a href="#" tooltip="{{ 'operations.edit.field.moneyWas.tooltip' | translate}}">
+                                <span class="glyphicon glyphicon-question-sign"></span></a></label>
                         <input type="text" class="form-control input-sm" id="moneyWas" name="moneyWas"
                                ng-model="model.moneyWas"
                                ng-required="true" ng-change="moneyUpdate()" numbers-only>
@@ -214,9 +154,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.moneyBecome.$invalid}">
-                        <label for="moneyBecome">Money after <a href="#"
-                                                                tooltip="Money become on account after operation"><span
-                                class="glyphicon glyphicon-question-sign"></span></a></label>
+                        <label for="moneyBecome">{{ 'operations.edit.field.moneyBecome.title' | translate}}
+                            <a href="#" tooltip="{{ 'operations.edit.field.moneyBecome.tooltip' | translate}}">
+                                <span class="glyphicon glyphicon-question-sign"></span></a></label>
                         <input type="text" class="form-control input-sm" id="moneyBecome" name="moneyBecome"
                                ng-model="model.moneyBecome"
                                ng-required="true" numbers-only>
@@ -226,9 +166,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="info">Info <a href="#"
-                                                  tooltip="Additional information about opertaion"><span
-                                class="glyphicon glyphicon-question-sign"></span></a></label>
+                        <label for="info">{{ 'operations.edit.field.info.title' | translate}}
+                            <a href="#" tooltip="{{ 'operations.edit.field.info.tooltip' | translate}}">
+                                <span class="glyphicon glyphicon-question-sign"></span></a></label>
                         <input type="text" class="form-control input-sm" id="info" ng-model="model.info"/>
                     </div>
                 </div>
@@ -238,6 +178,8 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="submit()" ng-disabled="operationForm.$invalid">Save</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="submit()" ng-disabled="operationForm.$invalid">{{ 'function.save' |
+        translate}}
+    </button>
+    <button class="btn btn-warning" ng-click="cancel()">{{ 'function.cancel' | translate}}</button>
 </div>

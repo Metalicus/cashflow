@@ -1,0 +1,86 @@
+{
+  "title": "Home Bookkeeping",
+  "function": {
+    "add": "Add",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "menu": {
+    "operations": "Operations",
+    "category": "Category",
+    "currency": "Currency",
+    "account": "Account",
+    "reports": "Reports"
+  },
+  "operations": {
+    "title": "Cash flow",
+    "filters": {
+      "category": "Select category..."
+    },
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Category",
+      "account": "Account",
+      "currency": "Currency",
+      "amount": "Amount",
+      "crossCurrencyAmount": "Cross currency",
+      "exchangeRate": "Exchange Rate",
+      "info": "Info"
+    },
+    "edit": {
+      "title": "Operation",
+      "field": {
+        "date": "Date of operation",
+        "type": {
+          "expense": "Expense",
+          "transfer": "Transfer",
+          "income": "Income"
+        },
+        "account": {
+          "title": "Account",
+          "tooltip": "Select account..."
+        },
+        "currency": {
+          "title": "Currency",
+          "tooltip": "Select currency..."
+        },
+        "category": {
+          "title": "Category",
+          "tooltip": "Select category..."
+        },
+        "transfer": {
+          "account": {
+            "title": "Account to",
+            "tooltip": "Select account..."
+          },
+          "amount": {
+            "title": "Transfered money",
+            "tooltip": "Amount of money transferred on the account"
+          }
+        },
+        "amount": {
+          "title": "Money",
+          "tooltip": "Amount of money of this operation in the operation currency"
+        },
+        "moneyWas": {
+          "title": "Money before",
+          "tooltip": "Money was on account before the operation"
+        },
+        "moneyBecome": {
+          "title": "Money after",
+          "tooltip": "Money become on account after operation"
+        },
+        "info": {
+          "title": "Info",
+          "tooltip": "Additional information about opertaion"
+        }
+      }
+    }
+  },
+  "calculator": {
+    "clear": "Clear"
+  }
+}

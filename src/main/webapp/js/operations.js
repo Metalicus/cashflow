@@ -44,11 +44,21 @@
     }]);
 
     // controller for operation table and modal dialogs calls
-    operations.controller('OperationsCtrl', ['$scope', 'uiGridConstants', 'Operation', 'Category', '$modal',
-        function ($scope, uiGridConstants, Operation, Category, $modal) {
+    operations.controller('OperationsCtrl', ['$scope', 'uiGridConstants', 'Operation', 'Category', '$modal', '$filter',
+        function ($scope, uiGridConstants, Operation, Category, $modal, $filter) {
 
             // filters
             $scope.categories = Category.query();
+
+            // some magic here. i want to feel screen with operation table, because it's huge, but i want it only if
+            // windows width is bigger than sum of columns width
+            var defaultWidth = 160;
+            if (window.innerWidth && window.innerWidth > (defaultWidth * 9)) {
+                defaultWidth = window.innerWidth / 9;
+            }
+
+            //console.debug('column default size is: ' + defaultWidth);
+            //console.debug('windows width is: ' + window.innerWidth);
 
             $scope.gridOptions = {
                 enableRowSelection: true,
@@ -60,21 +70,62 @@
                 noUnselect: true,
                 columnDefs: [
                     {
-                        name: 'Date',
+                        name: $filter('translate')('operations.table.date'),
                         field: 'date',
                         type: 'date',
                         cellFilter: 'date:"yyyy-MM-dd"',
-                        width: 150,
+                        width: defaultWidth,
+                        enableColumnMenu: false,
                         defaultSort: {direction: uiGridConstants.DESC}
                     },
-                    {name: 'Type', field: 'type', width: 180},
-                    {name: 'Category', field: 'category.name', width: 180},
-                    {name: 'Account', field: 'account.name', width: 180},
-                    {name: 'Currency', field: 'currency.name', width: 180},
-                    {name: 'Amount', field: 'amount', width: 180},
-                    {name: 'Cross currency amount', field: 'crossCurrency.amount', width: 180},
-                    {name: 'Exchange rate', field: 'crossCurrency.exchangeRate', width: 180},
-                    {name: 'Info', field: 'info', width: 150}
+                    {
+                        name: $filter('translate')('operations.table.type'),
+                        field: 'type',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.category'),
+                        field: 'category.name',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.account'),
+                        field: 'account.name',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.currency'),
+                        field: 'currency.name',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.amount'),
+                        field: 'amount',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.crossCurrencyAmount'),
+                        field: 'crossCurrency.amount',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.exchangeRate'),
+                        field: 'crossCurrency.exchangeRate',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    },
+                    {
+                        name: $filter('translate')('operations.table.info'),
+                        field: 'info',
+                        width: defaultWidth,
+                        enableColumnMenu: false
+                    }
                 ],
                 onRegisterApi: function (gridApi) {
                     $scope.gridApi = gridApi;

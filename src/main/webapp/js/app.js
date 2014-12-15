@@ -1,7 +1,7 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
-        'cashflow-category', 'cashflow-reports', 'cashflow-calculator', 'ngRoute', 'ngTouch', 'ui.grid', 'ui.grid.selection',
-        'ui.grid.infiniteScroll', 'ui.bootstrap', 'ui.select', 'toaster', 'ngResource']);
+        'cashflow-category', 'cashflow-reports', 'cashflow-calculator', 'ngRoute', 'ngTouch', 'ngCookies', 'ui.grid', 'ui.grid.selection',
+        'ui.grid.infiniteScroll', 'ui.bootstrap', 'ui.select', 'toaster', 'ngResource', 'pascalprecht.translate']);
 
     // -------------------------------- CONSTANTS
     cashFlow.constant('OPERATION_TYPE', {
@@ -12,40 +12,49 @@
 
     // -------------------------------- LIBRARIES SETTINGS
 
-    cashFlow.config(['$routeProvider', 'uiSelectConfig', '$httpProvider', function ($routeProvider, uiSelectConfig, $httpProvider) {
-        // route config
-        $routeProvider
+    cashFlow.config(['$routeProvider', 'uiSelectConfig', '$httpProvider', '$translateProvider',
+        function ($routeProvider, uiSelectConfig, $httpProvider, $translateProvider) {
+            // route config
+            $routeProvider
 
-            .when('/', {
-                templateUrl: 'operations.html',
-                controller: 'OperationsCtrl'
-            })
+                .when('/', {
+                    templateUrl: 'operations.html',
+                    controller: 'OperationsCtrl'
+                })
 
-            .when('/category', {
-                templateUrl: 'category.html',
-                controller: 'CategoryCtrl'
-            })
+                .when('/category', {
+                    templateUrl: 'category.html',
+                    controller: 'CategoryCtrl'
+                })
 
-            .when('/currency', {
-                templateUrl: 'currency.html',
-                controller: 'CurrencyCtrl'
-            })
+                .when('/currency', {
+                    templateUrl: 'currency.html',
+                    controller: 'CurrencyCtrl'
+                })
 
-            .when('/account', {
-                templateUrl: 'account.html',
-                controller: 'AccountCtrl'
-            })
+                .when('/account', {
+                    templateUrl: 'account.html',
+                    controller: 'AccountCtrl'
+                })
 
-            .when('/reports', {
-                templateUrl: 'reports.html'
+                .when('/reports', {
+                    templateUrl: 'reports.html'
+                });
+
+            //ui-selector theme
+            uiSelectConfig.theme = 'bootstrap';
+
+            // http provider
+            $httpProvider.interceptors.push('errorHandlerInterceptor');
+
+            // i18n
+            $translateProvider.useStaticFilesLoader({
+                prefix: 'i18n/',
+                suffix: '.json'
             });
-
-        //ui-selector theme
-        uiSelectConfig.theme = 'bootstrap';
-
-        // http provider
-        $httpProvider.interceptors.push('errorHandlerInterceptor');
-    }]);
+            $translateProvider.preferredLanguage('ru');
+            $translateProvider.useLocalStorage();
+        }]);
 
     // -------------------------------- FACTORIES
 
