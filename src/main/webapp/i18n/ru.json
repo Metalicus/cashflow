@@ -156,6 +156,12 @@
       "total": "ИТОГО"
     }
   },
+  "configure": {
+    "title": "Настройки приложения",
+    "language": {
+      "title": "Язык"
+    }
+  },
   "calculator": {
     "clear": "Сброс"
   },

@@ -156,6 +156,12 @@
       "total": "TOTAL"
     }
   },
+  "configure": {
+    "title": "Application settings",
+    "language": {
+      "title": "Application language"
+    }
+  },
   "calculator": {
     "clear": "Clear"
   },

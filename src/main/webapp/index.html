@@ -36,6 +36,7 @@
     <script src="js/currency.js"></script>
     <script src="js/operations.js"></script>
     <script src="js/reports.js"></script>
+    <script src="js/configure.js"></script>
     <!-- endbuild -->
 </head>
 
@@ -60,9 +61,12 @@
                     <li ng-class="{ active: isActive('/category')}"><a href="#category" translate>menu.category</a></li>
                     <li ng-class="{ active: isActive('/currency')}"><a href="#currency" translate>menu.currency</a></li>
                     <li ng-class="{ active: isActive('/account')}"><a href="#account" translate>menu.account</a></li>
+                    <li ng-class="{ active: isActive('/reports')}"><a href="#reports" translate>menu.reports</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-class="{ active: isActive('/reports')}"><a href="#reports" translate>menu.reports</a></li>
+                    <li ng-class="{ active: isActive('/configure')}"><a href="#configure" translate>
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                    </a></li>
                 </ul>
             </div>
         </div>

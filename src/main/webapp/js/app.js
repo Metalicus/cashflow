@@ -1,7 +1,8 @@
 (function () {
     var cashFlow = angular.module('cashFlow', ['cashflow-operations', 'cashflow-account', 'cashflow-currency',
-        'cashflow-category', 'cashflow-reports', 'cashflow-calculator', 'ngRoute', 'ngTouch', 'ngCookies', 'ui.grid', 'ui.grid.selection',
-        'ui.grid.infiniteScroll', 'ui.bootstrap', 'ui.select', 'toaster', 'ngResource', 'pascalprecht.translate']);
+        'cashflow-category', 'cashflow-reports', 'cashflow-calculator', 'cashflow-configure', 'ngRoute', 'ngTouch',
+        'ngCookies', 'ui.grid', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.bootstrap', 'ui.select',
+        'toaster', 'ngResource', 'pascalprecht.translate']);
 
     // -------------------------------- CONSTANTS
     cashFlow.constant('OPERATION_TYPE', {
@@ -39,6 +40,10 @@
 
                 .when('/reports', {
                     templateUrl: 'reports.html'
+                })
+
+                .when('/configure', {
+                    templateUrl: 'configure.html'
                 });
 
             //ui-selector theme
@@ -52,7 +57,7 @@
                 prefix: 'i18n/',
                 suffix: '.json'
             });
-            $translateProvider.preferredLanguage('ru');
+            $translateProvider.preferredLanguage('en');
             $translateProvider.fallbackLanguage('en');
             $translateProvider.useLocalStorage();
         }]);

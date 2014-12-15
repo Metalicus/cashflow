@@ -1,0 +1,15 @@
+<div class="page-header">
+    <h1 translate>configure.title</h1>
+</div>
+
+<div class="row" ng-controller="ConfigureCtrl">
+    <div class="col-md-3">
+        <form role="form">
+            <div class="form-group">
+                <label for="language" translate>configure.language.title</label>
+                <select id="language" ng-model="currentLang"
+                        class="form-control" ng-options="language.name for language in languages"></select>
+            </div>
+        </form>
+    </div>
+</div>
