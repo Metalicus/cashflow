@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{ 'category.edit.title' | translate}}</h3>
+    <h3 class="modal-title" translate>category.edit.title</h3>
 </div>
 <div class="modal-body">
     <form name="categoryForm" role="form" ng-submit="submit()" novalidate>
@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': categoryForm.name.$invalid}">
-                        <label for="name">{{ 'category.edit.field.name' | translate}}</label>
+                        <label for="name" translate>category.edit.field.name</label>
                         <input type="text" name="name" class="form-control input-sm" ng-required="true" id="name"
                                ng-model="model.name"/>
                     </div>
@@ -17,8 +17,7 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="submit()" ng-disabled="categoryForm.$invalid">{{ 'function.save' |
-        translate}}
+    <button class="btn btn-primary" ng-click="submit()" ng-disabled="categoryForm.$invalid" translate>function.save
     </button>
-    <button class="btn btn-warning" ng-click="cancel()">{{ 'function.cancel' | translate}}</button>
+    <button class="btn btn-warning" ng-click="cancel()" translate>function.cancel</button>
 </div>

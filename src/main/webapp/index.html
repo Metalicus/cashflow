@@ -39,7 +39,7 @@
     <!-- endbuild -->
 </head>
 
-<body>
+<body translate-cloak>
 
 <header>
     <nav class="navbar navbar-default" role="navigation" ng-controller="NavBarCtrl">
@@ -51,22 +51,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">{{'title' | translate}}</a>
+                <a class="navbar-brand" href="#" translate>title</a>
             </div>
 
             <div class="collapse navbar-collapse" collapse="isCollapsed">
                 <ul class="nav navbar-nav">
-                    <li ng-class="{ active: isActive('/')}"><a href="#">{{ 'menu.operations' | translate}}</a></li>
-                    <li ng-class="{ active: isActive('/category')}"><a href="#category">{{ 'menu.category' |
-                        translate}}</a></li>
-                    <li ng-class="{ active: isActive('/currency')}"><a href="#currency">{{ 'menu.currency' |
-                        translate}}</a></li>
-                    <li ng-class="{ active: isActive('/account')}"><a href="#account">{{ 'menu.account' |
-                        translate}}</a></li>
+                    <li ng-class="{ active: isActive('/')}"><a href="#" translate>menu.operations</a></li>
+                    <li ng-class="{ active: isActive('/category')}"><a href="#category" translate>menu.category</a></li>
+                    <li ng-class="{ active: isActive('/currency')}"><a href="#currency" translate>menu.currency</a></li>
+                    <li ng-class="{ active: isActive('/account')}"><a href="#account" translate>menu.account</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-class="{ active: isActive('/reports')}"><a href="#reports">{{ 'menu.reports' |
-                        translate}}</a></li>
+                    <li ng-class="{ active: isActive('/reports')}"><a href="#reports" translate>menu.reports</a></li>
                 </ul>
             </div>
         </div>

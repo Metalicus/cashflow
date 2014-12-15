@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{ 'operations.edit.title' | translate}}</h3>
+    <h3 class="modal-title" translate>operations.edit.title</h3>
 </div>
 <div class="modal-body">
 
@@ -34,7 +34,7 @@
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': operationForm.date.$invalid}"
                          ng-controller="DPickerCtrl">
-                        <label>{{ 'operations.edit.field.date' | translate}}</label>
+                        <label translate>operations.edit.field.date</label>
 
                         <p class="input-group">
                             <input type="text" name="date" class="form-control input-sm" datepicker-popup="{{format}}"
@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.account.$invalid}">
-                        <label>{{ 'operations.edit.field.account.title' | translate}}</label>
+                        <label translate>operations.edit.field.account.title</label>
                         <ui-select name="account" ng-model="$parent.model.account" on-select="changeAccount($model)"
                                    ng-required="true">
                             <ui-select-match placeholder="{{ 'operations.edit.field.account.tooltip' | translate}}">
@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.currency.$invalid}">
-                        <label>{{ 'operations.edit.field.currency.title' | translate}}</label>
+                        <label translate>operations.edit.field.currency.title</label>
                         <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true">
                             <ui-select-match placeholder="{{ 'operations.edit.field.currency.tooltip' | translate}}">
                                 {{$select.selected.name}}
@@ -82,7 +82,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': operationForm.category.$invalid}">
-                        <label>{{ 'operations.edit.field.category.title' | translate}}</label>
+                        <label translate>operations.edit.field.category.title</label>
                         <ui-select name="category" ng-model="$parent.model.category" ng-required="true">
                             <ui-select-match placeholder="{{ 'operations.edit.field.category.tooltip' | translate}}">
                                 {{$select.selected.name}}
@@ -97,7 +97,7 @@
             <div class="row" ng-show="isTransfer()">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.accountTo.$invalid}">
-                        <label>{{ 'operations.edit.field.transfer.account.title' | translate}}</label>
+                        <label translate>operations.edit.field.transfer.account.title</label>
                         <ui-select name="accountTo" ng-model="$parent.model.transfer.to" ng-required="isTransfer()">
                             <ui-select-match
                                     placeholder="{{ 'operations.edit.field.transfer.account.tooltip' | translate}}">
@@ -111,8 +111,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.transferedMoney.$invalid}">
-                        <label for="transferedMoney">
-                            {{ 'operations.edit.field.transfer.amount.title' | translate}}
+                        <label for="transferedMoney" translate>
+                            operations.edit.field.transfer.amount.title
                             <a href="#" tooltip="{{ 'operations.edit.field.transfer.amount.tooltip' | translate}}">
                             <span class="glyphicon glyphicon-question-sign"></span></a>
                         </label>
@@ -124,7 +124,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': operationForm.amount.$invalid}">
-                        <label for="amount">{{ 'operations.edit.field.amount.title' | translate}}
+                        <label for="amount" translate>operations.edit.field.amount.title
                             <a href="#" tooltip="{{ 'operations.edit.field.amount.tooltip' | translate}}"><span
                                 class="glyphicon glyphicon-question-sign"></span></a></label>
 
@@ -144,7 +144,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.moneyWas.$invalid}">
-                        <label for="moneyWas">{{ 'operations.edit.field.moneyWas.title' | translate}}
+                        <label for="moneyWas" translate>operations.edit.field.moneyWas.title
                             <a href="#" tooltip="{{ 'operations.edit.field.moneyWas.tooltip' | translate}}">
                                 <span class="glyphicon glyphicon-question-sign"></span></a></label>
                         <input type="text" class="form-control input-sm" id="moneyWas" name="moneyWas"
@@ -154,7 +154,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group" ng-class="{'has-error': operationForm.moneyBecome.$invalid}">
-                        <label for="moneyBecome">{{ 'operations.edit.field.moneyBecome.title' | translate}}
+                        <label for="moneyBecome" translate>operations.edit.field.moneyBecome.title
                             <a href="#" tooltip="{{ 'operations.edit.field.moneyBecome.tooltip' | translate}}">
                                 <span class="glyphicon glyphicon-question-sign"></span></a></label>
                         <input type="text" class="form-control input-sm" id="moneyBecome" name="moneyBecome"
@@ -166,7 +166,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="info">{{ 'operations.edit.field.info.title' | translate}}
+                        <label for="info" translate>operations.edit.field.info.title
                             <a href="#" tooltip="{{ 'operations.edit.field.info.tooltip' | translate}}">
                                 <span class="glyphicon glyphicon-question-sign"></span></a></label>
                         <input type="text" class="form-control input-sm" id="info" ng-model="model.info"/>
@@ -178,8 +178,7 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="submit()" ng-disabled="operationForm.$invalid">{{ 'function.save' |
-        translate}}
+    <button class="btn btn-primary" ng-click="submit()" ng-disabled="operationForm.$invalid" translate>function.save
     </button>
-    <button class="btn btn-warning" ng-click="cancel()">{{ 'function.cancel' | translate}}</button>
+    <button class="btn btn-warning" ng-click="cancel()" translate>function.cancel</button>
 </div>

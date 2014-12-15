@@ -53,15 +53,16 @@
                 suffix: '.json'
             });
             $translateProvider.preferredLanguage('ru');
+            $translateProvider.fallbackLanguage('en');
             $translateProvider.useLocalStorage();
         }]);
 
     // -------------------------------- FACTORIES
 
-    cashFlow.factory('errorHandlerInterceptor', ['$q', 'toaster', function ($q, toaster) {
+    cashFlow.factory('errorHandlerInterceptor', ['$q', 'toaster', '$filter', function ($q, toaster, $filter) {
         return {
             'responseError': function (response) {
-                toaster.pop('error', "Error", (response.data && response.data["message"] ? response.data["message"] : ''));
+                toaster.pop('error', $filter('translate')('error.title'), (response.data && response.data["message"] ? response.data["message"] : ''));
 
                 if (response.data && response.data["stack"])
                     console.log(response.data["stack"]);

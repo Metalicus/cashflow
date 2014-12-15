@@ -1,6 +1,7 @@
 {
   "title": "Home Bookkeeping",
   "function": {
+    "ok": "OK",
     "add": "Add",
     "delete": "Delete",
     "edit": "Edit",
@@ -126,7 +127,43 @@
       }
     }
   },
+  "reports": {
+    "title": "Reports",
+    "months": {
+      "jan": "January",
+      "feb": "February",
+      "mar": "March",
+      "apr": "April",
+      "may": "May",
+      "jun": "June",
+      "jul": "July",
+      "aug": "August",
+      "sep": "September",
+      "oct": "October",
+      "nov": "November",
+      "dec": "December"
+    },
+    "MONTHLY_BALANCE": {
+      "title": "Monthly Balance",
+      "desc": "Monthy balance report",
+      "filter": {
+        "month": "Select month...",
+        "year": "Select year..."
+      },
+      "category": "Category",
+      "expense": "Expense",
+      "income": "Income",
+      "total": "TOTAL"
+    }
+  },
   "calculator": {
     "clear": "Clear"
+  },
+  "delete": {
+    "title": "Delete",
+    "confirm": "Are you sure you want to delete this"
+  },
+  "error": {
+    "title": "Error"
   }
 }

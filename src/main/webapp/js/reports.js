@@ -8,7 +8,8 @@
     //controller for list-group
     reports.controller('ReportListCtrl', ['$scope', 'REPORT_TYPE', function ($scope, REPORT_TYPE) {
         $scope.REPORT_TYPE = REPORT_TYPE;
-        $scope.current = Object.keys(REPORT_TYPE)[0];
+        $scope.reports = Object.keys(REPORT_TYPE);
+        $scope.current = $scope.reports[0];
 
         $scope.isActive = function (report) {
             return $scope.current === report;
@@ -25,21 +26,21 @@
         };
     }]);
 
-    reports.controller('MonthlyBalanceCrtl', ['$scope', 'REPORT_TYPE', '$http', function ($scope, REPORT_TYPE, $http) {
+    reports.controller('MonthlyBalanceCrtl', ['$scope', 'REPORT_TYPE', '$http', '$filter', function ($scope, REPORT_TYPE, $http, $filter) {
         var currentDate = new Date();
         $scope.months = [
-            {index: 0, name: 'January'},
-            {index: 1, name: 'February'},
-            {index: 2, name: 'March'},
-            {index: 3, name: 'April'},
-            {index: 4, name: 'May'},
-            {index: 5, name: 'June'},
-            {index: 6, name: 'July'},
-            {index: 7, name: 'August'},
-            {index: 8, name: 'September'},
-            {index: 9, name: 'October'},
-            {index: 10, name: 'November'},
-            {index: 11, name: 'December'}
+            {index: 0, name: $filter('translate')('reports.months.jan')},
+            {index: 1, name: $filter('translate')('reports.months.feb')},
+            {index: 2, name: $filter('translate')('reports.months.mar')},
+            {index: 3, name: $filter('translate')('reports.months.apr')},
+            {index: 4, name: $filter('translate')('reports.months.may')},
+            {index: 5, name: $filter('translate')('reports.months.jun')},
+            {index: 6, name: $filter('translate')('reports.months.jul')},
+            {index: 7, name: $filter('translate')('reports.months.aug')},
+            {index: 8, name: $filter('translate')('reports.months.sep')},
+            {index: 9, name: $filter('translate')('reports.months.oct')},
+            {index: 10, name: $filter('translate')('reports.months.nov')},
+            {index: 11, name: $filter('translate')('reports.months.dec')}
         ];
         $scope.years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020];
 

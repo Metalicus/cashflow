@@ -1,12 +1,13 @@
 <div class="page-header">
-    <h1>Reports</h1>
+    <h1 translate>reports.title</h1>
 </div>
 
 <div class="row" ng-controller="ReportListCtrl">
     <div class="col-md-3">
         <div class="list-group">
-            <a href="#" class="list-group-item" ng-class="{active: isActive(REPORT_TYPE.MONTHLY_BALANCE)}"
-               ng-click="selectReport(REPORT_TYPE.MONTHLY_BALANCE); preventClick($event)">Monthly Balance</a>
+            <a href="#" class="list-group-item" ng-class="{active: isActive(report)}"
+               ng-click="selectReport(report); preventClick($event)" ng-repeat="report in reports">{{ 'reports.' +
+                report + '.title' | translate}}</a>
         </div>
     </div>
     <div class="col-md-9">

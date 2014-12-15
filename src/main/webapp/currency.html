@@ -1,13 +1,13 @@
 <div class="page-header">
-    <h1>{{ 'currency.title' | translate }}</h1>
+    <h1 translate>currency.title</h1>
 </div>
 
-<button type="button" class="btn btn-primary" ng-click="openNewDialog()">{{ 'function.add' | translate}}</button>
+<button type="button" class="btn btn-primary" ng-click="openNewDialog()" translate>function.add</button>
 <button type="button" class="btn btn-default" ng-click="openEditDialog()"
-        ng-disabled="gridApi.selection.getSelectedRows().length === 0">{{ 'function.edit' | translate}}
+        ng-disabled="gridApi.selection.getSelectedRows().length === 0" translate>function.edit
 </button>
 <button type="button" class="btn btn-danger" ng-click="openDeleteDialog()"
-        ng-disabled="gridApi.selection.getSelectedRows().length === 0">{{ 'function.delete' | translate}}
+        ng-disabled="gridApi.selection.getSelectedRows().length === 0" translate>function.delete
 </button>
 
 <div ui-grid="gridOptions" class="grid" ui-grid-selection server-data></div>

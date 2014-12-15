@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{ 'account.edit.title' | translate}}</h3>
+    <h3 class="modal-title" translate>account.edit.title</h3>
 </div>
 <div class="modal-body">
     <form name="accountForm" role="form" ng-submit="submit()" novalidate>
@@ -7,14 +7,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': accountForm.name.$invalid}">
-                        <label for="name">{{ 'account.edit.field.name' | translate}}</label>
+                        <label for="name" translate>account.edit.field.name</label>
                         <input type="text" name="name" class="form-control input-sm" ng-required="true" id="name"
                                ng-model="model.name"/>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group" ng-class="{'has-error': accountForm.currency.$invalid}">
-                        <label>{{ 'account.edit.field.currency.title' | translate}}</label>
+                        <label translate>account.edit.field.currency.title</label>
                         <ui-select name="currency" ng-model="$parent.model.currency" ng-required="true"
                                    ng-disabled="$parent.model.id !== null">
                             <ui-select-match placeholder="{{ 'account.edit.field.currency.tooltip' | translate}}">
@@ -29,7 +29,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="form-group" ng-class="{'has-error': accountForm.amount.$invalid}">
-                            <label for="amount">{{ 'account.edit.field.balance.title' | translate}}
+                            <label for="amount" translate>account.edit.field.balance.title
                                 <a href="#" tooltip="{{ 'account.edit.field.balance.tooltip' | translate}} ">
                                     <span class="glyphicon glyphicon-question-sign"></span></a></label>
                             <input type="text" name="amount" class="form-control input-sm" id="amount"
@@ -42,8 +42,7 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="submit()" ng-disabled="accountForm.$invalid">{{ 'function.save' |
-        translate}}
+    <button class="btn btn-primary" ng-click="submit()" ng-disabled="accountForm.$invalid" translate>function.save
     </button>
-    <button class="btn btn-warning" ng-click="cancel()">{{ 'function.cancel' | translate}}</button>
+    <button class="btn btn-warning" ng-click="cancel()" translate>function.cancel</button>
 </div>
