@@ -3,6 +3,7 @@
 describe('Calculator tests', function () {
 
     beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
 
     describe('CalculatorCtrl', function () {
         var $scope, controller, CALC_OPERATION;

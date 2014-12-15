@@ -3,6 +3,7 @@
 describe('Category tests ', function () {
 
     beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
 
     describe('CategoryCtrl', function () {
         var $scope, $modal, modalInstance, controller, deferred;

@@ -15,15 +15,21 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'src/main/webapp/bower_components/angular/angular.js',
+            'src/main/webapp/bower_components/angular-cookies/angular-cookies.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             'src/main/webapp/bower_components/angular-route/angular-route.js',
             'src/main/webapp/bower_components/angular-touch/angular-touch.js',
             'src/main/webapp/bower_components/angular-resource/angular-resource.js',
             'src/main/webapp/bower_components/angular-animate/angular-animate.js',
+            'src/main/webapp/bower_components/angular-translate/angular-translate.js',
+            'src/main/webapp/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+            'src/main/webapp/bower_components/angular-translate-storage-local/angular-translate-storage-local.js',
+            'src/main/webapp/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
             'src/main/webapp/bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js',
             'src/main/webapp/bower_components/angular-ui-grid/ui-grid.js',
             'src/main/webapp/bower_components/angular-ui-select/dist/select.js',
             'src/main/webapp/bower_components/AngularJS-Toaster/toaster.js',
+            'src/test/javascript/translate.mock.js',
             'src/main/webapp/js/*.js',
             'src/test/javascript/spec/*.spec.js'
         ],

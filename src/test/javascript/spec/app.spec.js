@@ -2,10 +2,11 @@
 
 describe('App tests ', function () {
 
+    beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
+
     describe('ErrorHandlerInterceptor Test', function () {
         var toaster, $httpBackend, Operation;
-
-        beforeEach(module('cashFlow'));
 
         beforeEach(inject(function (_$httpBackend_, _Operation_, _toaster_) {
             $httpBackend = _$httpBackend_;
@@ -20,7 +21,7 @@ describe('App tests ', function () {
             $httpBackend.whenGET('action/operation').respond(500);
             Operation.query();
             $httpBackend.flush();
-            expect(toaster.pop).toHaveBeenCalledWith('error', 'Error', '');
+            expect(toaster.pop).toHaveBeenCalledWith('error', 'error.title', '');
             expect(console.log).not.toHaveBeenCalled();
         });
 
@@ -31,7 +32,7 @@ describe('App tests ', function () {
             });
             Operation.get({id: 12});
             $httpBackend.flush();
-            expect(toaster.pop).toHaveBeenCalledWith('error', 'Error', 'error message');
+            expect(toaster.pop).toHaveBeenCalledWith('error', 'error.title', 'error message');
             expect(console.log).toHaveBeenCalledWith('stack trace');
         });
 
@@ -39,8 +40,6 @@ describe('App tests ', function () {
 
     describe('directove: ServerData', function () {
         var $scope, $compile, $httpBackend;
-
-        beforeEach(module('cashFlow'));
 
         beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _Operation_) {
             $httpBackend = _$httpBackend_;
@@ -92,8 +91,6 @@ describe('App tests ', function () {
 
     describe('directove: Pageable', function () {
         var $scope, $compile, $httpBackend;
-
-        beforeEach(module('cashFlow'));
 
         beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _Operation_) {
             $httpBackend = _$httpBackend_;

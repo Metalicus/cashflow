@@ -3,6 +3,7 @@
 describe('Currency tests ', function () {
 
     beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
 
     describe('CurrencyCtrl', function () {
         var $scope, $modal, modalInstance, controller, deferred;

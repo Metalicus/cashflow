@@ -3,6 +3,7 @@
 describe('Operation tests ', function () {
 
     beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
 
     describe('OperationsCtrl', function () {
         var $scope, $modal, modalInstance, $httpBackend, controller, deferred;

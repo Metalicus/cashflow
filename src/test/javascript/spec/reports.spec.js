@@ -3,6 +3,7 @@
 describe('Report tests', function () {
 
     beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
 
     describe('ReportListCtrl', function () {
         var $scope, controller, REPORT_TYPE;
@@ -53,18 +54,6 @@ describe('Report tests', function () {
         it('should create default scope variables', function () {
             expect($scope.months).not.toBeUndefined();
             expect($scope.months.length).toEqual(12);
-            expect($scope.months[0]).toEqual({index: 0, name: 'January'});
-            expect($scope.months[1]).toEqual({index: 1, name: 'February'});
-            expect($scope.months[2]).toEqual({index: 2, name: 'March'});
-            expect($scope.months[3]).toEqual({index: 3, name: 'April'});
-            expect($scope.months[4]).toEqual({index: 4, name: 'May'});
-            expect($scope.months[5]).toEqual({index: 5, name: 'June'});
-            expect($scope.months[6]).toEqual({index: 6, name: 'July'});
-            expect($scope.months[7]).toEqual({index: 7, name: 'August'});
-            expect($scope.months[8]).toEqual({index: 8, name: 'September'});
-            expect($scope.months[9]).toEqual({index: 9, name: 'October'});
-            expect($scope.months[10]).toEqual({index: 10, name: 'November'});
-            expect($scope.months[11]).toEqual({index: 11, name: 'December'});
 
             expect($scope.years).not.toBeUndefined();
             expect($scope.years.length).toEqual(8);

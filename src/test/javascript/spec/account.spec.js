@@ -3,6 +3,7 @@
 describe('Account tests ', function () {
 
     beforeEach(module('cashFlow'));
+    beforeEach(module('translateNoop'));
 
     describe('AccountCtrl', function () {
         var $scope, $modal, modalInstance, controller, deferred;
