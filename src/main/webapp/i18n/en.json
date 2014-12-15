@@ -80,6 +80,52 @@
       }
     }
   },
+  "account": {
+    "title": "Accounts",
+    "table": {
+      "name": "Name",
+      "currency": "Currency",
+      "balance": "Current balance"
+    },
+    "edit": {
+      "title": "Account",
+      "field": {
+        "name": "Name",
+        "currency": {
+          "title": "Currency",
+          "tooltip": "Select currency..."
+        },
+        "balance": {
+          "title": "Balance",
+          "tooltip": "Current account's balance"
+        }
+      }
+    }
+  },
+  "category": {
+    "title": "Categories",
+    "table": {
+      "name": "Name"
+    },
+    "edit": {
+      "title": "Category",
+      "field": {
+        "name": "Name"
+      }
+    }
+  },
+  "currency": {
+    "title": "Currencies",
+    "table": {
+      "name": "Name"
+    },
+    "edit": {
+      "title": "Currency",
+      "field": {
+        "name": "Name"
+      }
+    }
+  },
   "calculator": {
     "clear": "Clear"
   }

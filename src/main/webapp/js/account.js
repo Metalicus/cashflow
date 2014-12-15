@@ -1,7 +1,7 @@
 (function () {
     var account = angular.module('cashflow-account', []);
 
-    account.controller('AccountCtrl', ['$scope', 'Account', '$modal', function ($scope, Account, $modal) {
+    account.controller('AccountCtrl', ['$scope', 'Account', '$modal', '$filter', function ($scope, Account, $modal, $filter) {
         $scope.gridOptions = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -10,9 +10,9 @@
             modifierKeysToMultiSelect: false,
             noUnselect: true,
             columnDefs: [
-                {name: 'Name', field: 'name'},
-                {name: 'Currency', field: 'currency.name'},
-                {name: 'Current balance', field: 'balance'}
+                {name: $filter('translate')('account.table.name'), enableColumnMenu: false, field: 'name'},
+                {name: $filter('translate')('account.table.currency'), enableColumnMenu: false, field: 'currency.name'},
+                {name: $filter('translate')('account.table.balance'), enableColumnMenu: false, field: 'balance'}
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;

@@ -1,7 +1,7 @@
 (function () {
     var category = angular.module('cashflow-category', []);
 
-    category.controller('CategoryCtrl', ['$scope', 'Category', '$modal', function ($scope, Category, $modal) {
+    category.controller('CategoryCtrl', ['$scope', 'Category', '$modal', '$filter', function ($scope, Category, $modal, $filter) {
         $scope.gridOptions = {
             enableRowSelection: true,
             enableRowHeaderSelection: false,
@@ -10,7 +10,7 @@
             modifierKeysToMultiSelect: false,
             noUnselect: true,
             columnDefs: [
-                {name: 'Name', field: 'name'}
+                {name: $filter('translate')('category.table.name'), enableColumnMenu: false, field: 'name'}
             ],
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
