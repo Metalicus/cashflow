@@ -12,37 +12,32 @@ import ru.metal.cashflow.server.request.FilterRequest;
 /**
  * Business layer for categories
  */
-@Service
+@Service("categoryService")
 public class CategoryService implements CRUDService<Category> {
 
     @Autowired
-    private CategoryRepository repository;
+    CategoryRepository repository;
 
-    @Override
     @Transactional(readOnly = true)
     public Page<Category> list(Pageable pageable, FilterRequest filterRequest) {
         return repository.findAll(pageable);
     }
 
-    @Override
     @Transactional
     public Category insert(Category model) {
         return repository.saveAndFlush(model);
     }
 
-    @Override
     @Transactional
     public Category update(Category model) {
         return repository.saveAndFlush(model);
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Category get(int id) {
         return repository.findOne(id);
     }
 
-    @Override
     @Transactional
     public void delete(Integer id) {
         repository.delete(id);

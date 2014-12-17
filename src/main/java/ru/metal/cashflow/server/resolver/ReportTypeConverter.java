@@ -1,18 +1,17 @@
 package ru.metal.cashflow.server.resolver;
 
+import org.springframework.core.convert.converter.Converter;
 import ru.metal.cashflow.server.model.report.ReportType;
-
-import java.beans.PropertyEditorSupport;
 
 /**
  * Converter for enum ReportType
  *
  * @see ru.metal.cashflow.server.model.report.ReportType
  */
-public class ReportTypeConverter extends PropertyEditorSupport {
+public class ReportTypeConverter implements Converter<String, ReportType> {
 
     @Override
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(ReportType.valueOf(text.toUpperCase()));
+    public ReportType convert(String source) {
+        return ReportType.valueOf(source.toUpperCase());
     }
 }

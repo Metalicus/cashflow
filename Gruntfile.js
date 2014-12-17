@@ -67,7 +67,6 @@ module.exports = function (grunt) {
                 src: [
                     '*.html',
                     'template/*.html',
-                    'WEB-INF/*.xml',
                     'i18n/*.json'
                 ]
             },

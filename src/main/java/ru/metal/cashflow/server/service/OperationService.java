@@ -1,6 +1,7 @@
 package ru.metal.cashflow.server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,10 @@ import java.math.BigDecimal;
 public class OperationService implements CRUDService<Operation> {
 
     @Autowired
-    private OperationRepository operationRepository;
+    @Qualifier("accountService")
+    AccountService accountService;
     @Autowired
-    private AccountService accountService;
+    OperationRepository operationRepository;
 
     @Transactional(readOnly = true)
     public Page<Operation> list(Pageable pageable, FilterRequest filterRequest) {
@@ -35,7 +37,6 @@ public class OperationService implements CRUDService<Operation> {
         return operationRepository.findAll(pageable);
     }
 
-    @Override
     @Transactional(rollbackFor = CFException.class)
     public Operation insert(Operation model) throws CFException {
         // foolproof
@@ -73,7 +74,6 @@ public class OperationService implements CRUDService<Operation> {
         return operationRepository.saveAndFlush(model);
     }
 
-    @Override
     @Transactional(rollbackFor = CFException.class)
     public Operation update(Operation model) throws CFException {
         if (model.getAccount() == null)
@@ -150,13 +150,11 @@ public class OperationService implements CRUDService<Operation> {
         return operationRepository.saveAndFlush(model);
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Operation get(int id) {
         return operationRepository.findOne(id);
     }
 
-    @Override
     @Transactional(rollbackFor = CFException.class)
     public void delete(Integer id) throws CFException {
         final Operation operation = get(id);

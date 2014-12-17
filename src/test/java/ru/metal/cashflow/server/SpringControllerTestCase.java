@@ -7,11 +7,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import ru.metal.cashflow.server.config.WebConfig;
 
 @WebAppConfiguration
-@ContextConfiguration(locations = {
-        "file:src/main/webapp/WEB-INF/appServlet-servlet.xml"
-})
+@ContextConfiguration(classes = WebConfig.class)
 public class SpringControllerTestCase extends SpringTestCase {
 
     @Autowired

@@ -1,5 +1,0 @@
-DONE 1. Migrate to Spring Data JPA
-DONE 2. Add Bower front-end packet manager
-DONE 3. Add Grunt
-DONE 4. Learn how to build war with gradle and grunt. replace index.html bower dependencies adn minify my angular js files
-5. Learn about Spring annotation configuration

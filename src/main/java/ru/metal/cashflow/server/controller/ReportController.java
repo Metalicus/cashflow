@@ -1,13 +1,14 @@
 package ru.metal.cashflow.server.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.report.Report;
 import ru.metal.cashflow.server.model.report.ReportType;
 import ru.metal.cashflow.server.request.ReportRequest;
-import ru.metal.cashflow.server.resolver.ReportTypeConverter;
 import ru.metal.cashflow.server.service.ReportService;
 
 @RestController
@@ -16,11 +17,6 @@ public class ReportController {
 
     @Autowired
     private ReportService service;
-
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder) {
-        dataBinder.registerCustomEditor(ReportType.class, new ReportTypeConverter());
-    }
 
     @RequestMapping(value = "/{type}", method = RequestMethod.GET)
     public Report get(@PathVariable ReportType type, ReportRequest request) throws CFException {

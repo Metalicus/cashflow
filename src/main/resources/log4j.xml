@@ -18,6 +18,9 @@
     <category name="org.apache" additivity="true">
         <priority value="ERROR"/>
     </category>
+    <category name="org.springframework">
+        <priority value="INFO"/>
+    </category>
 
     <root>
         <priority value="INFO"/>

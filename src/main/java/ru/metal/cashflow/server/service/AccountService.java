@@ -10,19 +10,17 @@ import ru.metal.cashflow.server.model.business.Account;
 import ru.metal.cashflow.server.repository.AccountRepository;
 import ru.metal.cashflow.server.request.FilterRequest;
 
-@Service
+@Service("accountService")
 public class AccountService implements CRUDService<Account> {
 
     @Autowired
-    private AccountRepository repository;
+    AccountRepository repository;
 
-    @Override
     @Transactional(readOnly = true)
     public Page<Account> list(Pageable pageable, FilterRequest filterRequest) {
         return repository.findAll(pageable);
     }
 
-    @Override
     @Transactional(rollbackFor = CFException.class)
     public Account insert(Account model) throws CFException {
         // foolproof
@@ -32,7 +30,6 @@ public class AccountService implements CRUDService<Account> {
         return repository.saveAndFlush(model);
     }
 
-    @Override
     @Transactional(rollbackFor = CFException.class)
     public Account update(Account model) throws CFException {
         // foolproof
@@ -43,13 +40,11 @@ public class AccountService implements CRUDService<Account> {
         return repository.saveAndFlush(model);
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Account get(int id) {
         return repository.findOne(id);
     }
 
-    @Override
     @Transactional
     public void delete(Integer id) {
         repository.delete(id);

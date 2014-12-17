@@ -3,7 +3,7 @@ package ru.metal.cashflow.server.service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.metal.cashflow.server.exception.CFException;
 import ru.metal.cashflow.server.model.business.Category;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Service for creating all reports
  */
-@Service
+@Component
 @Transactional(rollbackFor = CFException.class, readOnly = true)
 public class ReportService {
 
