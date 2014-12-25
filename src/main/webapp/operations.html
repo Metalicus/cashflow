@@ -13,21 +13,14 @@
         </button>
     </div>
     <div class="col-md-2">
-        <div class="input-group">
-            <ui-select ng-model="$parent.filter.category">
-                <ui-select-match placeholder="{{ 'operations.filters.category' | translate}}">{{$select.selected.name}}
-                </ui-select-match>
-                <ui-select-choices repeat="category in categories | filter: $select.search">
-                    {{category.name}}
-                </ui-select-choices>
-            </ui-select>
-
-            <span class="input-group-btn">
-              <button ng-click="filter.category = undefined" class="btn btn-default">
-                  <span class="glyphicon glyphicon-trash"></span>
-              </button>
-            </span>
-        </div>
+        <ui-select ng-model="$parent.filter.category">
+            <ui-select-match placeholder="{{ 'operations.filters.category' | translate}}" allow-clear>
+                {{$select.selected.name}}
+            </ui-select-match>
+            <ui-select-choices repeat="category in categories | filter: $select.search">
+                {{category.name}}
+            </ui-select-choices>
+        </ui-select>
     </div>
 </div>
 <div class="row">
