@@ -4,13 +4,6 @@
         'ngCookies', 'ui.grid', 'ui.grid.selection', 'ui.grid.infiniteScroll', 'ui.bootstrap', 'ui.select',
         'toaster', 'ngResource', 'pascalprecht.translate']);
 
-    // ui-select fix: https://github.com/angular-ui/ui-select/issues/494
-    angular.module("ui.select").run([
-        "$templateCache",
-        function ($templateCache) {
-            $templateCache.put("bootstrap/match.tpl.html", "<div style=\"display: flex\" class=\"btn-group ui-select-match btn-block\" ng-hide=\"$select.open\" ng-disabled=\"$select.disabled\" ng-class=\"{\'btn-default-focus\':$select.focus}\"><button style=\"flex-grow: 1;\" type=\"button\" class=\"btn btn-default\" tabindex=\"-1\" ng-click=\"$select.activate()\"><span ng-show=\"$select.isEmpty()\" class=\"text-muted\">{{$select.placeholder}}</span> <span ng-hide=\"$select.isEmpty()\" ng-transclude=\"\"></span></button> <button class=\"btn btn-default\" ng-if=\"$select.allowClear && !$select.isEmpty()\" ng-click=\"$select.select(undefined)\"><span class=\"glyphicon glyphicon-remove ui-select-toggle\"></span></button> <button class=\"btn btn-default\" ng-click=\"$select.activate()\"><span class=\"caret ui-select-toggle\" ng-click=\"$select.toggle($event)\"></span></button></div>");
-        }]);
-
     // -------------------------------- CONSTANTS
     cashFlow.constant('OPERATION_TYPE', {
         EXPENSE: 'EXPENSE',
