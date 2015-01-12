@@ -94,19 +94,23 @@ describe('Report tests', function () {
                 .respond('{}');
             $httpBackend.flush();
 
-            // now change month for january
+            // now change month for january, and if now is january change to february
+            var chagedMonth = 0;
+            if (date.getMonth() == 0)
+                chagedMonth = 1;
+
             $httpBackend
-                .expectGET('action/report/' + REPORT_TYPE.MONTHLY_BALANCE + '?month=0' + '&year=' + date.getFullYear())
+                .expectGET('action/report/' + REPORT_TYPE.MONTHLY_BALANCE + '?month=' + chagedMonth + '&year=' + date.getFullYear())
                 .respond('{}');
-            $scope.request.month = $scope.months[0];
+            $scope.request.month = $scope.months[chagedMonth];
             $scope.$digest();
             $httpBackend.flush();
 
             // change year
             $httpBackend
-                .expectGET('action/report/' + REPORT_TYPE.MONTHLY_BALANCE + '?month=0' + '&year=2015')
+                .expectGET('action/report/' + REPORT_TYPE.MONTHLY_BALANCE + '?month=' + chagedMonth + '&year=2020')
                 .respond('{}');
-            $scope.request.year = 2015;
+            $scope.request.year = 2020;
             $scope.$digest();
             $httpBackend.flush();
         });
