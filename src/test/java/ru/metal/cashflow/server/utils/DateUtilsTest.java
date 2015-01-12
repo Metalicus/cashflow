@@ -32,6 +32,17 @@ public class DateUtilsTest {
     }
 
     @Test
+    public void minusDayTest2() throws Exception {
+        final Date date = DateUtils.minusDay(DateUtils.create(2015, 0, 1), 1);
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        assertEquals(2014, calendar.get(Calendar.YEAR));
+        assertEquals(11, calendar.get(Calendar.MONTH));
+        assertEquals(31, calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    @Test
     public void plusMonthTest() throws Exception {
         final Date date = DateUtils.plusMonth(DateUtils.create(2014, 0, 1), 3);
         final Calendar calendar = Calendar.getInstance();

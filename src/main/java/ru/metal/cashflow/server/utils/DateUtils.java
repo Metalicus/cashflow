@@ -31,7 +31,7 @@ public class DateUtils {
     public static Date minusDay(Date date, int day) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.roll(Calendar.DAY_OF_YEAR, -day);
+        calendar.add(Calendar.DAY_OF_YEAR, -day);
 
         return calendar.getTime();
     }
@@ -46,7 +46,7 @@ public class DateUtils {
     public static Date plusMonth(Date date, int month) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.roll(Calendar.MONTH, month);
+        calendar.add(Calendar.MONTH, month);
 
         return calendar.getTime();
     }

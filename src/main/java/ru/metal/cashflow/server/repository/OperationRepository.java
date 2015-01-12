@@ -27,7 +27,7 @@ public interface OperationRepository extends JpaRepository<Operation, Integer> {
      * @param dateTo   date to
      * @return operation collection
      */
-    @Query("select sum(amount), currency.id, category.id, type from Operation where date between ?1 and ?2 and crossCurrency is null group by currency.id, category.id, type")
+    @Query("select sum(amount), currency.id, category.id, type from Operation where date > ?1 and date <= ?2 and crossCurrency is null group by currency.id, category.id, type")
     List<Object[]> findMonthlyReport(Date dateFrom, Date dateTo);
 
     /**
@@ -43,7 +43,7 @@ public interface OperationRepository extends JpaRepository<Operation, Integer> {
             "join op.account as acc " +
             "join op.category as cat " +
             "join acc.currency as cur " +
-            "where op.date between ?1 and ?2 and op.crossCurrency is not null " +
+            "where op.date > ?1 and op.date <= ?2 and op.crossCurrency is not null " +
             "group by cur.id, cat.id, op.type")
     List<Object[]> findMonthlyCrossCurrencyReport(Date dateFrom, Date dateTo);
 }
