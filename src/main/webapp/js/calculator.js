@@ -16,6 +16,7 @@
             secondNumber: '',
             newNumber: false,
             operation: null,
+            decimal: false,
             toScreen: function () {
                 var screen = '';
                 if (this.firstNumber === '')
@@ -51,6 +52,7 @@
                 this.firstNumber = '';
                 this.secondNumber = '';
                 this.operation = null;
+                this.decimal = false;
             },
             calculate: function () {
                 if (this.firstNumber === '' || this.secondNumber === '' || this.operation === null)
@@ -59,18 +61,23 @@
                 var result;
                 switch (this.operation) {
                     case CALC_OPERATION.DIVIDE:
-                        result = (Number(this.firstNumber) / Number(this.secondNumber)).toString();
+                        result = (Number(this.firstNumber) / Number(this.secondNumber));
                         break;
                     case CALC_OPERATION.MULTIPLY:
-                        result = (Number(this.firstNumber) * Number(this.secondNumber)).toString();
+                        result = (Number(this.firstNumber) * Number(this.secondNumber));
                         break;
                     case CALC_OPERATION.ADD:
-                        result = (Number(this.firstNumber) + Number(this.secondNumber)).toString();
+                        result = (Number(this.firstNumber) + Number(this.secondNumber));
                         break;
                     case CALC_OPERATION.SUBTRACT:
-                        result = (Number(this.firstNumber) - Number(this.secondNumber)).toString();
+                        result = (Number(this.firstNumber) - Number(this.secondNumber));
                         break;
                 }
+
+                if (this.decimal)
+                    result = result.toFixed(2);
+                else
+                    result = result.toString();
 
                 this.firstNumber = result;
                 this.secondNumber = '';
@@ -104,6 +111,7 @@
                 }
             },
             setDecimal: function () {
+                this.decimal = true;
                 if (this.operation === null) {
                     if (this.firstNumber.indexOf('.') === -1)
                         this.addNumber(this.firstNumber === '' ? '0.' : '.');
@@ -125,6 +133,9 @@
                 }
             },
             removeLastNumber: function (number) {
+                if (number.charAt(number.length - 1) === '.')
+                    this.decimal = false;
+
                 number = number.substr(0, number.length - 1);
                 if (number.length === 0)
                     return '';
