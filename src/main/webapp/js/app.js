@@ -19,6 +19,10 @@
             $routeProvider
 
                 .when('/', {
+                    redirectTo: '/operation'
+                })
+
+                .when('/operation', {
                     templateUrl: 'operations.html',
                     controller: 'OperationsCtrl'
                 })
