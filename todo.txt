@@ -1,0 +1,12 @@
+==== before 1.0 release:
+
+1. table loading. with pageable or wait for infinite scrolling fix. because i need load and reload every page, i need it
+then i move down and up again, reload previously loaded data
+2. add/delete/update should trigger page refresh, not manipulating with data array
+3. calculater should get numbers from field and put result in selected field. like several calculator buttons on every field
+there it needed, it's only 2 fields, and when you click 'done' it sets result to this field
+4. generate pdf report so you can print it or save
+5. think about new reports:
+    * information about sum of all incomes (separated by currency of course) and sum of all expenses. May be with possibility
+      to remove operation type from calculation
+
