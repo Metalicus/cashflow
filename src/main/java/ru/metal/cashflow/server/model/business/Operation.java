@@ -209,40 +209,17 @@ public class Operation {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Operation)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Operation operation = (Operation) o;
 
-        if (account != null ? !account.equals(operation.account) : operation.account != null) return false;
-        if (amount != null ? amount.compareTo(operation.amount) != 0 : operation.amount != null) return false;
-        if (category != null ? !category.equals(operation.category) : operation.category != null) return false;
-        if (crossCurrency != null ? !crossCurrency.equals(operation.crossCurrency) : operation.crossCurrency != null)
-            return false;
-        if (currency != null ? !currency.equals(operation.currency) : operation.currency != null) return false;
-        if (date != null ? !date.equals(operation.date) : operation.date != null) return false;
         if (id != null ? !id.equals(operation.id) : operation.id != null) return false;
-        if (info != null ? !info.equals(operation.info) : operation.info != null) return false;
-        if (moneyBecome != null ? moneyBecome.compareTo(operation.moneyBecome) != 0 : operation.moneyBecome != null)
-            return false;
-        if (moneyWas != null ? moneyWas.compareTo(operation.moneyWas) != 0 : operation.moneyWas != null) return false;
-        if (type != operation.type) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (account != null ? account.hashCode() : 0);
-        result = 31 * result + (currency != null ? currency.hashCode() : 0);
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (amount != null ? amount.hashCode() : 0);
-        result = 31 * result + (moneyWas != null ? moneyWas.hashCode() : 0);
-        result = 31 * result + (moneyBecome != null ? moneyBecome.hashCode() : 0);
-        result = 31 * result + (info != null ? info.hashCode() : 0);
-        result = 31 * result + (crossCurrency != null ? crossCurrency.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

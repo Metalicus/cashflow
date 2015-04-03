@@ -55,18 +55,13 @@ public class Transfer {
 
         Transfer transfer = (Transfer) o;
 
-        if (amount != null ? amount.compareTo(transfer.amount) != 0 : transfer.amount != null) return false;
         if (id != null ? !id.equals(transfer.id) : transfer.id != null) return false;
-        if (to != null ? !to.equals(transfer.to) : transfer.to != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (to != null ? to.hashCode() : 0);
-        result = 31 * result + (amount != null ? amount.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }
