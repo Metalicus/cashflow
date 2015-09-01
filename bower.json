@@ -18,7 +18,7 @@
     "angular-translate-storage-local": "2.6.0",
     "bootstrap": "3.3.2",
     "angular-ui-bootstrap-bower": "0.12.1",
-    "angular-ui-grid": "3.0.0-rc.20",
+    "angular-ui-grid": "3.0.4",
     "AngularJS-Toaster": "0.4.10"
   },
   "devDependencies": {

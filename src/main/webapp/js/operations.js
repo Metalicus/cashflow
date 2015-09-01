@@ -66,7 +66,8 @@
                 multiSelect: false,
                 useExternalSorting: true,
                 modifierKeysToMultiSelect: false,
-                infiniteScroll: 20,
+                infiniteScrollRowsFromEnd: 20,
+                infiniteScrollDown: true,
                 noUnselect: true,
                 columnDefs: [
                     {
@@ -152,6 +153,7 @@
                 });
             };
 
+            // todo: remove array modifiing
             $scope.openEditDialog = function () {
                 var selectedRow = $scope.gridApi.selection.getSelectedRows()[0];
                 var modalInstance = $modal.open({

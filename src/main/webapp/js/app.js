@@ -163,7 +163,7 @@
     });
 
     // support Spring data fetching in pages from server with sorting and filtering
-    cashFlow.directive('pageable', function () {
+    cashFlow.directive('pageable', ['$q', '$timeout', function ($q, $timeout) {
         return {
             restrict: 'A',
             compile: function () {
@@ -203,32 +203,36 @@
                             },
                             fetchData: function () {
                                 // if this is first page set last to false
-                                if (options.serverData.page == 0)
+                                if (options.serverData.page == 0) {
                                     options.serverData.last = false;
+                                    options.data = [];
+                                }
 
                                 // prevent fetching then last page
                                 if (options.serverData.last)
                                     return;
 
+                                // load data on top
+                                var promise = $q.defer();
                                 var data = resource.fetch(options.serverData.getRequestParameters(), function () {
-                                    if (options.serverData.page > 0) {
-                                        // if this is not first page populate date to the exisiting array
-                                        for (var i = 0; i < data['content'].length; i++)
-                                            options.data.push(data['content'][i]);
-
-                                    } else {
-                                        // if this is first page just set new data
-                                        options.data = data['content'];
-                                    }
-
+                                    scope.gridApi.infiniteScroll.saveScrollPercentage();
+                                    options.data = options.data.concat(data['content']);
+                                    options.serverData.page++;
                                     options.serverData.last = data['last'];
-                                    ++options.serverData.page;
-                                    scope.gridApi.infiniteScroll.dataLoaded();
+                                    scope.gridApi.infiniteScroll.dataLoaded(function () {
+                                        promise.resolve();
+                                    });
                                 });
+                                return promise.promise;
                             },
                             resort: function () {
+                                scope.gridApi.infiniteScroll.setScrollDirections(false, false);
                                 options.serverData.page = 0;
-                                options.serverData.fetchData();
+                                options.serverData.fetchData().then(function () {
+                                    $timeout(function () {
+                                        $scope.gridApi.infiniteScroll.resetScroll(true, false);
+                                    });
+                                });
                             }
                         };
 
@@ -262,9 +266,7 @@
                         });
 
                         // needs more data for infinite scroll
-                        scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, function () {
-                            options.serverData.fetchData();
-                        });
+                        scope.gridApi.infiniteScroll.on.needLoadMoreData(scope, options.serverData.fetchData);
 
                         // filtering
                         scope.filter = {};
@@ -281,16 +283,21 @@
                                         }
                                     }
                                 }
+                                scope.gridApi.infiniteScroll.setScrollDirections(false, false);
                                 options.serverData.page = 0;
                                 options.serverData.filters = filters;
-                                options.serverData.fetchData();
+                                options.serverData.fetchData().then(function () {
+                                    $timeout(function () {
+                                        $scope.gridApi.infiniteScroll.resetScroll(true, false);
+                                    });
+                                });
                             }
                         }, true);
                     }
                 }
             }
         }
-    });
+    }]);
 
     // controller for navigation bar button
     cashFlow.controller('NavBarCtrl', ['$scope', '$location', function ($scope, $location) {

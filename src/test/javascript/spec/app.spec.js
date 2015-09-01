@@ -1,5 +1,6 @@
 'use strict';
 
+// todo: rewrite
 describe('App tests ', function () {
 
     beforeEach(module('cashFlow'));
