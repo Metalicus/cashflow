@@ -12,9 +12,10 @@ module.exports = function (grunt) {
             install: {
                 options: {
                     targetDir: "src/main/webapp/bower_components",
-                    bowerOptions: {
-                        production: false
-                    }
+                    cleanTargetDir: false,
+                    install: true,
+                    copy: false,
+                    verbose: true
                 }
             }
         },

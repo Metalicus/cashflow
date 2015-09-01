@@ -230,7 +230,7 @@
                                 options.serverData.page = 0;
                                 options.serverData.fetchData().then(function () {
                                     $timeout(function () {
-                                        $scope.gridApi.infiniteScroll.resetScroll(true, false);
+                                        scope.gridApi.infiniteScroll.resetScroll(true, false);
                                     });
                                 });
                             }
@@ -288,7 +288,7 @@
                                 options.serverData.filters = filters;
                                 options.serverData.fetchData().then(function () {
                                     $timeout(function () {
-                                        $scope.gridApi.infiniteScroll.resetScroll(true, false);
+                                        scope.gridApi.infiniteScroll.resetScroll(true, false);
                                     });
                                 });
                             }

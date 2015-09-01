@@ -1,6 +1,5 @@
 'use strict';
 
-// todo: rewrite
 describe('App tests ', function () {
 
     beforeEach(module('cashFlow'));
@@ -117,6 +116,12 @@ describe('App tests ', function () {
                     on: {
                         needLoadMoreData: function () {
                         }
+                    },
+                    saveScrollPercentage: function () {
+
+                    },
+                    setScrollDirections: function () {
+
                     }
                 }
             };
