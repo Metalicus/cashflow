@@ -13,7 +13,7 @@ public class Account {
     private BigDecimal balance = BigDecimal.ZERO;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }

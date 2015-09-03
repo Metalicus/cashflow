@@ -15,7 +15,7 @@ public class Transfer {
     private BigDecimal amount;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
