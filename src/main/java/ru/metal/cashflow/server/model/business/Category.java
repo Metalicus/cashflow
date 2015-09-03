@@ -1,14 +1,12 @@
 package ru.metal.cashflow.server.model.business;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Category of operations
  */
 @Entity
+@Table
 public class Category {
 
     private Integer id;

@@ -10,6 +10,7 @@ import java.util.Date;
  * Operation with money and accounts
  */
 @Entity
+@Table
 public class Operation {
 
     public enum FlowType {

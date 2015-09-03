@@ -23,11 +23,11 @@
     <facet type="web" name="Web Gradle : cashflow-1.0.war">
       <configuration>
         <webroots>
-          <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+          <root url="file://$MODULE_DIR$/dist" relative="/" />
         </webroots>
         <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/resources" />
           <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
         </sourceRoots>
       </configuration>
     </facet>
@@ -42,8 +42,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -98,6 +98,5 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-all:1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.h2database:h2:1.4.182" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.aspectj:aspectjweaver:1.8.4" level="project" />
-    <orderEntry type="library" name="cashflow node_modules" level="project" />
   </component>
 </module>

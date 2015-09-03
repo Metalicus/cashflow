@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Transfer information
  */
 @Entity
+@Table
 public class Transfer {
 
     private Integer id;

@@ -1,15 +1,13 @@
 package ru.metal.cashflow.server.model.business;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Inforamition about cross currency transactions
  */
 @Entity
+@Table
 public class CrossCurrency {
 
     private Integer id;

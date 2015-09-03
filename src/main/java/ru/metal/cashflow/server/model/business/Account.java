@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
+@Table
 public class Account {
 
     private Integer id;
